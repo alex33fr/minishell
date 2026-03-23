@@ -6,7 +6,7 @@
 #    By: byonis <byonis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/13 13:49:48 by byonis            #+#    #+#              #
-#    Updated: 2026/01/01 10:48:39 by byonis           ###   ########.fr        #
+#    Updated: 2026/03/23 09:54:36 by aprivalo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,10 @@ MY_SOURCES = ft_isalpha.c \
 			strlen_int.c \
 			arr_len.c \
 			get_next_line_utils.c \
-			get_next_line.c
+			get_next_line.c \
+			ft_printf.c \
+			ft_atol.c \
+			ft_int_len_un.c
 
 MY_OBJECTS = $(MY_SOURCES:.c=.o)
 
@@ -57,17 +60,17 @@ MY_OBJ_BONUS = $(BONUS:.c=.o)
 
 NAME = libft.a
 
-re: fclean all
-
 all: $(NAME)
 
+re: fclean all
+
 $(NAME): $(MY_OBJECTS)
-	ar rcs $(NAME) $(MY_OBJECTS) 
+	ar rcs $(NAME) $(MY_OBJECTS)
 
 %.o: %.c
 	cc $(CFLAGS) -o $@ -c $<
 
-clean: 
+clean:
 	rm -f $(MY_OBJECTS)
 	rm -f $(MY_OBJ_BONUS)
 

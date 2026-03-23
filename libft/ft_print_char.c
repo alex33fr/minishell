@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arr_len.c                                          :+:      :+:    :+:   */
+/*   ft_print_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:46:33 by byonis            #+#    #+#             */
-/*   Updated: 2026/03/23 10:09:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2025/11/02 17:31:10 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/03/23 10:07:55 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int	arr_len(char **arr)
+int	ft_print_char(va_list args)
 {
-	int	i;
+	char	c;
 
-	if (!arr)
-		return (0);
-	i = 0;
-	while (arr[i] != NULL)
-		i++;
-	return (i);
+	c = (char)va_arg(args, int);
+	write(1, &c, 1);
+	return (1);
 }

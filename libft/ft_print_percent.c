@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arr_len.c                                          :+:      :+:    :+:   */
+/*   ft_print_percent.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:46:33 by byonis            #+#    #+#             */
-/*   Updated: 2026/03/23 10:09:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2025/11/04 11:04:06 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/03/23 10:08:09 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int	arr_len(char **arr)
+int	ft_print_percent(va_list args)
 {
-	int	i;
-
-	if (!arr)
-		return (0);
-	i = 0;
-	while (arr[i] != NULL)
-		i++;
-	return (i);
+	(void)args;
+	write(1, "%", 1);
+	return (1);
 }

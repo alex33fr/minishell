@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 11:06:32 by byonis            #+#    #+#             */
-/*   Updated: 2025/12/29 15:13:03 by byonis           ###   ########.fr       */
+/*   Updated: 2026/03/23 10:09:54 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "includes/libft.h"
 
 void	ft_bzero(void *s, size_t n)
 {

@@ -1,25 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arr_len.c                                          :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:46:33 by byonis            #+#    #+#             */
-/*   Updated: 2026/03/23 10:09:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/02/24 14:49:14 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/03/23 10:09:51 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int	arr_len(char **arr)
+long	ft_atol(const char *s)
 {
-	int	i;
+	int		i;
+	int		sign;
+	long	result;
 
-	if (!arr)
-		return (0);
 	i = 0;
-	while (arr[i] != NULL)
+	sign = 1;
+	result = 0;
+	while ((s[i] >= '\t' && s[i] <= '\r') || s[i] == ' ')
 		i++;
-	return (i);
+	if (s[i] == '-' || s[i] == '+')
+	{
+		if (s[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (s[i] >= '0' && s[i] <= '9')
+	{
+		result = (result * 10) + (s[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }
