@@ -16,15 +16,18 @@ SRCS        = main.c \
               env/ft_env_set.c \
 			  env/ft_env_unset.c \
 			  env/ft_env_to_envp.c \
-              utils/ft_clear.c \
-			  utils/ft_strcmp.c \
-			  utils/ft_close.c \
 			  exec/ft_exec_childs.c \
 			  exec/ft_exec_external.c \
 			  exec/ft_exec_builtin.c \
 			  exec/ft_exec_wait.c \
 			  exec/ft_exec.c \
-			  exec/ft_path.c
+			  exec/ft_path.c \
+			  builtins/ft_builtin_env.c \
+			  builtins/ft_builtin_simple.c \
+			  utils/ft_clear.c \
+			  utils/ft_strcmp.c \
+			  utils/ft_close.c
+
 OBJS        = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 TOTAL_FILES := $(words $(SRCS))
@@ -40,7 +43,7 @@ all: $(NAME)
 $(NAME): $(LIBFT_LIB) $(OBJS)
 	@printf "\r$(GREEN)[Linking]$(RESET)                     "
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) || (printf "\n$(RED)Link error$(RESET)\n"; exit 1)
-	@printf "\r$(GREEN)[100%%] $(NAME) ready [OK]$(RESET)\n"
+	@printf "\r$(GREEN)[100%%] $(NAME) normaly is ready [OK]$(RESET)\n"
 
 $(LIBFT_LIB):
 	@$(MAKE) -C $(LIBFT_DIR) >/dev/null 2>&1 || exit 1

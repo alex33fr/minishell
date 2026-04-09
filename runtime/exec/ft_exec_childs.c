@@ -51,4 +51,3 @@ void	ft_exec_child(t_exec *exec, char *path, char **envp)
 		exit(126);
 	exit(127);
 }
-

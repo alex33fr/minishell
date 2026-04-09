@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/08 16:49:14 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/04/09 17:48:47 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include <linux/limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 /**
@@ -69,6 +70,14 @@ void	ft_exec_child(t_exec *exec, char *path, char **envp);
 int		ft_is_path_cmd(char *cmd);
 char	*ft_find_path(char *cmd, t_env *env);
 char	*ft_join_cmd_path(char *dir, char *cmd);
+
+int		ft_builtin_pwd(void);
+int		ft_builtin_env(t_env *env);
+int		ft_builtin_exit(char **argv);
+int		ft_builtin_echo(char **argv);
+int		ft_builtin_cd(char **argv, t_env *env);
+int		ft_builtin_export(char **argv, t_env *env);
+int		ft_builtin_unset(char **argv, t_env *env);
 
 /**
  * @brief 
