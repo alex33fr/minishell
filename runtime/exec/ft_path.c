@@ -119,9 +119,10 @@ char	*ft_find_path(char *cmd, t_env *env)
 		return (NULL);
 	if (ft_is_path_cmd(cmd))
 	{
+		path = NULL;
 		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
+			path = ft_strdup(cmd);
+		return (path);
 	}
 	paths = ft_get_path_splitted(env);
 	if (!paths)

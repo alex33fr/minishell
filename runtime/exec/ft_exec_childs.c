@@ -52,18 +52,3 @@ void	ft_exec_child(t_exec *exec, char *path, char **envp)
 	exit(127);
 }
 
-/**
- * @brief
- * Wait for child process and return its exit status
- * @param pid
- * @return int
- */
-int	ft_wait_child(pid_t pid)
-{
-	int	status;
-
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (1);
-}
