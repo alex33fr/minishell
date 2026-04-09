@@ -1,8 +1,0 @@
-{
-  "[c]": {
-    "editor.insertSpaces": false,
-    "editor.tabSize": 4,
-    "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": false
-  }
-}
