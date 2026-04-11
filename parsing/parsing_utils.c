@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/10 13:30:47 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:31:45 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	args_number_in_cmd(t_queue *q)
 {
 	t_node	*temp;
 	int		count_redir;
-	int 	count_word;
+	int		count_word;
 
 	if (!q || !q->front)
 		return (0);
@@ -38,7 +38,7 @@ static int	args_number_in_cmd(t_queue *q)
 
 static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 {
-	t_redir *new_node;
+	t_redir	*new_node;
 	t_redir	*temp;
 
 	new_node = ft_calloc(1, sizeof(t_redir));
@@ -59,7 +59,7 @@ static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 	return (1);
 }
 
-static t_cmd *init_cmd(t_queue *q)
+static t_cmd	*init_cmd(t_queue *q)
 {
 	t_cmd	*res;
 	int		nb_args;
@@ -101,7 +101,7 @@ t_cmd	*first_cmd(t_queue *q)
 {
 	t_cmd	*res;
 	int		i;
-	
+
 	res = init_cmd(q);
 	if (!res)
 		return (NULL);

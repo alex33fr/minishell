@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 13:06:33 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 13:25:27 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:28:34 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 static void	add_cmd_back(t_cmd **head, t_cmd **current, t_cmd *new_node)
 {
 	if (!*head)
-		{
-			*head = new_node;
-			*current = *head;
-		}
-		else
-		{
-			(*current)->next = new_node;
-			new_node->prev = *current;
-			*current = new_node;
-		}
+	{
+		*head = new_node;
+		*current = *head;
+	}
+	else
+	{
+		(*current)->next = new_node;
+		new_node->prev = *current;
+		*current = new_node;
+	}
 }
 
 t_cmd	*create_cmds(t_queue *q)
@@ -40,7 +40,7 @@ t_cmd	*create_cmds(t_queue *q)
 		if (q->front->token == T_PIPE)
 		{
 			dequeue(q, NULL);
-			continue;
+			continue ;
 		}
 		new_node = first_cmd(q);
 		if (!new_node)

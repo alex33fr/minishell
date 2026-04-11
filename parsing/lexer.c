@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 11:18:39 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 13:47:19 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:24:57 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	process_next_token(t_queue *q, char *line)
 {
 	t_tok	type;
 	int		len;
-	
+
 	type = get_token_type(line);
 	len = next_token(line, type);
 	if (type == T_WORD)
@@ -92,31 +92,6 @@ t_queue	*lexer(char *line)
 		clear_queue(tokens);
 		return (NULL);
 	}
-	// while (line[i])
-	// {
-	// 	i += skip_spaces(line + i);
-	// 	if (!line[i])
-	// 		break ;
-	// 	type = get_token_type(line + i);
-	// 	len = next_token(line + i, type);
-	// 	if (type == T_WORD)
-	// 	{
-	// 		if (!enqueue(tokens, type, first_word(line + i)))
-	// 		{
-	// 			clear_queue(tokens);
-	// 			return (NULL);
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		if (!search_token(tokens, line + i))
-	// 		{
-	// 			clear_queue(tokens);
-	// 			return (NULL);
-	// 		}
-	// 	}
-	// 	i += len;
-	// }
 	if (!check_redir(tokens))
 	{
 		clear_queue(tokens);

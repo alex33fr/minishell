@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/10 13:31:24 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:26:55 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	get_first_word_len(char *line)
 	res = 0;
 	while (line[res] && !ft_isspace(line[res])
 		&& line[res] != '<' && line[res] != '>' && line[res] != '|')
-	{	
+	{
 		if (line[res] == '"' || line[res] == '\'')
 		{
 			quote = line[res++];

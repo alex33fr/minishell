@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/08 09:59:35 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:26:19 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 
 # include <unistd.h>
 # include "../libft/includes/libft.h"
-
-// FAire une liste avec tab de tab ?
-// Tant que token == T_WORD
-
 
 typedef enum e_tok
 {

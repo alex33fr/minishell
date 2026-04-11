@@ -6,15 +6,12 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/07 16:14:28 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:29:09 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-
-// FAIRE CHECK_REDIR
-// VERIFIER SI IL N'Y A PAS DE MOTS APRES
 int	check_redir(t_queue *queue)
 {
 	t_node	*node;
@@ -51,7 +48,7 @@ static int	check_pipe(char *line)
 	{
 		next_char = i + 1 + skip_spaces(line + i + 1);
 		if (line[i] == '|' && line[next_char] == '|')
-			return(0);
+			return (0);
 		i++;
 	}
 	if (line[len - 1] == '|')
