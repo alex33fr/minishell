@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/01 14:41:46 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/10 13:31:24 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	get_first_word_len(char *line)
 int	next_token(char *line, t_tok tok)
 {
 	int		res;
-	char	quote;
 
 	res = 0;
 	if (tok == T_WORD)
@@ -50,44 +49,34 @@ int	next_token(char *line, t_tok tok)
 	return (res);
 }
 
-static int	find_quote_end(char *line, int i)
+t_tok	get_token_type(char *line)
 {
-	char	quote;
-
-	quote = line[i];
-	i++;
-	while (line[i] && line[i] != quote)
-		i++;
-	if (line[i] == quote)
-		i++;
-	return (i);
+	if (line[0] == '<')
+	{
+		if (line[1] == '<')
+			return (T_HEREDOC);
+		return (T_REDIRIN);
+	}
+	else if (line[0] == '>')
+	{
+		if (line[1] == '>')
+			return (T_APPEND);
+		return (T_REDIROUT);
+	}
+	else if (line[0] == '|')
+		return (T_PIPE);
+	else
+		return (T_WORD);
 }
 
 char	*first_word(char *line)
 {
 	char	*result;
-	char	quote;
-	int		i;
-	int		j;
-	int		end;
+	int		len;
 
-	i = 0;
-	j = 0;
-	result = malloc(sizeof(char) * (next_token(line, T_WORD) + 1));
-	if (!result)
+	if (!line)
 		return (NULL);
-	while (i < next_token(line, T_WORD))
-	{
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			end = find_quote_end(line, i);
-			while (++i < end - 1)
-				result[j++] = line[i];
-			i++;
-		}
-		else
-			result[j++] = line[i++];
-	}
-	result[j] = '\0';
+	len = next_token(line, T_WORD);
+	result = ft_substr(line, 0, len);
 	return (result);
 }

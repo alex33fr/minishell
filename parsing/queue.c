@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 15:38:21 by byonis            #+#    #+#             */
-/*   Updated: 2026/03/31 12:52:36 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/08 15:35:10 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@ t_queue	*empty_queue(void)
 	result->front = NULL;
 	result->back = NULL;
 	return (result);
-}
-
-static int	check_new_node(t_node *new_node, char *value)
-{
-	if (!value)
-	{
-		free(new_node);
-		return (0);
-	}
-	return (1);
 }
 
 int	enqueue(t_queue *queue, t_tok type, char *value)

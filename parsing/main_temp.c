@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 10:52:24 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/01 15:28:52 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/11 14:20:08 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,61 @@
 
 int	main(void)
 {
-	// char	line[33] = "< infile ls -l | wc -l > outfile";
+	char	*line = "< infile ls -l | wc -l > outfile";
 	//					| arg1  | arg2 | arg3  |  arg4	|
 	// "< infile" "ls -l" "|" "wc -l" "> outfile"
 	
 	
-	// char	line[37] = "< infile \"ls -l\" | \"wc -l\" > outfile";
+	// char	*line = "< infile \"ls -l\" | \"wc -l\" > outfile";
 	// "< infile" ""ls -l"" "|" ""wc -l"" "> outfile"
 
 	
-	// char	line[8] = "echo \"|\"";
+	// char	*line = "echo \"|\"";
 	// "echo \"|\""
 
 
-	// char	line[7] = "echo \"\"";
+	// char	*line = "echo \"\"";
 	
 	// char	*line = "echo \"hello\"world";
 
-	char	*line = "echo \"hello";
+	// char	*line = "echo \"hello\"\'world\'";
+
+	// char	*line = "echo \"\'hello\"";
+
+	// char	*line = "echo ppp |       |  echo a";
+
+	// char	*line = "ls > file1 > file2";
 	
-	char	*temp;
+	t_redir	*files_redir;
 	t_queue	*tokens;
+	t_cmd	*cmds;
+	t_cmd	*temp;
+	int		i;
 
 	tokens = lexer(line);
 	if (!tokens)
 		return (1);
-	while (tokens->front)
+	cmds = create_cmds(tokens);
+	if (!cmds)
+		return (1);
+	temp = cmds;
+	while (temp)
 	{
-		// printf("%d\n", tokens->front->token);
-		dequeue(tokens, &temp);
-		printf("%s\n", temp);
-		free(temp);
+		i = 0;
+		while (temp->args[i])
+		{
+			printf("%s\n", temp->args[i]);
+			i++;
+		}
+		files_redir = temp->redir;
+		while (files_redir)
+		{
+			printf("%s\n", files_redir->file);
+			files_redir = files_redir->next;
+		}
+		temp = temp->next;
 	}
+	free_cmds(cmds);
 	clear_queue(tokens);
 	return (0);
 }
