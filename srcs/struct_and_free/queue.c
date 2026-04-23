@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 15:38:21 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/08 15:35:10 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:54:05 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 t_queue	*empty_queue(void)
 {

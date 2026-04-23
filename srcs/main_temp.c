@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 10:52:24 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:20:08 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:13:36 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 #include <stdio.h>
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
-	char	*line = "< infile ls -l | wc -l > outfile";
+	// char	*line = "< infile ls -l | wc -l > outfile";
 	//					| arg1  | arg2 | arg3  |  arg4	|
 	// "< infile" "ls -l" "|" "wc -l" "> outfile"
 	
@@ -40,6 +40,14 @@ int	main(void)
 	// char	*line = "echo ppp |       |  echo a";
 
 	// char	*line = "ls > file1 > file2";
+
+	// char	*line = "echo \"hello\" > file.txt world";
+	
+	// char	*line = "echo $HOME";
+	
+	// char	*line = "echo \"\'$HOME$PWD\'\"";
+
+	char	*line = "echo \'$HOME\'";
 	
 	t_redir	*files_redir;
 	t_queue	*tokens;
@@ -47,7 +55,9 @@ int	main(void)
 	t_cmd	*temp;
 	int		i;
 
-	tokens = lexer(line);
+	(void)ac;
+	(void)av;
+	tokens = lexer(line, envp); // rajouter last_status
 	if (!tokens)
 		return (1);
 	cmds = create_cmds(tokens);

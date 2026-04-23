@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 13:08:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:31:59 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:53:57 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static void	free_args(char **arr)
 {

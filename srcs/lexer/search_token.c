@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:38:54 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/04 11:22:45 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:50:42 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static int	search_pipe(t_queue *q, char *line)
 {

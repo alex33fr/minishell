@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 11:18:39 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:24:57 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:50:57 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 int	skip_spaces(char *line)
 {
@@ -76,7 +76,7 @@ static int	tokenize_line(t_queue *q, char *line)
 	return (1);
 }
 
-t_queue	*lexer(char *line)
+t_queue	*lexer(char *line, char **envp) // rajouter int last_status
 {
 	t_queue	*tokens;
 
@@ -88,6 +88,11 @@ t_queue	*lexer(char *line)
 	if (!tokens)
 		return (NULL);
 	if (!tokenize_line(tokens, line) || !add_eof(tokens))
+	{
+		clear_queue(tokens);
+		return (NULL);
+	}
+	if (!do_expand(tokens, envp)) // rajouter last_status
 	{
 		clear_queue(tokens);
 		return (NULL);

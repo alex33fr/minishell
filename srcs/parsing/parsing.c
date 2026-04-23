@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 13:06:33 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:28:34 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:54:15 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static void	add_cmd_back(t_cmd **head, t_cmd **current, t_cmd *new_node)
 {

@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:26:55 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:51:06 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static int	get_first_word_len(char *line)
 {
@@ -79,4 +79,25 @@ char	*first_word(char *line)
 	len = next_token(line, T_WORD);
 	result = ft_substr(line, 0, len);
 	return (result);
+}
+
+t_queue	*do_expand(t_queue *q, char **envp)
+{
+	t_node	*temp;
+	char	*res;
+
+	temp = q->front;
+	while (temp->token != T_EOF)
+	{
+		if (temp->token == T_WORD)
+		{
+			res = expand(temp->value, envp);
+			if (!res)
+				return (NULL);
+			free(temp->value);
+			temp->value = res;
+		}
+		temp = temp->next;
+	}
+	return (q);
 }

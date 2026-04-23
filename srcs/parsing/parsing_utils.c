@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:31:45 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:54:24 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static int	args_number_in_cmd(t_queue *q)
 {
@@ -110,7 +110,7 @@ t_cmd	*first_cmd(t_queue *q)
 	{
 		if (q->front->token == T_WORD)
 			dequeue(q, &res->args[i++]);
-		else if (q->front->token >= T_REDIRIN || q->front->token <= T_APPEND)
+		else if (q->front->token >= T_REDIRIN && q->front->token <= T_APPEND)
 		{
 			if (!manage_cmd_redir(q, res))
 				return (NULL);

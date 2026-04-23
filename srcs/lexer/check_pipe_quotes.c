@@ -6,11 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/11 14:29:09 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/23 12:51:11 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 int	check_redir(t_queue *queue)
 {
