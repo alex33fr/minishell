@@ -1,68 +1,73 @@
-NAME        = minishell
+CC      = cc
+CFLAGS  = -Wall -Wextra -Werror -g
 
-CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g
+INC_DIR = -I ../includes/ -I ../libft/includes/
 
-LIBFT_DIR   = ../libft
-LIBFT_LIB   = $(LIBFT_DIR)/libft.a
+OBJ_DIR = obj
 
-INCLUDES    = -Iincludes -I$(LIBFT_DIR)/includes
+BUILTINS = builtins/
+ENV      = env/
+EXEC     = exec/
+INIT     = init/
+PIPES    = pipes_redir_signals/
+UTILS    = utils/
 
-OBJ_DIR     = obj
-SRCS        = main.c \
-              env/ft_env_access.c \
-			  env/ft_env_clear.c \
-              env/ft_env_core.c \
-              env/ft_env_set.c \
-			  env/ft_env_unset.c \
-			  env/ft_env_to_envp.c \
-			  exec/ft_exec_childs.c \
-			  exec/ft_exec_external.c \
-			  exec/ft_exec_builtin.c \
-			  exec/ft_exec_wait.c \
-			  exec/ft_exec.c \
-			  exec/ft_path.c \
-			  builtins/ft_builtin_env.c \
-			  builtins/ft_builtin_simple.c \
-			  utils/ft_clear.c \
-			  utils/ft_strcmp.c \
-			  utils/ft_close.c
+NAME     = libruntime.a
 
-OBJS        = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+GREEN    = \033[0;32m
+RED      = \033[0;31m
+RESET    = \033[0m
 
-TOTAL_FILES := $(words $(SRCS))
-COUNT = 0
+MY_SOURCES = $(BUILTINS)ft_builtin_env.c \
+             $(BUILTINS)ft_builtin_simple.c \
+             $(ENV)ft_env_access.c \
+             $(ENV)ft_env_clear.c \
+             $(ENV)ft_env_core.c \
+             $(ENV)ft_env_set.c \
+             $(ENV)ft_env_to_envp.c \
+             $(ENV)ft_env_unset.c \
+             $(EXEC)ft_exec_builtin.c \
+             $(EXEC)ft_exec.c \
+             $(EXEC)ft_exec_childs.c \
+             $(EXEC)ft_exec_cmd_list.c \
+             $(EXEC)ft_exec_external.c \
+             $(EXEC)ft_exec_wait.c \
+             $(EXEC)ft_path.c \
+             $(INIT)ft_init.c \
+             $(PIPES)ft_pipe.c \
+             $(PIPES)ft_redir.c \
+             $(PIPES)ft_signals.c \
+             $(UTILS)ft_clear.c \
+             $(UTILS)ft_close.c \
+             $(UTILS)ft_errors.c \
+             $(UTILS)ft_redir_tools.c \
+             $(UTILS)ft_builtins_tools.c \
+             $(UTILS)ft_pipe_tools.c
 
-GREEN = \033[0;32m
-BLUE  = \033[0;34m
-RED   = \033[0;31m
-RESET = \033[0m
+MY_OBJECTS     = $(addprefix $(OBJ_DIR)/, $(MY_SOURCES:.c=.o))
+TOTAL_FILES   := $(words $(MY_SOURCES))
+COUNT          = 0
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_LIB) $(OBJS)
-	@printf "\r$(GREEN)[Linking]$(RESET)                     "
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) || (printf "\n$(RED)Link error$(RESET)\n"; exit 1)
-	@printf "\r$(GREEN)[100%%] $(NAME) normaly is ready [OK]$(RESET)\n"
-
-$(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR) >/dev/null 2>&1 || exit 1
+$(NAME): $(MY_OBJECTS)
+	@printf "\r$(GREEN)[Archiving]$(RESET)                   "
+	@ar rcs $@ $^
+	@printf "\r$(GREEN)[100%%] ========[ $(NAME) is ready ]======== [OK] $(RESET)\n"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 	@PERCENT=$$(($(COUNT)*100/$(TOTAL_FILES))); \
 	printf "\r$(GREEN)[%3d%%] %-30s$(RESET)" $$PERCENT "$<"; \
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ || exit 1
+	$(CC) $(CFLAGS) $(INC_DIR) -c $< -o $@ || (printf "\n$(RED)Error in $<$(RESET)\n"; exit 1)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@if [ -d "$(LIBFT_DIR)" ]; then $(MAKE) -C $(LIBFT_DIR) clean >/dev/null 2>&1; fi
 	@printf "$(GREEN)Clean [OK]$(RESET)\n"
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean >/dev/null 2>&1
 	@printf "$(GREEN)Fclean [OK]$(RESET)\n"
 
 re: fclean all

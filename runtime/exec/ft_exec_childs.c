@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:28:44 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/08 16:02:23 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/04/27 11:26:12 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,21 @@ char	*ft_resolve_path(t_exec *exec)
  */
 void	ft_exec_child(t_exec *exec, char *path, char **envp)
 {
+	struct stat	st;
+	int			is_path;
+
 	execve(path, exec->argv, envp);
 	perror(exec->argv[0]);
+	is_path = (ft_strchr(exec->argv[0], '/') != NULL);
+	if (stat(path, &st) != 0)
+	{
+		free(path);
+		exit(127);
+	}
 	free(path);
-	if (access(exec->argv[0], F_OK) == 0)
+	if (!S_ISDIR(st.st_mode))
+		exit(126);
+	if (is_path)
 		exit(126);
 	exit(127);
 }

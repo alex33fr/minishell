@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:35:19 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/08 15:59:47 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/04/27 09:59:39 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ static char	**ft_get_path_splitted(t_env *env)
 
 	path_val = ft_env_get(env, "PATH");
 	if (!path_val)
-		return (NULL);
+	{
+		paths = ft_split(".", ':');
+		return (paths);
+	}
 	paths = ft_split(path_val, ':');
 	if (!paths)
 		return (NULL);

@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+/**
+ * @brief
+ * Free a NULL-terminated array of strings
+ */
 void	ft_free_tab(char **tab)
 {
 	int	i;

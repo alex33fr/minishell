@@ -1,36 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   runtime.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/09 17:48:47 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/04/26 18:44:57 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../../libft/includes/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <fcntl.h>
-# include <signal.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <errno.h>
-# include <linux/limits.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+#ifndef RUNTIME_H
+# define RUNTIME_H
+
 /**
- * @brief 
+ * @brief
  * ENV
  */
-
 typedef struct s_env_n
 {
 	char			*key;
@@ -51,7 +37,7 @@ char	**ft_env_to_envp(t_env *env);
 void	ft_env_clear(t_env *env);
 
 /**
- * @brief 
+ * @brief
  * EXEC
  */
 typedef struct s_exec
@@ -78,12 +64,57 @@ int		ft_builtin_echo(char **argv);
 int		ft_builtin_cd(char **argv, t_env *env);
 int		ft_builtin_export(char **argv, t_env *env);
 int		ft_builtin_unset(char **argv, t_env *env);
+int		ft_is_valid_num(char *s);
+long	ft_exit_atol(char *s, int *overflow);
+int		ft_is_valid_name(char *s);
+int		ft_is_n_flag(char *s);
 
 /**
- * @brief 
+ * @brief
+ * PIPES
+ */
+typedef struct s_pipe_fds
+{
+	int	prev_fd;
+	int	pipefd[2];
+	int	last;
+}	t_pipe_fds;
+
+int		ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env);
+int		ft_wait_all(pid_t *pids, int n_cmds);
+void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds);
+void	ft_update_fds(t_pipe_fds *fds);
+
+/**
+ * @brief
+ * REDIRECTIONS
+ */
+int		ft_apply_redirs(t_redir *redir);
+int		ft_redir_in(char *file);
+int		ft_redir_out(char *file);
+int		ft_redir_append(char *file);
+int		ft_redir_heredoc(char *delimiter);
+
+/**
+ * @brief
+ * INIT
+ */
+t_env	*ft_init(char **envp);
+
+/**
+ * @brief
+ * SIGNALS
+ */
+void	ft_setup_signals(void);
+void	ft_signals_child(void);
+
+/**
+ * @brief
  * TOOLS
  */
 void	ft_free_tab(char **tab);
 void	ft_close(int in_1, int in_2);
-int		ft_strcmp(char *s1, char *s2);
+int		ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status);
+int		ft_export_err(char *s);
+
 #endif

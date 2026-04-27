@@ -6,16 +6,16 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:11:46 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/09 22:44:03 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/04/27 12:13:52 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief
- * Print current working directory to stdout
- * @return int
+ * @brief 
+ * 
+ * @return int 
  */
 int	ft_builtin_pwd(void)
 {
@@ -32,10 +32,10 @@ int	ft_builtin_pwd(void)
 }
 
 /**
- * @brief
- * Print all env variables to stdout
- * @param env
- * @return int
+ * @brief 
+ * 
+ * @param env 
+ * @return int 
  */
 int	ft_builtin_env(t_env *env)
 {
@@ -57,32 +57,43 @@ int	ft_builtin_env(t_env *env)
 }
 
 /**
- * @brief
- * Exit shell with optional numeric exit code from argv[1]
- * @param argv
- * @return int
+ * @brief 
+ * 
+ * @param argv 
+ * @return int 
  */
 int	ft_builtin_exit(char **argv)
 {
-	int	result;
+	long	val;
+	int		err;
 
-	result = 0;
 	if (!argv[1])
 		exit(0);
-	if (!ft_isdigit(argv[1][0]))
+	if (!ft_is_valid_num(argv[1]))
 	{
 		ft_putstr_fd("exit: numeric argument required\n", 2);
 		exit(2);
 	}
-	result = ft_atoi(argv[1]);
-	exit(result);
+	if (argv[2])
+	{
+		ft_putstr_fd("exit: too many arguments\n", 2);
+		return (1);
+	}
+	err = 0;
+	val = ft_exit_atol(argv[1], &err);
+	if (err)
+	{
+		ft_putstr_fd("exit: numeric argument required\n", 2);
+		exit(2);
+	}
+	exit((unsigned char)val);
 }
 
 /**
- * @brief
- * Print argv to stdout, handle -n flag to skip newline
- * @param argv
- * @return int
+ * @brief 
+ * 
+ * @param argv 
+ * @return int 
  */
 int	ft_builtin_echo(char **argv)
 {
@@ -91,10 +102,10 @@ int	ft_builtin_echo(char **argv)
 
 	newline = 1;
 	i = 1;
-	if (argv[1] && !ft_strcmp(argv[1], "-n"))
+	while (argv[i] && ft_is_n_flag(argv[i]))
 	{
 		newline = 0;
-		i = 2;
+		i++;
 	}
 	while (argv[i])
 	{
@@ -109,11 +120,11 @@ int	ft_builtin_echo(char **argv)
 }
 
 /**
- * @brief
- * Change current directory and update PWD and OLDPWD in env
- * @param argv
- * @param env
- * @return int
+ * @brief 
+ * 
+ * @param argv 
+ * @param env 
+ * @return int 
  */
 int	ft_builtin_cd(char **argv, t_env *env)
 {

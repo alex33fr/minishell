@@ -6,17 +6,19 @@
 #    By: byonis <byonis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/13 13:49:48 by byonis            #+#    #+#              #
-#    Updated: 2026/03/23 09:54:36 by aprivalo         ###   ########.fr        #
+#    Updated: 2026/04/11 13:49:17 by byonis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS = -Wall -Werror -Wextra
 
-MY_SOURCES = ft_isalpha.c \
+MY_SOURCES = ft_strcmp.c \
+			ft_isalpha.c \
 			ft_isdigit.c \
 			ft_isalnum.c \
 			ft_isascii.c \
 			ft_isprint.c \
+			ft_isspace.c \
 			ft_strlen.c \
 			ft_memset.c \
 			ft_bzero.c \

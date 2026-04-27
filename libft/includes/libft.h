@@ -71,6 +71,7 @@ char			*ft_strjoin_m(char *s1, char *s2);
 char			*ft_substr_m(char *s, unsigned int start, size_t len);
 long			ft_atol(const char *s);
 unsigned int	ft_int_len_un(unsigned int n);
+int				ft_strcmp(char *s1, char *s2);
 int				ft_printf(const char *s, ...);
 int				ft_print_char(va_list args);
 int				ft_print_string(va_list args);
