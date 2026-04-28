@@ -6,7 +6,7 @@
 #    By: byonis <byonis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/23 12:43:54 by byonis            #+#    #+#              #
-#    Updated: 2026/04/23 13:50:23 by byonis           ###   ########.fr        #
+#    Updated: 2026/04/28 11:04:40 by byonis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,16 +18,16 @@ OBJ_DIR := obj
 
 SRC_DIR := srcs/
 
-EXPAND := expand
-LEXER := lexer
-PARSING := parsing
-STRUCT := struct_and_free
+EXPAND := expand/
+LEXER := lexer/
+PARSING := parsing/
+STRUCT := struct_and_free/
 
 LIBFT := libft/libft.a
 
 MY_SOURCES := $(SRC_DIR)$(EXPAND)expand_utils.c \
 				$(SRC_DIR)$(EXPAND)expand.c \
-				$(SRC_DIR)$(LEXER)check_pipe_quotes.c \
+				$(SRC_DIR)$(LEXER)check_syntax.c \
 				$(SRC_DIR)$(LEXER)lexer_utils.c \
 				$(SRC_DIR)$(LEXER)lexer.c \
 				$(SRC_DIR)$(LEXER)search_token.c \

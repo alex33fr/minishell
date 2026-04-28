@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 12:51:06 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/28 14:26:15 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_queue	*do_expand(t_queue *q, char **envp)
 				return (NULL);
 			free(temp->value);
 			temp->value = res;
+			remove_quotes(temp->value);
 		}
 		temp = temp->next;
 	}

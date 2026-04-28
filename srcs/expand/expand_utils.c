@@ -6,26 +6,24 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 13:58:15 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/28 15:56:00 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-int	find_the_next_valid_variable(char *s, int start)
+int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes)
 {
 	int	i;
-	int	in_double_quotes;
+	// int	in_double_quotes;
 
 	i = start;
-	in_double_quotes = 0;
-	while (s[i])
+	// in_double_quotes = 0;
+	while (s && s[i])
 	{
-		if (s[i] == '"' && !in_double_quotes)
-			in_double_quotes = 1;
-		else if (s[i] == '"' && in_double_quotes)
-			in_double_quotes = 0;
-		if (s[i] == '\'' && !in_double_quotes)
+		if (s[i] == '"')
+			*in_double_quotes = !(*in_double_quotes);
+		if (s[i] == '\'' && !(*in_double_quotes))
 		{
 			i++;
 			while (s[i] && s[i] != '\'')

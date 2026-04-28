@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 11:18:39 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 12:50:57 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/27 16:28:38 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_queue	*lexer(char *line, char **envp) // rajouter int last_status
 
 	if (!line)
 		return (NULL);
-	if (!check_pipe_quotes(line))
+	if (!check_syntax(line))
 		return (NULL);
 	tokens = empty_queue();
 	if (!tokens)

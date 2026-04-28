@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 10:42:50 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/28 15:44:35 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_tok	dequeue(t_queue *queue, char **val_ptr);
 void	clear_queue(t_queue *queue);
 
 int		check_redir(t_queue *queue);
-int		check_pipe_quotes(char *line);
+int		check_syntax(char *line);
 
 int		search_token(t_queue *q, char *line);
 
@@ -82,8 +82,9 @@ t_cmd	*create_cmds(t_queue *q);
 
 char	*var_replaced(char *var, char **envp, int pos);
 char	*var_extraction(char *str, int pos);
-// char	*replace(char *var, char *var_replaced, int pos);
+
+char	*remove_quotes(char *str);
 char 	*expand(char *str, char **envp);
-int		find_the_next_valid_variable(char *str, int start);
+int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif
