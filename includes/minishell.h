@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen_int.c                                       :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:41:28 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/27 12:12:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/03/23 12:32:17 by byonis            #+#    #+#             */
+/*   Updated: 2026/04/27 11:04:14 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int	strlen_int(const char *s)
-{
-	int	n;
+# include <errno.h>
+# include "parsing.h"
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <linux/limits.h>
+# include <limits.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "globals.h"
+# include "parsing.h"
+# include "runtime.h"
 
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
-}
+#endif

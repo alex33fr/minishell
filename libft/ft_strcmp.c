@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen_int.c                                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:41:28 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/27 12:12:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/03/26 15:51:07 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/04/15 14:50:39 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int	strlen_int(const char *s)
-{
-	int	n;
+/**
+ * @brief 
+ *  Compare string 1 and string 2
+ * @param s1 
+ * @param s2 
+ * @return int 
+ */
 
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
 }
