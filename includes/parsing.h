@@ -60,7 +60,7 @@ t_tok	dequeue(t_queue *queue, char **val_ptr);
 void	clear_queue(t_queue *queue);
 
 int		check_redir(t_queue *queue);
-int		check_pipe_quotes(char *line);
+int		check_syntax(char *line);
 
 int		search_token(t_queue *q, char *line);
 
@@ -70,8 +70,8 @@ char	*first_word(char *line);
 
 int		ft_isspace(int c);
 int		skip_spaces(char *line);
-t_queue	*do_expand(t_queue *q, char **envp, int last_status);
-t_queue	*lexer(char *line, char **envp, int last_status);
+t_queue	*do_expand(t_queue *q, char **envp);
+t_queue	*lexer(char *line, char **envp);
 
 void	free_cmds(t_cmd *cmds);
 
@@ -79,9 +79,10 @@ t_cmd	*first_cmd(t_queue *q);
 
 t_cmd	*create_cmds(t_queue *q);
 
-char	*var_replaced(char *var, char **envp, int pos, int last_status);
+char	*remove_quotes(char *str);
+char	*var_replaced(char *str, char **envp, int pos);
 char	*var_extraction(char *str, int pos);
-char	*expand(char *str, char **envp, int last_status);
-int		find_the_next_valid_variable(char *str, int start);
+char	*expand(char *str, char **envp);
+int		find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif
