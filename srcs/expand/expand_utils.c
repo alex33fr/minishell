@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 15:56:00 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/30 13:44:16 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*var_replaced(char *str, char **envp, int pos) // rajouter int last_status
 	temp = var_extraction(str, pos);
 	if (!temp)
 		return (NULL);
-	// if (ft_strncmp(temp, "?", 0))
+	// if (ft_strncmp(temp, "?", 1) == 0)
 	// 	res = ft_itoa(last_status);
 	// 	if (!res)
 	//		return (NULL);

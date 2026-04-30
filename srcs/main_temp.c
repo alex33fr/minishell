@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 10:52:24 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 16:06:56 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/30 13:27:35 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ int	main(int ac, char **av, char **envp)
 
 	// char	*line = "echo \"> >> < * ? [ ] | ; [ ] || && ( }) & # $ \\ <<\"";
 
-	char	*line = "echo \"HOME=$HOME USER=$USER PWD=$PWD\"";
+	// char	*line = "echo \"HOME=$HOME USER=$USER PWD=$PWD\"";
+	
+	char	*line = "echo $?";
 	
 	t_redir	*files_redir;
 	t_queue	*tokens;
