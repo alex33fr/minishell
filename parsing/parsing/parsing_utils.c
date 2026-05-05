@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/30 15:00:43 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 13:20:10 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,11 @@ t_cmd	*first_cmd(t_queue *q)
 		if (q->front->token == T_WORD)
 		{
 			dequeue(q, &tmp);
-			res->args[i++] = remove_quotes(tmp);
+			tmp = remove_quotes(tmp);
+			if (tmp && tmp[0] == '\0')
+				free(tmp);
+			else
+				res->args[i++] = tmp;
 		}
 		else if (q->front->token >= T_REDIRIN && q->front->token <= T_APPEND)
 		{

@@ -8,3 +8,4 @@ obj/
 libft/libft.a
 libft/
 minishell
+minishell_tester
