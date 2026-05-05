@@ -2,3 +2,9 @@
 .vscode/
 runtime/obj/
 parsing/obj/
+runtime/libruntime.a
+parsing/libparsing.a
+obj/
+libft/libft.a
+libft/
+minishell
