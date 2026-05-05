@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/29 09:45:42 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/05 10:16:42 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	ft_run_line(char *line, t_env *env, int last_status)
 		return (last_status);
 	if (isatty(STDIN_FILENO))
 		add_history(line);
-	tokens = lexer(line, ft_env_to_envp(env));
+	tokens = lexer(line, ft_env_to_envp(env), last_status);
 	if (!tokens)
 		return (2);
 	cmds = create_cmds(tokens);

@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:35:02 by byonis            #+#    #+#             */
-/*   Updated: 2026/01/01 12:53:49 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/22 13:40:41 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static size_t	ft_strlen_szt(const char *s)
 char	*ft_strjoin_m(char *s1, char *s2)
 {
 	char	*s_result;
-	size_t	s_len;
+	size_t	s2_len;
 	size_t	i;
 	size_t	s1_len;
 
@@ -35,21 +35,19 @@ char	*ft_strjoin_m(char *s1, char *s2)
 		return (NULL);
 	i = 0;
 	s1_len = ft_strlen_szt(s1);
-	s_len = s1_len + ft_strlen_szt(s2);
-	s_result = malloc(sizeof(char) * (s_len + 1));
+	s2_len = ft_strlen_szt(s2);
+	s_result = malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (s_result == NULL)
-		return (NULL);
-	while (i < s_len)
 	{
-		if (i < s1_len)
-			s_result[i] = s1[i];
-		else
-			s_result[i] = s2[i - s1_len];
-		i++;
+		free(s1);
+		free(s2);
+		return (NULL);
 	}
+	ft_memcpy(s_result, s1, s1_len);
+	ft_memcpy(s_result + s1_len, s2, s2_len);
+	s_result[s1_len + s2_len] = '\0';
 	free(s1);
 	free(s2);
-	s_result[i] = '\0';
 	return (s_result);
 }
 
