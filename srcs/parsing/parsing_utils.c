@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 12:54:24 by byonis           ###   ########.fr       */
+/*   Updated: 2026/04/30 15:00:43 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ static int	manage_cmd_redir(t_queue *q, t_cmd *res)
 t_cmd	*first_cmd(t_queue *q)
 {
 	t_cmd	*res;
+	char	*tmp;
 	int		i;
 
 	res = init_cmd(q);
@@ -109,7 +110,10 @@ t_cmd	*first_cmd(t_queue *q)
 	while (q->front->token != T_PIPE && q->front->token != T_EOF)
 	{
 		if (q->front->token == T_WORD)
-			dequeue(q, &res->args[i++]);
+		{
+			dequeue(q, &tmp);
+			res->args[i++] = remove_quotes(tmp);
+		}
 		else if (q->front->token >= T_REDIRIN && q->front->token <= T_APPEND)
 		{
 			if (!manage_cmd_redir(q, res))

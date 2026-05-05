@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:12:57 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 15:45:04 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 09:29:40 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ static char	*replace(char *str, char *var_replaced, int pos)
 	return (res);
 }
 
-static char	*process_expansion(char *res, char **envp, int *i)
+static char	*process_expansion(char *res, char **envp, int *i, int last_status)
 {
 	char	*value;
 	char	*temp;
 	int		val_len;
 
 	val_len = 0;
-	value = var_replaced(res, envp, *i); // rajouter int last_status
+	value = var_replaced(res, envp, *i, last_status); // rajouter int last_status
 	if (!value)
 	{
 		free(res);
@@ -95,7 +95,7 @@ char	*remove_quotes(char *str)
 	return (str);
 }
 
-char *expand(char *str, char **envp) // rajouter int last_status
+char *expand(char *str, char **envp, int last_status) // rajouter int last_status
 {
 	char	*res;
 	int		i;
@@ -111,7 +111,7 @@ char *expand(char *str, char **envp) // rajouter int last_status
 	i = find_the_next_valid_variable(res, i, &in_double_quotes);
 	while (i != -1)
 	{
-		res = process_expansion(res, envp, &i); // rajouter int last_status
+		res = process_expansion(res, envp, &i, last_status); // rajouter int last_status
 		if (!res)
 			break ;
 		i = find_the_next_valid_variable(res, i, &in_double_quotes);

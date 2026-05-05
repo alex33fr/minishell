@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 15:44:35 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 09:31:51 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ char	*first_word(char *line);
 
 int		ft_isspace(int c);
 int		skip_spaces(char *line);
-t_queue	*do_expand(t_queue *q, char **envp);
-t_queue	*lexer(char *line, char **envp);
+t_queue	*do_expand(t_queue *q, char **envp, int last_status);
+t_queue	*lexer(char *line, char **envp, int last_status);
 
 void	free_cmds(t_cmd *cmds);
 
@@ -80,11 +80,11 @@ t_cmd	*first_cmd(t_queue *q);
 
 t_cmd	*create_cmds(t_queue *q);
 
-char	*var_replaced(char *var, char **envp, int pos);
+char	*var_replaced(char *var, char **envp, int pos, int last_status);
 char	*var_extraction(char *str, int pos);
 
 char	*remove_quotes(char *str);
-char 	*expand(char *str, char **envp);
+char 	*expand(char *str, char **envp, int last_status);
 int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 14:26:15 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 09:31:23 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*first_word(char *line)
 	return (result);
 }
 
-t_queue	*do_expand(t_queue *q, char **envp)
+t_queue	*do_expand(t_queue *q, char **envp, int last_status)
 {
 	t_node	*temp;
 	char	*res;
@@ -91,12 +91,12 @@ t_queue	*do_expand(t_queue *q, char **envp)
 	{
 		if (temp->token == T_WORD)
 		{
-			res = expand(temp->value, envp);
+			res = expand(temp->value, envp, last_status);
 			if (!res)
 				return (NULL);
 			free(temp->value);
 			temp->value = res;
-			remove_quotes(temp->value);
+			// remove_quotes(temp->value);
 		}
 		temp = temp->next;
 	}

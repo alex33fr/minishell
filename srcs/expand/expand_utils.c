@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/30 13:44:16 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 09:27:27 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ ATTENTION !!!!!!
 IL FAUT LAST_STATUS POUR CETTE FONCTION !!!!!
 */
 
-char	*var_replaced(char *str, char **envp, int pos) // rajouter int last_status
+char	*var_replaced(char *str, char **envp, int pos, int last_status) // rajouter int last_status
 {
 	char	*temp;
 	char	*res;
@@ -92,24 +92,24 @@ char	*var_replaced(char *str, char **envp, int pos) // rajouter int last_status
 	temp = var_extraction(str, pos);
 	if (!temp)
 		return (NULL);
-	// if (ft_strncmp(temp, "?", 1) == 0)
-	// 	res = ft_itoa(last_status);
-	// 	if (!res)
-	//		return (NULL);
-	// else
-	// {
-	// val = find_env_value(temp, envp);
-	// free(temp);
-	// if (!val)
-	// 	res = ft_strdup("");
-	// else
-	// 	res = ft_strdup(val);
-	// 	}
+	if (ft_strncmp(temp, "?", 1) == 0)
+		res = ft_itoa(last_status);
+		if (!res)
+			return (NULL);
+	else
+	{
 	val = find_env_value(temp, envp);
 	free(temp);
 	if (!val)
 		res = ft_strdup("");
 	else
 		res = ft_strdup(val);
+		}
+	// val = find_env_value(temp, envp);
+	// free(temp);
+	// if (!val)
+	// 	res = ft_strdup("");
+	// else
+	// 	res = ft_strdup(val);
 	return (res);
 }
