@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 13:20:10 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 13:42:53 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_cmd	*first_cmd(t_queue *q)
 	t_cmd	*res;
 	char	*tmp;
 	int		i;
+	int		had_quotes;
 
 	res = init_cmd(q);
 	if (!res)
@@ -112,8 +113,12 @@ t_cmd	*first_cmd(t_queue *q)
 		if (q->front->token == T_WORD)
 		{
 			dequeue(q, &tmp);
+			if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
+				had_quotes = 1;
+			else
+				had_quotes = 0;
 			tmp = remove_quotes(tmp);
-			if (tmp && tmp[0] == '\0')
+			if (tmp && tmp[0] == '\0' && !had_quotes)
 				free(tmp);
 			else
 				res->args[i++] = tmp;
