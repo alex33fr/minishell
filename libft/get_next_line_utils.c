@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:35:02 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/22 13:40:41 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 11:04:32 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ char	*ft_strjoin_m(char *s1, char *s2)
 {
 	char	*s_result;
 	size_t	s2_len;
-	size_t	i;
 	size_t	s1_len;
 
 	if (!s1 && !s2)
 		return (NULL);
-	i = 0;
 	s1_len = ft_strlen_szt(s1);
 	s2_len = ft_strlen_szt(s2);
 	s_result = malloc(sizeof(char) * (s1_len + s2_len + 1));
