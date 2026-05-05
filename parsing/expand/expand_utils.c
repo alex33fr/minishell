@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 10:28:12 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 14:00:58 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes)
 {
 	int	i;
-	// int	in_double_quotes;
 
 	i = start;
-	// in_double_quotes = 0;
 	while (s && s[i])
 	{
 		if (s[i] == '"')
@@ -30,6 +28,8 @@ int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes)
 				i++;
 			if (!s[i])
 				break ;
+			i++;
+			continue;
 		}
 		if (s[i] == '$' && s[i + 1]
 			&& (ft_isalpha(s[i + 1]) || s[i + 1] == '_' || s[i + 1] == '?'))
