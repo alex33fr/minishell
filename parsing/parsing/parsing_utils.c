@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 13:42:53 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 14:34:54 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static int	manage_cmd_redir(t_queue *q, t_cmd *res)
 	if (q->front->token == T_WORD)
 	{
 		dequeue(q, &file);
+		file = remove_quotes(file);
 		if (!add_redir_back(&res->redir, redir_type, file))
 		{
 			free_cmds(res);
