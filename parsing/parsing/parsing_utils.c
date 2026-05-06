@@ -6,7 +6,11 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/05/05 14:34:54 by byonis           ###   ########.fr       */
+=======
+/*   Updated: 2026/05/06 14:03:47 by byonis           ###   ########.fr       */
+>>>>>>> parsing
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +63,7 @@ static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 	return (1);
 }
 
-static t_cmd	*init_cmd(t_queue *q)
+t_cmd	*init_cmd(t_queue *q)
 {
 	t_cmd	*res;
 	int		nb_args;
@@ -78,7 +82,7 @@ static t_cmd	*init_cmd(t_queue *q)
 	return (res);
 }
 
-static int	manage_cmd_redir(t_queue *q, t_cmd *res)
+int	manage_cmd_redir(t_queue *q, t_cmd *res)
 {
 	t_tok	redir_type;
 	char	*file;
@@ -98,10 +102,10 @@ static int	manage_cmd_redir(t_queue *q, t_cmd *res)
 	return (1);
 }
 
-t_cmd	*first_cmd(t_queue *q)
+void	manage_cmd_word(t_queue *q, t_cmd *res, int *i)
 {
-	t_cmd	*res;
 	char	*tmp;
+<<<<<<< HEAD
 	int		i;
 	int		had_quotes;
 
@@ -133,4 +137,18 @@ t_cmd	*first_cmd(t_queue *q)
 			dequeue(q, NULL);
 	}
 	return (res);
+=======
+	int		had_quotes;
+
+	dequeue(q, &tmp);
+	if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
+		had_quotes = 1;
+	else
+		had_quotes = 0;
+	tmp = remove_quotes(tmp);
+	if (tmp && tmp[0] == '\0' && !had_quotes)
+		free(tmp);
+	else
+		res->args[(*i)++] = tmp;
+>>>>>>> parsing
 }

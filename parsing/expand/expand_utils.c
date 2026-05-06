@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 14:00:58 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:20:46 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes)
 			if (!s[i])
 				break ;
 			i++;
-			continue;
+			continue ;
 		}
 		if (s[i] == '$' && s[i + 1]
 			&& (ft_isalpha(s[i + 1]) || s[i + 1] == '_' || s[i + 1] == '?'))
@@ -75,13 +75,7 @@ static char	*find_env_value(char *name, char **envp)
 	return (NULL);
 }
 
-/*
-ATTENTION !!!!!!
-
-IL FAUT LAST_STATUS POUR CETTE FONCTION !!!!!
-*/
-
-char	*var_replaced(char *str, char **envp, int pos, int last_status) // rajouter int last_status
+char	*var_replaced(char *str, char **envp, int pos, int last_status)
 {
 	char	*temp;
 	char	*res;
@@ -100,18 +94,12 @@ char	*var_replaced(char *str, char **envp, int pos, int last_status) // rajouter
 	}
 	else
 	{
-	val = find_env_value(temp, envp);
-	free(temp);
-	if (!val)
-		res = ft_strdup("");
-	else
-		res = ft_strdup(val);
-		}
-	// val = find_env_value(temp, envp);
-	// free(temp);
-	// if (!val)
-	// 	res = ft_strdup("");
-	// else
-	// 	res = ft_strdup(val);
+		val = find_env_value(temp, envp);
+		free(temp);
+		if (!val)
+			res = ft_strdup("");
+		else
+			res = ft_strdup(val);
+	}
 	return (res);
 }

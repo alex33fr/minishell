@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 11:18:39 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 09:30:14 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:09:25 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	tokenize_line(t_queue *q, char *line)
 	return (1);
 }
 
-t_queue	*lexer(char *line, char **envp, int last_status) // rajouter int last_status
+t_queue	*lexer(char *line, char **envp, int last_status)
 {
 	t_queue	*tokens;
 
@@ -92,7 +92,7 @@ t_queue	*lexer(char *line, char **envp, int last_status) // rajouter int last_st
 		clear_queue(tokens);
 		return (NULL);
 	}
-	if (!do_expand(tokens, envp, last_status)) // rajouter last_status
+	if (!do_expand(tokens, envp, last_status))
 	{
 		clear_queue(tokens);
 		return (NULL);

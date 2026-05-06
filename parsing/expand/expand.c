@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:12:57 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 14:19:50 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:20:22 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*process_expansion(char *res, char **envp, int *i, int last_status)
 	int		val_len;
 
 	val_len = 0;
-	value = var_replaced(res, envp, *i, last_status); // rajouter int last_status
+	value = var_replaced(res, envp, *i, last_status);
 	if (!value)
 	{
 		free(res);
@@ -95,12 +95,12 @@ char	*remove_quotes(char *str)
 	return (str);
 }
 
-char *expand(char *str, char **envp, int last_status) // rajouter int last_status
+char	*expand(char *str, char **envp, int last_status)
 {
 	char	*res;
 	int		i;
 	int		in_double_quotes;
-	
+
 	if (!str)
 		return (NULL);
 	if (str[0] == '$' && (str[1] == '\'' || str[1] == '"'))
@@ -110,18 +110,15 @@ char *expand(char *str, char **envp, int last_status) // rajouter int last_statu
 	if (!res)
 		return (NULL);
 	i = 0;
-	// in_double_quotes = 0;
-	// i = find_the_next_valid_variable(res, i, &in_double_quotes);
 	while (1)
 	{
 		in_double_quotes = 0;
 		i = find_the_next_valid_variable(res, 0, &in_double_quotes);
 		if (i == -1)
 			break ;
-		res = process_expansion(res, envp, &i, last_status); // rajouter int last_status
+		res = process_expansion(res, envp, &i, last_status);
 		if (!res)
 			return (NULL);
 	}
-	// remove_quotes(res);
 	return (res);
 }
