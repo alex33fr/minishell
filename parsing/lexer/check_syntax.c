@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 11:06:02 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 12:47:54 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	process_syntax(char *line, int *i, int *last_was_pipe)
 		if (*last_was_pipe)
 			return (0);
 		*last_was_pipe = 1;
-		i++;
+		(*i)++;
 	}
 	else
 	{

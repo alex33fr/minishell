@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen_int.c                                       :+:      :+:    :+:   */
+/*   ft_exec_wait.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:41:28 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/27 12:12:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/04/01 14:49:51 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/04/09 17:03:41 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "minishell.h"
 
-int	strlen_int(const char *s)
+/**
+ * @brief
+ * Wait for child process and return its exit status
+ * @param pid
+ * @return int
+ */
+int	ft_wait_child(pid_t pid)
 {
-	int	n;
+	int	status;
 
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (1);
 }

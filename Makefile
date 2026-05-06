@@ -1,69 +1,68 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: byonis <byonis@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/23 12:43:54 by byonis            #+#    #+#              #
-#    Updated: 2026/04/28 11:04:40 by byonis           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME        = minishell
 
-CFLAGS := -Wall -Werror -Wextra
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -g
 
-INC_DIR := -I includes/
+LIBFT_DIR   = libft
+LIBFT_LIB   = $(LIBFT_DIR)/libft.a
 
-OBJ_DIR := obj
+PARSING_DIR = parsing
+PARSING_LIB = $(PARSING_DIR)/libparsing.a
 
-SRC_DIR := srcs/
+RUNTIME_DIR = runtime
+RUNTIME_LIB = $(RUNTIME_DIR)/libruntime.a
 
-EXPAND := expand/
-LEXER := lexer/
-PARSING := parsing/
-STRUCT := struct_and_free/
+INCLUDES    = -Iincludes -I$(LIBFT_DIR)/includes
 
-LIBFT := libft/libft.a
+OBJ_DIR     = obj
 
-MY_SOURCES := $(SRC_DIR)$(EXPAND)expand_utils.c \
-				$(SRC_DIR)$(EXPAND)expand.c \
-				$(SRC_DIR)$(LEXER)check_syntax.c \
-				$(SRC_DIR)$(LEXER)lexer_utils.c \
-				$(SRC_DIR)$(LEXER)lexer.c \
-				$(SRC_DIR)$(LEXER)search_token.c \
-				$(SRC_DIR)$(PARSING)parsing_utils.c \
-				$(SRC_DIR)$(PARSING)parsing.c \
-				$(SRC_DIR)$(STRUCT)free.c \
-				$(SRC_DIR)$(STRUCT)queue.c \
-				$(SRC_DIR)main_temp.c
+GREEN = \033[0;32m
+BLUE  = \033[0;34m
+RED   = \033[0;31m
+RESET = \033[0m
 
-MY_OBJECTS := $(MY_SOURCES:srcs/%.c=$(OBJ_DIR)/%.o)
+all: $(LIBFT_LIB) $(PARSING_LIB) $(RUNTIME_LIB) $(NAME)
 
-LIB := $(LIBFT)
+$(LIBFT_LIB):
+	@printf "$(BLUE)[Building libft...]$(RESET)\n"
+	@$(MAKE) -C $(LIBFT_DIR) >/dev/null 2>&1 || exit 1
+	@printf "$(GREEN)[libft OK]$(RESET)\n"
 
-NAME := minishell
+$(PARSING_LIB):
+	@printf "$(BLUE)[Building parsing...]$(RESET)\n"
+	@$(MAKE) -C $(PARSING_DIR) 2>&1 | grep -v "^make" || true
+	@printf ""
 
-all : $(LIB) $(NAME) 
+$(RUNTIME_LIB):
+	@printf "$(BLUE)[Building runtime...]$(RESET)\n"
+	@$(MAKE) -C $(RUNTIME_DIR) 2>&1 | grep -v "^make" || true
+	@printf ""
 
-$(LIB):
-	$(MAKE) -C libft/
+$(OBJ_DIR)/main.o: main.c
+	@mkdir -p $(OBJ_DIR)
+	@printf "$(GREEN)[Compiling]$(RESET) main.c\n"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c main.c -o $@ || (printf "$(RED)Error in main.c$(RESET)\n"; exit 1)
 
-$(NAME) : $(MY_OBJECTS)
-	cc $(CFLAGS) $(INC_DIR) -o $@ $^ $(LIB) -g
-
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	mkdir -p $(dir $@)
-	cc $(CFLAGS) $(INC_DIR) -o $@ -c $< -g
+$(NAME): $(OBJ_DIR)/main.o $(LIBFT_LIB) $(PARSING_LIB) $(RUNTIME_LIB)
+	@printf "\r$(GREEN)[Linking]$(RESET)                     "
+	@$(CC) $(CFLAGS) $< $(RUNTIME_LIB) $(PARSING_LIB) $(LIBFT_LIB) -lreadline -o $(NAME) || (printf "\n$(RED)Link error$(RESET)\n"; exit 1)
+	@printf "\r$(GREEN)[100%%] ========[ $(NAME) is ready to work ]======== [OK] $(RESET)\n"
 
 clean:
-	rm -f $(MY_OBJECTS)
-	rm -rfd $(OBJ_DIR)
-	$(MAKE) -C libft/ clean
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean >/dev/null 2>&1
+	@$(MAKE) -C $(PARSING_DIR) clean >/dev/null 2>&1
+	@$(MAKE) -C $(RUNTIME_DIR) clean >/dev/null 2>&1
+	@printf "$(GREEN)Clean [OK]$(RESET)\n"
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C libft/ fclean
+	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean >/dev/null 2>&1
+	@$(MAKE) -C $(PARSING_DIR) fclean >/dev/null 2>&1
+	@$(MAKE) -C $(RUNTIME_DIR) fclean >/dev/null 2>&1
+	@printf "$(GREEN)Fclean [OK]$(RESET)\n"
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
+

@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen_int.c                                       :+:      :+:    :+:   */
+/*   ft_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:41:28 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/27 12:12:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/04/14 12:26:31 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/04/14 12:26:45 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "minishell.h"
 
-int	strlen_int(const char *s)
+/**
+ * @brief
+ * Initialize shell: env from envp + setup signals
+ */
+t_env	*ft_init(char **envp)
 {
-	int	n;
+	t_env	*env;
 
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
+	env = ft_env_init(envp);
+	if (!env)
+		return (NULL);
+	ft_setup_signals();
+	return (env);
 }

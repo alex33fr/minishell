@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen_int.c                                       :+:      :+:    :+:   */
+/*   ft_exec.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 10:41:28 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/27 12:12:45 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/04/01 14:23:07 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/04/26 19:08:11 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "minishell.h"
 
-int	strlen_int(const char *s)
+/**
+ * @brief
+ * Dispatch to builtin or external
+ * @param argv
+ * @param env
+ * @return int
+ */
+int	ft_exec_cmd(char **argv, t_env *env)
 {
-	int	n;
+	int	status;
 
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
+	if (!argv || !argv[0])
+		return (0);
+	if (!env)
+		return (1);
+	status = 1;
+	if (ft_is_builtin(argv[0]))
+		status = ft_exec_builtin(argv, env);
+	else
+		status = ft_exec_external(argv, env);
+	return (status);
 }

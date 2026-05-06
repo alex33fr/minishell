@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:12:57 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 09:29:40 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 14:19:50 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,18 +103,24 @@ char *expand(char *str, char **envp, int last_status) // rajouter int last_statu
 	
 	if (!str)
 		return (NULL);
-	res = ft_strdup(str);
+	if (str[0] == '$' && (str[1] == '\'' || str[1] == '"'))
+		res = ft_strdup(str + 1);
+	else
+		res = ft_strdup(str);
 	if (!res)
 		return (NULL);
 	i = 0;
-	in_double_quotes = 0;
-	i = find_the_next_valid_variable(res, i, &in_double_quotes);
-	while (i != -1)
+	// in_double_quotes = 0;
+	// i = find_the_next_valid_variable(res, i, &in_double_quotes);
+	while (1)
 	{
+		in_double_quotes = 0;
+		i = find_the_next_valid_variable(res, 0, &in_double_quotes);
+		if (i == -1)
+			break ;
 		res = process_expansion(res, envp, &i, last_status); // rajouter int last_status
 		if (!res)
-			break ;
-		i = find_the_next_valid_variable(res, i, &in_double_quotes);
+			return (NULL);
 	}
 	// remove_quotes(res);
 	return (res);

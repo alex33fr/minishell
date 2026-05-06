@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/30 15:00:43 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/05 14:34:54 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static int	manage_cmd_redir(t_queue *q, t_cmd *res)
 	if (q->front->token == T_WORD)
 	{
 		dequeue(q, &file);
+		file = remove_quotes(file);
 		if (!add_redir_back(&res->redir, redir_type, file))
 		{
 			free_cmds(res);
@@ -102,6 +103,7 @@ t_cmd	*first_cmd(t_queue *q)
 	t_cmd	*res;
 	char	*tmp;
 	int		i;
+	int		had_quotes;
 
 	res = init_cmd(q);
 	if (!res)
@@ -112,7 +114,15 @@ t_cmd	*first_cmd(t_queue *q)
 		if (q->front->token == T_WORD)
 		{
 			dequeue(q, &tmp);
-			res->args[i++] = remove_quotes(tmp);
+			if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
+				had_quotes = 1;
+			else
+				had_quotes = 0;
+			tmp = remove_quotes(tmp);
+			if (tmp && tmp[0] == '\0' && !had_quotes)
+				free(tmp);
+			else
+				res->args[i++] = tmp;
 		}
 		else if (q->front->token >= T_REDIRIN && q->front->token <= T_APPEND)
 		{
