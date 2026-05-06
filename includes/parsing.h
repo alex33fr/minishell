@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 13:58:31 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:02:55 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*var_replaced(char *var, char **envp, int pos, int last_status);
 char	*var_extraction(char *str, int pos);
 
 char	*remove_quotes(char *str);
-char 	*expand(char *str, char **envp, int last_status);
-int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
+char	*expand(char *str, char **envp, int last_status);
+int		find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif

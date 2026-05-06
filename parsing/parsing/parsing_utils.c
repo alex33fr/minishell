@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 13:58:05 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:03:47 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	manage_cmd_word(t_queue *q, t_cmd *res, int *i)
 {
 	char	*tmp;
 	int		had_quotes;
-	
+
 	dequeue(q, &tmp);
 	if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
 		had_quotes = 1;

@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 12:47:54 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 14:08:44 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	check_start_pipe(char *line, int *i)
 static int	process_syntax(char *line, int *i, int *last_was_pipe)
 {
 	int	next_pos;
-	
+
 	if (line[*i] == '"' || line[*i] == '\'')
 	{
 		next_pos = next_quote(line + *i);
