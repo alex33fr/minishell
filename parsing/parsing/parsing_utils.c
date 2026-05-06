@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 14:34:54 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 13:47:24 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,27 @@ static int	manage_cmd_redir(t_queue *q, t_cmd *res)
 	return (1);
 }
 
+static void	manange_cmd_word(t_queue *q, t_cmd *res, int *i)
+{
+	char	*tmp;
+	int		had_quotes;
+	
+	dequeue(q, &tmp);
+	if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
+		had_quotes = 1;
+	else
+		had_quotes = 0;
+	tmp = remove_quotes(tmp);
+	if (tmp && tmp[0] == '\0' && !had_quotes)
+		free(tmp);
+	else
+		res->args[(*i)++] = tmp;
+}
+
 t_cmd	*first_cmd(t_queue *q)
 {
 	t_cmd	*res;
-	char	*tmp;
 	int		i;
-	int		had_quotes;
 
 	res = init_cmd(q);
 	if (!res)
@@ -112,18 +127,7 @@ t_cmd	*first_cmd(t_queue *q)
 	while (q->front->token != T_PIPE && q->front->token != T_EOF)
 	{
 		if (q->front->token == T_WORD)
-		{
-			dequeue(q, &tmp);
-			if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
-				had_quotes = 1;
-			else
-				had_quotes = 0;
-			tmp = remove_quotes(tmp);
-			if (tmp && tmp[0] == '\0' && !had_quotes)
-				free(tmp);
-			else
-				res->args[i++] = tmp;
-		}
+			manange_cmd_word(q, res, &i);
 		else if (q->front->token >= T_REDIRIN && q->front->token <= T_APPEND)
 		{
 			if (!manage_cmd_redir(q, res))
