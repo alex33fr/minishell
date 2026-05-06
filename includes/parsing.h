@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 10:09:50 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/06 13:58:31 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ t_queue	*lexer(char *line, char **envp, int last_status);
 
 void	free_cmds(t_cmd *cmds);
 
-t_cmd	*first_cmd(t_queue *q);
+t_cmd	*init_cmd(t_queue *q);
+int		manage_cmd_redir(t_queue *q, t_cmd *res);
+void	manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
 t_cmd	*create_cmds(t_queue *q);
 
