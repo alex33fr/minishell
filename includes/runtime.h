@@ -27,14 +27,9 @@ typedef struct s_env_n
 typedef struct s_env
 {
 	t_env_n	*head;
-}	t_env;
-
-typedef struct s_shell
-{
-	t_env	*env;
 	int		exit_flag;
 	int		exit_code;
-}	t_shell;
+}	t_env;
 
 t_env	*ft_env_init(char **envp);
 char	*ft_env_get(t_env *env, char *key);
@@ -51,24 +46,28 @@ typedef struct s_exec
 {
 	char	**argv;
 	t_env	*env;
+	t_cmd	*cmd;
+	char	**envp;
+	pid_t	*pids;
 }	t_exec;
 
-int		ft_exec_cmd(char **argv, t_shell *shell);
+int		ft_exec_cmd(t_cmd *cmd, t_env *env);
 int		ft_is_builtin(char *cmd);
-int		ft_exec_builtin(char **argv, t_shell *shell);
-int		ft_exec_external(char **argv, t_env *env);
+int		ft_exec_builtin(t_cmd *cmd, t_env *env);
+int		ft_exec_external(t_cmd *cmd, t_env *env);
 int		ft_wait_child(pid_t pid);
 char	*ft_resolve_path(t_exec *exec);
-void	ft_exec_child(t_exec *exec, char *path, char **envp);
+void	ft_exec_child(t_exec *exec, char *path);
 int		ft_is_path_cmd(char *cmd);
 char	*ft_find_path(char *cmd, t_env *env);
 char	*ft_join_cmd_path(char *dir, char *cmd);
 
 int		ft_builtin_pwd(void);
 int		ft_builtin_env(t_env *env);
-int		ft_builtin_exit(char **argv, t_shell *shell);
+int		ft_builtin_exit(t_cmd *cmd, t_env *env);
 int		ft_builtin_echo(char **argv);
 int		ft_builtin_cd(char **argv, t_env *env);
+char	*ft_cd_target(char **argv, t_env *env);
 int		ft_builtin_export(char **argv, t_env *env);
 int		ft_builtin_unset(char **argv, t_env *env);
 int		ft_is_valid_num(char *s);
@@ -83,14 +82,15 @@ char	*ft_read_heredoc_line(void);
  */
 typedef struct s_pipe_fds
 {
-	int	prev_fd;
-	int	pipefd[2];
-	int	last;
+	int		prev_fd;
+	int		pipefd[2];
+	int		last;
+	pid_t	*pids;
 }	t_pipe_fds;
 
-int		ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_shell *shell);
+int		ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env);
 int		ft_wait_all(pid_t *pids, int n_cmds);
-void	ft_child(t_cmd *cmd, t_shell *shell, t_pipe_fds *fds);
+void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds);
 void	ft_update_fds(t_pipe_fds *fds);
 
 /**
@@ -107,7 +107,7 @@ int		ft_redir_heredoc(char *delimiter);
  * @brief
  * INIT
  */
-t_shell	*ft_init(char **envp);
+t_env	*ft_init(char **envp);
 
 /**
  * @brief
@@ -122,7 +122,7 @@ void	ft_signals_child(void);
  */
 void	ft_free_tab(char **tab);
 void	ft_close(int in_1, int in_2);
-int		ft_exec_cmd_list(t_cmd *cmds, t_shell *shell, int last_status);
+int		ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status);
 int		ft_export_err(char *s);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:41:06 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/08 16:10:24 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 08:05:12 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,51 +14,46 @@
 
 /**
  * @brief
- * Run in child process: resolve path then execve
- * @param exec
- * @param envp
+ * Run in child process: resolve path then execve. Never returns.
  * @order 1.2.3.5.2.2.3.1
  */
-static void	ft_run_process(t_exec *exec, char **envp)
+static void	ft_run_process(t_exec *exec)
 {
 	char	*path;
 
 	path = ft_resolve_path(exec);
-	ft_exec_child(exec, path, envp);
+	ft_exec_child(exec, path);
 }
 
 /**
  * @brief
- * Fork and execute an external command from argv using env
- * Return exit code of the child process
- * @param argv
- * @param env
- * @return int
+ * Fork and execute an external command. Return exit code of the child.
  * @order 1.2.3.5.2.2.3
  */
-int	ft_exec_external(char **argv, t_env *env)
+int	ft_exec_external(t_cmd *cmd, t_env *env)
 {
 	t_exec	exec;
-	char	**envp;
 	pid_t	pid;
 	int		ret;
 
-	if (!argv || !argv[0] || !env)
+	if (!cmd->args || !cmd->args[0] || !env)
 		return (1);
-	exec.argv = argv;
+	exec.argv = cmd->args;
 	exec.env = env;
-	envp = ft_env_to_envp(env);
-	if (!envp)
+	exec.cmd = cmd;
+	exec.envp = ft_env_to_envp(env);
+	exec.pids = NULL;
+	if (!exec.envp)
 		return (1);
 	pid = fork();
 	if (pid < 0)
 	{
-		ft_free_tab(envp);
+		ft_free_tab(exec.envp);
 		return (1);
 	}
 	if (pid == 0)
-		ft_run_process(&exec, envp);
-	ft_free_tab(envp);
+		ft_run_process(&exec);
+	ft_free_tab(exec.envp);
 	ret = ft_wait_child(pid);
 	return (ret);
 }

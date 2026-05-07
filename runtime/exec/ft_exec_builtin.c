@@ -45,26 +45,26 @@ int	ft_is_builtin(char *cmd)
  * Dispatch argv[0] to the matching builtin handler, return its exit status.
  * @order 1.2.3.5.2.2.2
  */
-int	ft_exec_builtin(char **argv, t_shell *shell)
+int	ft_exec_builtin(t_cmd *cmd, t_env *env)
 {
 	int	status;
 
-	if (!argv || !argv[0])
+	if (!cmd->args || !cmd->args[0])
 		return (1);
 	status = 1;
-	if (!ft_strcmp(argv[0], "echo"))
-		status = ft_builtin_echo(argv);
-	else if (!ft_strcmp(argv[0], "cd"))
-		status = ft_builtin_cd(argv, shell->env);
-	else if (!ft_strcmp(argv[0], "pwd"))
+	if (!ft_strcmp(cmd->args[0], "echo"))
+		status = ft_builtin_echo(cmd->args);
+	else if (!ft_strcmp(cmd->args[0], "cd"))
+		status = ft_builtin_cd(cmd->args, env);
+	else if (!ft_strcmp(cmd->args[0], "pwd"))
 		status = ft_builtin_pwd();
-	else if (!ft_strcmp(argv[0], "export"))
-		status = ft_builtin_export(argv, shell->env);
-	else if (!ft_strcmp(argv[0], "unset"))
-		status = ft_builtin_unset(argv, shell->env);
-	else if (!ft_strcmp(argv[0], "env"))
-		status = ft_builtin_env(shell->env);
-	else if (!ft_strcmp(argv[0], "exit"))
-		status = ft_builtin_exit(argv, shell);
+	else if (!ft_strcmp(cmd->args[0], "export"))
+		status = ft_builtin_export(cmd->args, env);
+	else if (!ft_strcmp(cmd->args[0], "unset"))
+		status = ft_builtin_unset(cmd->args, env);
+	else if (!ft_strcmp(cmd->args[0], "env"))
+		status = ft_builtin_env(env);
+	else if (!ft_strcmp(cmd->args[0], "exit"))
+		status = ft_builtin_exit(cmd, env);
 	return (status);
 }

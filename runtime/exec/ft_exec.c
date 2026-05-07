@@ -17,18 +17,18 @@
  * Dispatch argv[0] to builtin or external, return its exit status.
  * @order 1.2.3.5.2.2
  */
-int	ft_exec_cmd(char **argv, t_shell *shell)
+int	ft_exec_cmd(t_cmd *cmd, t_env *env)
 {
 	int	status;
 
-	if (!argv || !argv[0])
+	if (!cmd->args || !cmd->args[0])
 		return (0);
-	if (!shell || !shell->env)
+	if (!env)
 		return (1);
 	status = 1;
-	if (ft_is_builtin(argv[0]))
-		status = ft_exec_builtin(argv, shell);
+	if (ft_is_builtin(cmd->args[0]))
+		status = ft_exec_builtin(cmd, env);
 	else
-		status = ft_exec_external(argv, shell->env);
+		status = ft_exec_external(cmd, env);
 	return (status);
 }

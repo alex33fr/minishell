@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/07 10:05:05 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:17:11 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ char	*var_replaced(char *str, char **envp, int pos, int last_status)
 	if (ft_strncmp(temp, "?", 1) == 0)
 	{
 		res = ft_itoa(last_status);
+		free(temp);
 		if (!res)
 			return (NULL);
 	}

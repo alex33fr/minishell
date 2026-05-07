@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:11:46 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 12:13:52 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 08:05:12 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,47 +33,46 @@ int	ft_builtin_pwd(void)
 
 /**
  * @brief
- * Print "numeric argument required", set exit_flag, return code.
- * @order 1.2.3.5.2.2.2.7.2
+ * Set exit_flag and exit_code in env, return code.
+ * @order 1.2.3.5.2.2.2.7.1
  */
-static int	ft_exit_error(t_shell *shell, int code)
+static int	ft_exit_set(t_env *env, int code)
 {
-	ft_putstr_fd("exit: numeric argument required\n", 2);
-	shell->exit_flag = 1;
-	shell->exit_code = code;
+	env->exit_flag = 1;
+	env->exit_code = code;
 	return (code);
 }
 
 /**
  * @brief
- * Validate argv[1] as exit code, set exit_flag/exit_code, return the code.
+ * Validate exit code arg, set exit flag, return status.
  * @order 1.2.3.5.2.2.2.7
  */
-int	ft_builtin_exit(char **argv, t_shell *shell)
+int	ft_builtin_exit(t_cmd *cmd, t_env *env)
 {
 	long	val;
 	int		err;
 
-	if (!argv[1])
+	if (!cmd->args[1])
+		return (ft_exit_set(env, 0));
+	if (!ft_is_valid_num(cmd->args[1]))
 	{
-		shell->exit_flag = 1;
-		shell->exit_code = 0;
-		return (0);
+		ft_putstr_fd("exit: numeric argument required\n", 2);
+		return (ft_exit_set(env, 2));
 	}
-	if (!ft_is_valid_num(argv[1]))
-		return (ft_exit_error(shell, 2));
-	if (argv[2])
+	if (cmd->args[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		return (1);
 	}
 	err = 0;
-	val = ft_exit_atol(argv[1], &err);
+	val = ft_exit_atol(cmd->args[1], &err);
 	if (err)
-		return (ft_exit_error(shell, 2));
-	shell->exit_flag = 1;
-	shell->exit_code = (unsigned char)val;
-	return ((unsigned char)val);
+	{
+		ft_putstr_fd("exit: numeric argument required\n", 2);
+		return (ft_exit_set(env, 2));
+	}
+	return (ft_exit_set(env, (unsigned char)val));
 }
 
 /**
@@ -114,6 +113,7 @@ int	ft_builtin_cd(char **argv, t_env *env)
 {
 	char	buffer[PATH_MAX];
 	char	*old_pwd;
+	char	*target;
 
 	if (!argv[1])
 	{
@@ -121,7 +121,10 @@ int	ft_builtin_cd(char **argv, t_env *env)
 		return (1);
 	}
 	old_pwd = ft_env_get(env, "PWD");
-	if (chdir(argv[1]) != 0)
+	target = ft_cd_target(argv, env);
+	if (!target)
+		return (1);
+	if (chdir(target) != 0)
 	{
 		perror("cd");
 		return (1);
