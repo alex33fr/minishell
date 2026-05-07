@@ -13,10 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param redir 
- * @return int 
+ * @brief
+ * Apply all redirections in the list in order. Return 1 on first failure.
+ * @order 1.2.3.5.2.1
  */
 int	ft_apply_redirs(t_redir *redir)
 {
@@ -36,10 +35,9 @@ int	ft_apply_redirs(t_redir *redir)
 }
 
 /**
- * @brief 
- * 
- * @param file 
- * @return int 
+ * @brief
+ * Open file read-only and redirect stdin from it. Return 1 on error.
+ * @order 1.2.3.5.2.1.1
  */
 int	ft_redir_in(char *file)
 {
@@ -64,10 +62,9 @@ int	ft_redir_in(char *file)
 }
 
 /**
- * @brief 
- * 
- * @param file 
- * @return int 
+ * @brief
+ * Open file for writing (create/truncate) and redirect stdout to it.
+ * @order 1.2.3.5.2.1.2
  */
 int	ft_redir_out(char *file)
 {
@@ -94,10 +91,9 @@ int	ft_redir_out(char *file)
 }
 
 /**
- * @brief 
- * 
- * @param file 
- * @return int 
+ * @brief
+ * Open file in append mode and redirect stdout to it. Return 1 on error.
+ * @order 1.2.3.5.2.1.3
  */
 int	ft_redir_append(char *file)
 {

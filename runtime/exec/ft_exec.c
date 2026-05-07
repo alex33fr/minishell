@@ -14,23 +14,21 @@
 
 /**
  * @brief
- * Dispatch to builtin or external
- * @param argv
- * @param env
- * @return int
+ * Dispatch argv[0] to builtin or external, return its exit status.
+ * @order 1.2.3.5.2.2
  */
-int	ft_exec_cmd(char **argv, t_env *env)
+int	ft_exec_cmd(char **argv, t_shell *shell)
 {
 	int	status;
 
 	if (!argv || !argv[0])
 		return (0);
-	if (!env)
+	if (!shell || !shell->env)
 		return (1);
 	status = 1;
 	if (ft_is_builtin(argv[0]))
-		status = ft_exec_builtin(argv, env);
+		status = ft_exec_builtin(argv, shell);
 	else
-		status = ft_exec_external(argv, env);
+		status = ft_exec_external(argv, shell->env);
 	return (status);
 }

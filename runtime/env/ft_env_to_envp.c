@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 15:03:18 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/03 14:11:33 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 09:52:16 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
  * Return size of env nodes
  * @param env
  * @return int
+ * @order 1.2.3.2.1
  */
 static int	ft_env_size(t_env *env)
 {
@@ -41,6 +42,7 @@ static int	ft_env_size(t_env *env)
  * @param key
  * @param value
  * @return char*
+ * @order 1.2.3.2.2
  */
 static char	*ft_env_join_entry(char *key, char *value)
 {
@@ -52,6 +54,8 @@ static char	*ft_env_join_entry(char *key, char *value)
 	if (!value)
 	{
 		entry = ft_strdup(key);
+		if (!entry)
+			return (NULL);
 		return (entry);
 	}
 	tmp = ft_strjoin(key, "=");
@@ -69,6 +73,7 @@ static char	*ft_env_join_entry(char *key, char *value)
  * Convert node to char ** for execve, format KEY=value finished by NULL
  * @param env
  * @return char**
+ * @order 1.2.3.2
  */
 char	**ft_env_to_envp(t_env *env)
 {

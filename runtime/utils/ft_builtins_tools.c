@@ -13,10 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param s 
- * @return int 
+ * @brief
+ * Return 1 if s is an optional sign followed by one or more digits, else 0.
+ * @order 1.2.3.5.2.2.2.7.1
  */
 int	ft_is_valid_num(char *s)
 {
@@ -39,11 +38,9 @@ int	ft_is_valid_num(char *s)
 }
 
 /**
- * @brief 
- * 
- * @param s 
- * @param overflow 
- * @return long 
+ * @brief
+ * Convert s to long; set *overflow to 1 and return 0 if out of range.
+ * @order 1.2.3.5.2.2.2.7.3
  */
 long	ft_exit_atol(char *s, int *overflow)
 {
@@ -73,10 +70,9 @@ long	ft_exit_atol(char *s, int *overflow)
 }
 
 /**
- * @brief 
- * 
- * @param s 
- * @return int 
+ * @brief
+ * Return 1 if s is a valid env identifier (alnum/underscore, no leading digit).
+ * @order 1.2.3.5.2.2.2.4.1.1
  */
 int	ft_is_valid_name(char *s)
 {
@@ -97,10 +93,9 @@ int	ft_is_valid_name(char *s)
 }
 
 /**
- * @brief 
- * 
- * @param s 
- * @return int 
+ * @brief
+ * Return 1 if s matches echo's -n flag format ("-n", "-nn", etc.), else 0.
+ * @order 1.2.3.5.2.2.2.1.1
  */
 int	ft_is_n_flag(char *s)
 {

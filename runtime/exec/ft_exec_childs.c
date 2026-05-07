@@ -18,6 +18,7 @@
  * Print error and exit 127 if not found
  * @param exec
  * @return char*
+ * @order 1.2.3.5.2.2.3.1.1
  */
 char	*ft_resolve_path(t_exec *exec)
 {
@@ -41,6 +42,7 @@ char	*ft_resolve_path(t_exec *exec)
  * @param exec
  * @param path
  * @param envp
+ * @order 1.2.3.5.2.2.3.1.2
  */
 void	ft_exec_child(t_exec *exec, char *path, char **envp)
 {

@@ -15,14 +15,21 @@
 /**
  * @brief
  * Initialize shell: env from envp + setup signals
+ * @order 1.1
  */
-t_env	*ft_init(char **envp)
+t_shell	*ft_init(char **envp)
 {
-	t_env	*env;
+	t_shell	*shell;
 
-	env = ft_env_init(envp);
-	if (!env)
+	shell = ft_calloc(1, sizeof(t_shell));
+	if (!shell)
 		return (NULL);
+	shell->env = ft_env_init(envp);
+	if (!shell->env)
+	{
+		free(shell);
+		return (NULL);
+	}
 	ft_setup_signals();
-	return (env);
+	return (shell);
 }

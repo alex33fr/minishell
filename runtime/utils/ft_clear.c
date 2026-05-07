@@ -15,6 +15,7 @@
 /**
  * @brief
  * Free a NULL-terminated array of strings
+ * @order util
  */
 void	ft_free_tab(char **tab)
 {

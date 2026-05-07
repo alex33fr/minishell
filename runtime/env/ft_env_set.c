@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:52:06 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/03 15:53:06 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 10:03:52 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@
  * @brief 
  * Find and return the node matching key in the env list.
  * Return NULL if not found.
- * @param env 
- * @param key 
- * @return t_env_n* 
+ * @param env
+ * @param key
+ * @return t_env_n*
+ * @order env-utility
  */
 static t_env_n	*ft_env_find(t_env *env, char *key)
 {
@@ -43,6 +44,7 @@ static t_env_n	*ft_env_find(t_env *env, char *key)
  * @param key
  * @param value
  * @return t_env_n*
+ * @order env-utility
  */
 static t_env_n	*ft_env_new_node_kv(char *key, char *value)
 {
@@ -80,6 +82,7 @@ static t_env_n	*ft_env_new_node_kv(char *key, char *value)
  * @param env
  * @param new_node
  * @return int
+ * @order env-utility
  */
 static int	ft_env_add_back(t_env *env, t_env_n *new_node)
 {
@@ -108,6 +111,7 @@ static int	ft_env_add_back(t_env *env, t_env_n *new_node)
  * @param key
  * @param value
  * @return int
+ * @order env-utility
  */
 int	ft_env_set(t_env *env, char *key, char *value)
 {

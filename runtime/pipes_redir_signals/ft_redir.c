@@ -6,18 +6,18 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 11:30:52 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 10:00:26 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @return char* 
+ * @brief
+ * Read one line from stdin character by character. Return NULL on EOF.
+ * @order 1.2.1 / 1.2.3.5.2.1.4.1.1
  */
-static char	*ft_read_heredoc_line(void)
+char	*ft_read_heredoc_line(void)
 {
 	char	buf[4096];
 	char	c;
@@ -39,14 +39,15 @@ static char	*ft_read_heredoc_line(void)
 		return (NULL);
 	buf[i] = '\0';
 	res = ft_strdup(buf);
+	if (!res)
+		return (NULL);
 	return (res);
 }
 
 /**
- * @brief 
- * 
- * @param fd 
- * @param delimiter 
+ * @brief
+ * Read lines from stdin and write them to fd until delimiter or EOF is seen.
+ * @order 1.2.3.5.2.1.4.1
  */
 static void	ft_heredoc_loop(int fd, char *delimiter)
 {
@@ -79,6 +80,7 @@ static void	ft_heredoc_loop(int fd, char *delimiter)
  * Returns 0 on success, 1 on error
  * @param delimiter
  * @return int
+ * @order 1.2.3.5.2.1.4
  */
 int	ft_redir_heredoc(char *delimiter)
 {

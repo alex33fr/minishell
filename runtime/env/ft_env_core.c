@@ -17,6 +17,7 @@
  * Search '=', key adress before '=', value adress after '='
  * @param str
  * @return t_env_n*
+ * @order 1.1.1.1
  */
 static t_env_n	*ft_new_env_node(char *str)
 {
@@ -47,6 +48,7 @@ static t_env_n	*ft_new_env_node(char *str)
  * @param env
  * @param node
  * @param last
+ * @order 1.1.1.2
  */
 static void	ft_env_append(t_env *env, t_env_n *node, t_env_n **last)
 {
@@ -63,6 +65,7 @@ static void	ft_env_append(t_env *env, t_env_n *node, t_env_n **last)
  * Each entry "KEY=value" becomes a node in the list.
  * @param envp
  * @return t_env*
+ * @order 1.1.1
  */
 t_env	*ft_env_init(char **envp)
 {

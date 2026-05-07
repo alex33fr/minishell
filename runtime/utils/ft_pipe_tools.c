@@ -13,11 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param pids 
- * @param n_cmds 
- * @return int 
+ * @brief
+ * Wait for all n_cmds children, return exit status of the last one.
+ * @order 1.2.3.5.3.2
  */
 int	ft_wait_all(pid_t *pids, int n_cmds)
 {
@@ -38,13 +36,11 @@ int	ft_wait_all(pid_t *pids, int n_cmds)
 }
 
 /**
- * @brief 
- * 
- * @param cmd 
- * @param env 
- * @param fds 
+ * @brief
+ * Wire pipe fds, apply redirs, then exec builtin or external. Never returns.
+ * @order 1.2.3.5.3.1.2.1.1
  */
-void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
+void	ft_child(t_cmd *cmd, t_shell *shell, t_pipe_fds *fds)
 {
 	t_exec	exec;
 	char	*path;
@@ -62,18 +58,18 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	if (!cmd->args || !cmd->args[0])
 		exit(0);
 	exec.argv = cmd->args;
-	exec.env = env;
+	exec.env = shell->env;
 	if (ft_is_builtin(cmd->args[0]))
-		exit(ft_exec_builtin(cmd->args, env));
-	envp = ft_env_to_envp(env);
+		exit(ft_exec_builtin(cmd->args, shell));
+	envp = ft_env_to_envp(shell->env);
 	path = ft_resolve_path(&exec);
 	ft_exec_child(&exec, path, envp);
 }
 
 /**
- * @brief 
- * 
- * @param fds 
+ * @brief
+ * Close the write end of the current pipe and advance prev_fd to the read end.
+ * @order 1.2.3.5.3.1.2.2
  */
 void	ft_update_fds(t_pipe_fds *fds)
 {
