@@ -13,9 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @return int 
+ * @brief
+ * Print the current working directory to stdout. Return 1 on getcwd failure.
+ * @order 1.2.3.5.2.2.2.3
  */
 int	ft_builtin_pwd(void)
 {
@@ -32,48 +32,36 @@ int	ft_builtin_pwd(void)
 }
 
 /**
- * @brief 
- * 
- * @param env 
- * @return int 
+ * @brief
+ * Print "numeric argument required", set exit_flag, return code.
+ * @order 1.2.3.5.2.2.2.7.2
  */
-int	ft_builtin_env(t_env *env)
+static int	ft_exit_error(t_shell *shell, int code)
 {
-	char	**envp;
-	int		i;
-
-	envp = ft_env_to_envp(env);
-	if (!envp)
-		return (1);
-	i = 0;
-	while (envp[i])
-	{
-		ft_putstr_fd(envp[i], 1);
-		ft_putstr_fd("\n", 1);
-		i++;
-	}
-	ft_free_tab(envp);
-	return (0);
+	ft_putstr_fd("exit: numeric argument required\n", 2);
+	shell->exit_flag = 1;
+	shell->exit_code = code;
+	return (code);
 }
 
 /**
- * @brief 
- * 
- * @param argv 
- * @return int 
+ * @brief
+ * Validate argv[1] as exit code, set exit_flag/exit_code, return the code.
+ * @order 1.2.3.5.2.2.2.7
  */
-int	ft_builtin_exit(char **argv)
+int	ft_builtin_exit(char **argv, t_shell *shell)
 {
 	long	val;
 	int		err;
 
 	if (!argv[1])
-		exit(0);
-	if (!ft_is_valid_num(argv[1]))
 	{
-		ft_putstr_fd("exit: numeric argument required\n", 2);
-		exit(2);
+		shell->exit_flag = 1;
+		shell->exit_code = 0;
+		return (0);
 	}
+	if (!ft_is_valid_num(argv[1]))
+		return (ft_exit_error(shell, 2));
 	if (argv[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);
@@ -82,18 +70,16 @@ int	ft_builtin_exit(char **argv)
 	err = 0;
 	val = ft_exit_atol(argv[1], &err);
 	if (err)
-	{
-		ft_putstr_fd("exit: numeric argument required\n", 2);
-		exit(2);
-	}
-	exit((unsigned char)val);
+		return (ft_exit_error(shell, 2));
+	shell->exit_flag = 1;
+	shell->exit_code = (unsigned char)val;
+	return ((unsigned char)val);
 }
 
 /**
- * @brief 
- * 
- * @param argv 
- * @return int 
+ * @brief
+ * Print argv words separated by spaces, with newline unless -n flag is set.
+ * @order 1.2.3.5.2.2.2.1
  */
 int	ft_builtin_echo(char **argv)
 {
@@ -120,11 +106,9 @@ int	ft_builtin_echo(char **argv)
 }
 
 /**
- * @brief 
- * 
- * @param argv 
- * @param env 
- * @return int 
+ * @brief
+ * Change directory to argv[1], update PWD and OLDPWD in env.
+ * @order 1.2.3.5.2.2.2.2
  */
 int	ft_builtin_cd(char **argv, t_env *env)
 {

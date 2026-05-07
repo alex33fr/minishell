@@ -17,6 +17,7 @@
  * Wait for child process and return its exit status
  * @param pid
  * @return int
+ * @order 1.2.3.5.2.2.3.2
  */
 int	ft_wait_child(pid_t pid)
 {

@@ -17,6 +17,7 @@
  * Run in child process: resolve path then execve
  * @param exec
  * @param envp
+ * @order 1.2.3.5.2.2.3.1
  */
 static void	ft_run_process(t_exec *exec, char **envp)
 {
@@ -33,6 +34,7 @@ static void	ft_run_process(t_exec *exec, char **envp)
  * @param argv
  * @param env
  * @return int
+ * @order 1.2.3.5.2.2.3
  */
 int	ft_exec_external(char **argv, t_env *env)
 {

@@ -13,11 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param env 
- * @param key 
- * @param sep 
+ * @brief
+ * Append the value after sep[1] to the existing env entry for key.
+ * @order 1.2.3.5.2.2.2.4.1.2
  */
 static void	ft_do_append(t_env *env, char *key, char *sep)
 {
@@ -28,17 +26,16 @@ static void	ft_do_append(t_env *env, char *key, char *sep)
 	if (!old)
 		old = "";
 	new = ft_strjoin(old, sep + 1);
+	if (!new)
+		return ;
 	ft_env_set(env, key, new);
 	free(new);
 }
 
 /**
- * @brief 
- * 
- * @param arg 
- * @param sep 
- * @param env 
- * @return int 
+ * @brief
+ * Handle "KEY=val" or "KEY+=val" export: set or append value in env.
+ * @order 1.2.3.5.2.2.2.4.1
  */
 static int	ft_export_sep(char *arg, char *sep, t_env *env)
 {
@@ -61,11 +58,9 @@ static int	ft_export_sep(char *arg, char *sep, t_env *env)
 }
 
 /**
- * @brief 
- * 
- * @param argv 
- * @param env 
- * @return int 
+ * @brief
+ * Export variables from argv into env; print env if no args given.
+ * @order 1.2.3.5.2.2.2.4
  */
 int	ft_builtin_export(char **argv, t_env *env)
 {
@@ -94,11 +89,9 @@ int	ft_builtin_export(char **argv, t_env *env)
 }
 
 /**
- * @brief 
- * 
- * @param argv 
- * @param env 
- * @return int 
+ * @brief
+ * Remove each argv key from env.
+ * @order 1.2.3.5.2.2.2.5
  */
 int	ft_builtin_unset(char **argv, t_env *env)
 {
@@ -112,5 +105,29 @@ int	ft_builtin_unset(char **argv, t_env *env)
 		ft_env_unset(env, argv[i]);
 		i++;
 	}
+	return (0);
+}
+
+/**
+ * @brief
+ * Print all env entries as "KEY=value" lines to stdout.
+ * @order 1.2.3.5.2.2.2.6
+ */
+int	ft_builtin_env(t_env *env)
+{
+	char	**envp;
+	int		i;
+
+	envp = ft_env_to_envp(env);
+	if (!envp)
+		return (1);
+	i = 0;
+	while (envp[i])
+	{
+		ft_putstr_fd(envp[i], 1);
+		ft_putstr_fd("\n", 1);
+		i++;
+	}
+	ft_free_tab(envp);
 	return (0);
 }

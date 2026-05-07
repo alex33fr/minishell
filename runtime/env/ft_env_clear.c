@@ -15,7 +15,8 @@
 /**
  * @brief 
  * Free node's
- * @param node 
+ * @param node
+ * @order 1.3.1
  */
 static void	ft_env_delone(t_env_n *node)
 {
@@ -29,7 +30,8 @@ static void	ft_env_delone(t_env_n *node)
 /**
  * @brief 
  * Cleaning/free node's
- * @param env 
+ * @param env
+ * @order 1.3
  */
 void	ft_env_clear(t_env *env)
 {

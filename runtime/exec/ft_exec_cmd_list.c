@@ -13,13 +13,12 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param cmd 
- * @param env 
- * @return int 
+ * @brief
+ * Save stdin/stdout, apply redirs, run cmd, restore fds.
+ * Return cmd exit status, 1 on redir error.
+ * @order 1.2.3.5.2
  */
-static int	ft_exec_single(t_cmd *cmd, t_env *env)
+static int	ft_exec_single(t_cmd *cmd, t_shell *shell)
 {
 	int	saved_in;
 	int	saved_out;
@@ -34,7 +33,7 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 		ft_close(saved_in, saved_out);
 		return (1);
 	}
-	status = ft_exec_cmd(cmd->args, env);
+	status = ft_exec_cmd(cmd->args, shell);
 	dup2(saved_in, STDIN_FILENO);
 	dup2(saved_out, STDOUT_FILENO);
 	ft_close(saved_in, saved_out);
@@ -42,10 +41,9 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 }
 
 /**
- * @brief 
- * 
- * @param cmds 
- * @return int 
+ * @brief
+ * Return the number of commands in the list.
+ * @order 1.2.3.5.1
  */
 static int	ft_count_cmds(t_cmd *cmds)
 {
@@ -61,27 +59,22 @@ static int	ft_count_cmds(t_cmd *cmds)
 }
 
 /**
- * @brief 
- * 
- * @param cmds 
- * @param env 
- * @param last_status 
- * @return int 
+ * @brief
+ * Dispatch a command list: single cmd runs in parent, multiple cmds as pipeline.
+ * @order 1.2.3.5
  */
-int	ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status)
+int	ft_exec_cmd_list(t_cmd *cmds, t_shell *shell, int last_status)
 {
-	int		n;
-	int		status;
+	int	n;
+	int	ret;
 
 	(void)last_status;
 	if (!cmds)
 		return (0);
 	n = ft_count_cmds(cmds);
 	if (n == 1)
-	{
-		status = ft_exec_single(cmds, env);
-		return (status);
-	}
-	status = ft_exec_pipeline(cmds, n, env);
-	return (status);
+		ret = ft_exec_single(cmds, shell);
+	else
+		ret = ft_exec_pipeline(cmds, n, shell);
+	return (ret);
 }

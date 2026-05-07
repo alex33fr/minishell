@@ -6,21 +6,18 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:01:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 12:09:01 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 08:14:01 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param cmd 
- * @param env 
- * @param fds 
- * @return int 
+ * @brief
+ * Fork and run ft_child in the child process. Return pid, -1 on error.
+ * @order 1.2.3.5.3.1.2.1
  */
-static int	ft_fork(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
+static int	ft_fork(t_cmd *cmd, t_shell *shell, t_pipe_fds *fds)
 {
 	pid_t	pid;
 
@@ -31,14 +28,14 @@ static int	ft_fork(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 		return (-1);
 	}
 	if (pid == 0)
-		ft_child(cmd, env, fds);
+		ft_child(cmd, shell, fds);
 	return (pid);
 }
 
 /**
- * @brief 
- * 
- * @param fds 
+ * @brief
+ * Initialize pipe fds struct with -1 (no fd open yet).
+ * @order 1.2.3.5.3.1.1
  */
 static void	ft_fds_init(t_pipe_fds *fds)
 {
@@ -48,39 +45,31 @@ static void	ft_fds_init(t_pipe_fds *fds)
 }
 
 /**
- * @brief 
- * 
- * @param cmds 
- * @param env 
- * @param fds 
- * @param pid 
- * @return int 
+ * @brief
+ * Open a pipe if not last cmd, fork, advance cmds. Return 0 or -1 on error.
+ * @order 1.2.3.5.3.1.2
  */
-static int	ft_iter_cmd(t_cmd **cmds, t_env *env, t_pipe_fds *fds, pid_t *pid)
+static int	ft_iter_cmd(t_cmd **cmds, t_shell *sh, t_pipe_fds *fd, pid_t *pid)
 {
-	if (!fds->last && pipe(fds->pipefd) == -1)
+	if (!fd->last && pipe(fd->pipefd) == -1)
 	{
 		perror("pipe");
 		return (-1);
 	}
-	*pid = ft_fork(*cmds, env, fds);
+	*pid = ft_fork(*cmds, sh, fd);
 	if (*pid < 0)
 		return (-1);
-	ft_update_fds(fds);
+	ft_update_fds(fd);
 	*cmds = (*cmds)->next;
 	return (0);
 }
-/**
- * @brief 
- * 
- * @param cmds 
- * @param n_cmds 
- * @param env 
- * @param pids 
- * @return int 
- */
 
-static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
+/**
+ * @brief
+ * Fork all pipeline commands, store pids. Return 1 on error.
+ * @order 1.2.3.5.3.1
+ */
+static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_shell *shell, pid_t *pids)
 {
 	t_pipe_fds	fds;
 	int			i;
@@ -90,7 +79,7 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 	while (cmds && i < n_cmds)
 	{
 		fds.last = (i == n_cmds - 1);
-		if (ft_iter_cmd(&cmds, env, &fds, &pids[i]) < 0)
+		if (ft_iter_cmd(&cmds, shell, &fds, &pids[i]) < 0)
 		{
 			ft_wait_all(pids, i);
 			return (1);
@@ -102,14 +91,11 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 }
 
 /**
- * @brief 
- * 
- * @param cmds 
- * @param n_cmds 
- * @param env 
- * @return int 
+ * @brief
+ * Execute a pipeline of n_cmds commands, wait for all children.
+ * @order 1.2.3.5.3
  */
-int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
+int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_shell *shell)
 {
 	pid_t	*pids;
 	int		ret;
@@ -117,7 +103,7 @@ int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
 	pids = malloc(sizeof(pid_t) * n_cmds);
 	if (!pids)
 		return (1);
-	if (ft_fork_loop(cmds, n_cmds, env, pids))
+	if (ft_fork_loop(cmds, n_cmds, shell, pids))
 	{
 		free(pids);
 		return (1);

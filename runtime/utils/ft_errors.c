@@ -13,10 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param s 
- * @return int 
+ * @brief
+ * Print "export: 's': not a valid identifier" to stderr, return 1.
+ * @order 1.2.3.5.2.2.2.4.2
  */
 int	ft_export_err(char *s)
 {

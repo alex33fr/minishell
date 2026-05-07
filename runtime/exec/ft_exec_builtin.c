@@ -15,8 +15,9 @@
 /**
  * @brief 
  * Find builtin in cmd argv[0]
- * @param cmd 
- * @return int 
+ * @param cmd
+ * @return int
+ * @order 1.2.3.5.2.2.1
  */
 int	ft_is_builtin(char *cmd)
 {
@@ -41,12 +42,10 @@ int	ft_is_builtin(char *cmd)
 
 /**
  * @brief
- * Find cmd in argv dispatche to builtin
- * @param argv 
- * @param env 
- * @return int 
+ * Dispatch argv[0] to the matching builtin handler, return its exit status.
+ * @order 1.2.3.5.2.2.2
  */
-int	ft_exec_builtin(char **argv, t_env *env)
+int	ft_exec_builtin(char **argv, t_shell *shell)
 {
 	int	status;
 
@@ -56,16 +55,16 @@ int	ft_exec_builtin(char **argv, t_env *env)
 	if (!ft_strcmp(argv[0], "echo"))
 		status = ft_builtin_echo(argv);
 	else if (!ft_strcmp(argv[0], "cd"))
-		status = ft_builtin_cd(argv, env);
+		status = ft_builtin_cd(argv, shell->env);
 	else if (!ft_strcmp(argv[0], "pwd"))
 		status = ft_builtin_pwd();
 	else if (!ft_strcmp(argv[0], "export"))
-		status = ft_builtin_export(argv, env);
+		status = ft_builtin_export(argv, shell->env);
 	else if (!ft_strcmp(argv[0], "unset"))
-		status = ft_builtin_unset(argv, env);
+		status = ft_builtin_unset(argv, shell->env);
 	else if (!ft_strcmp(argv[0], "env"))
-		status = ft_builtin_env(env);
+		status = ft_builtin_env(shell->env);
 	else if (!ft_strcmp(argv[0], "exit"))
-		status = ft_builtin_exit(argv);
+		status = ft_builtin_exit(argv, shell);
 	return (status);
 }

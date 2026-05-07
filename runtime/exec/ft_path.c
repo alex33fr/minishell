@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:35:19 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 09:59:39 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 09:59:27 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
  * Return NULL if PATH not exist
  * @param env
  * @return char**
+ * @order 1.2.3.5.2.2.3.1.1.1.2
  */
 static char	**ft_get_path_splitted(t_env *env)
 {
@@ -43,6 +44,7 @@ static char	**ft_get_path_splitted(t_env *env)
  * @param paths
  * @param cmd
  * @return char*
+ * @order 1.2.3.5.2.2.3.1.1.1.3
  */
 static char	*ft_search_path(char **paths, char *cmd)
 {
@@ -70,6 +72,7 @@ static char	*ft_search_path(char **paths, char *cmd)
  * Return 1 if cmd contains '/'
  * @param cmd
  * @return int
+ * @order 1.2.3.5.2.2.3.1.1.1.1
  */
 int	ft_is_path_cmd(char *cmd)
 {
@@ -87,6 +90,7 @@ int	ft_is_path_cmd(char *cmd)
  * @param dir
  * @param cmd
  * @return char*
+ * @order 1.2.3.5.2.2.3.1.1.1.3.1
  */
 char	*ft_join_cmd_path(char *dir, char *cmd)
 {
@@ -112,6 +116,7 @@ char	*ft_join_cmd_path(char *dir, char *cmd)
  * @param cmd
  * @param env
  * @return char*
+ * @order 1.2.3.5.2.2.3.1.1.1
  */
 char	*ft_find_path(char *cmd, t_env *env)
 {

@@ -16,9 +16,10 @@
  * @brief 
  * Return value associated to key in the env linked list.
  * Return NULL if key is not found.
- * @param env 
- * @param key 
- * @return char* 
+ * @param env
+ * @param key
+ * @return char*
+ * @order env-utility
  */
 char	*ft_env_get(t_env *env, char *key)
 {

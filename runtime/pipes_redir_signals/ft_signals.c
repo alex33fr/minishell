@@ -15,6 +15,7 @@
 /**
  * @brief
  * SIGINT handler: store signal number, redisplay prompt
+ * @order 1.1.2.1
  */
 static void	sig_int(int sig)
 {
@@ -29,6 +30,7 @@ static void	sig_int(int sig)
  * @brief
  * Setup signals
  * SIGINT -> new prompt line, SIGQUIT -> ignored
+ * @order 1.1.2
  */
 void	ft_setup_signals(void)
 {
@@ -38,7 +40,8 @@ void	ft_setup_signals(void)
 
 /**
  * @brief
- * Reset signals to default in chields
+ * Reset signals to default in children.
+ * @order 1.2.3.5.3.1.2.1.1.1
  */
 void	ft_signals_child(void)
 {
