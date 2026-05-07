@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:17:30 by byonis            #+#    #+#             */
-/*   Updated: 2025/12/29 15:15:11 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 14:01:30 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strchr(const char *s, int c)
 	char	*temp_char;
 	char	c1;
 
+	if (!s)
+		return (0);
 	i = 0;
 	size = ft_strlen(s);
 	temp_char = (char *)s;

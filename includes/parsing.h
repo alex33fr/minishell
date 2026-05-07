@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 14:21:39 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 14:12:51 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_node
 {
 	t_tok			token;
 	char			*value;
+	int				had_quotes;
 	struct s_node	*next;
 }	t_node;
 
@@ -56,7 +57,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 t_queue	*empty_queue(void);
-int		enqueue(t_queue *queue, t_tok type, char *value);
+int		enqueue(t_queue *queue, t_tok type, char *value, int had_quotes);
 t_tok	dequeue(t_queue *queue, char **val_ptr);
 void	clear_queue(t_queue *queue);
 
@@ -67,7 +68,7 @@ int		search_token(t_queue *q, char *line);
 
 int		next_token(char *line, t_tok tok);
 t_tok	get_token_type(char *line);
-char	*first_word(char *line);
+char	*first_word(char *line, int *had_quotes);
 
 int		ft_isspace(int c);
 int		skip_spaces(char *line);

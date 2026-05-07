@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 14:09:45 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 14:37:28 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_tok	get_token_type(char *line)
 		return (T_WORD);
 }
 
-char	*first_word(char *line)
+char	*first_word(char *line, int *had_quotes)
 {
 	char	*result;
 	int		len;
@@ -78,6 +78,12 @@ char	*first_word(char *line)
 		return (NULL);
 	len = next_token(line, T_WORD);
 	result = ft_substr(line, 0, len);
+	if (!result)
+		return (NULL);
+	if (ft_strchr(result, '\'') || ft_strchr(result, '"'))
+		*had_quotes = 1;
+	else
+		*had_quotes = 0;
 	return (result);
 }
 
