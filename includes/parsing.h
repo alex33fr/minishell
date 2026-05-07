@@ -54,6 +54,8 @@ typedef struct s_cmd
 	t_redir			*redir;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
+	int				saved_in;
+	int				saved_out;
 }	t_cmd;
 
 t_queue	*empty_queue(void);
