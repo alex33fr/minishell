@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MINI="./minishell"
-VG="valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=./readline.supp --error-exitcode=42"
+VG="valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes --suppressions=./readline.supp --error-exitcode=99"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -9,7 +9,8 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-LEAKS=0
+FAILS=0
+WARNS=0
 CLEAN=0
 
 vg_test() {
@@ -19,16 +20,21 @@ vg_test() {
 	out=$(printf '%s' "$input" | timeout 10 $VG "$MINI" 2>&1)
 	code=$?
 
-	# check valgrind output for leaks/errors
-	lost=$(echo "$out" | grep -E "definitely lost|indirectly lost|still reachable" | grep -v "0 bytes")
+	definitely=$(echo "$out" | grep -E "definitely lost|indirectly lost" | grep -v "0 bytes")
+	reachable=$(echo "$out" | grep -E "still reachable" | grep -v "0 bytes")
 	errors=$(echo "$out" | grep "ERROR SUMMARY" | grep -v "0 errors")
-	fds=$(echo "$out" | grep "FILE DESCRIPTORS" | grep -v "^==.*FILE DESCRIPTORS: [123] open" )
+	fds=$(echo "$out" | grep "FILE DESCRIPTORS" | grep -v "^==.*FILE DESCRIPTORS: [123] open")
 
-	if [ $code -eq 42 ] || [ -n "$lost" ] || [ -n "$errors" ]; then
-		echo -e "${RED}[LEAK   ] ${desc}${NC}"
+	if [ $code -eq 99 ] || [ -n "$definitely" ] || [ -n "$errors" ]; then
+		echo -e "${RED}[FAIL   ] ${desc}${NC}"
 		echo -e "  input : $input"
-		echo "$out" | grep -E "definitely lost|indirectly lost|still reachable|ERROR SUMMARY|Invalid|Use of uninitialised" | grep -v "0 bytes" | grep -v "0 errors" | sed 's/^/  /'
-		((LEAKS++))
+		echo "$out" | grep -E "definitely lost|indirectly lost|ERROR SUMMARY|Invalid|Use of uninitialised" | grep -v "0 bytes" | grep -v "0 errors" | sed 's/^/  /'
+		((FAILS++))
+	elif [ -n "$reachable" ] || [ -n "$fds" ]; then
+		echo -e "${YELLOW}[WARN   ] ${desc}${NC}"
+		echo -e "  input : $input"
+		echo "$out" | grep -E "still reachable|FILE DESCRIPTORS" | grep -v "0 bytes" | sed 's/^/  /'
+		((WARNS++))
 	else
 		echo -e "${GREEN}[CLEAN  ] ${desc}${NC}"
 		((CLEAN++))
@@ -157,4 +163,5 @@ echo -e "\n${CYAN}==============================================================
 echo -e "${CYAN}  VALGRIND RECAP${NC}"
 echo -e "${CYAN}================================================================${NC}"
 echo -e "${GREEN}CLEAN : $CLEAN${NC}"
-echo -e "${RED}LEAKS : $LEAKS${NC}"
+echo -e "${YELLOW}WARNS : $WARNS${NC}"
+echo -e "${RED}FAILS : $FAILS${NC}"

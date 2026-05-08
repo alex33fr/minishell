@@ -59,6 +59,11 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	char	*path;
 	int		ret;
 
+	exec.argv = cmd->args;
+	exec.env = env;
+	exec.cmd = cmd;
+	exec.pids = fds->pids;
+	exec.envp = NULL;
 	ft_signals_child();
 	if (fds->prev_fd != -1)
 		dup2(fds->prev_fd, STDIN_FILENO);
@@ -68,13 +73,9 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	if (!fds->last)
 		ft_close(fds->pipefd[0], fds->pipefd[1]);
 	if (ft_apply_redirs(cmd->redir))
-		exit(1);
+		ft_builtin_child_exit(&exec, 1);
 	if (!cmd->args || !cmd->args[0])
-		exit(0);
-	exec.argv = cmd->args;
-	exec.env = env;
-	exec.cmd = cmd;
-	exec.pids = fds->pids;
+		ft_builtin_child_exit(&exec, 0);
 	if (ft_is_builtin(cmd->args[0]))
 	{
 		ret = ft_exec_builtin(cmd, env);
