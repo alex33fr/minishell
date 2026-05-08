@@ -21,12 +21,14 @@ int	g_signal = 0;
  * @brief [1.2.3] Tokenize, parse and execute one line. Free intermediates.
  * @order 1.2.3
  */
-static int	ft_run_line(char *line, t_env *env, int last_status)
+static int	ft_run_line(char **pline, t_env *env, int last_status)
 {
 	t_queue	*tokens;
 	t_cmd	*cmds;
 	char	**envp;
+	char	*line;
 
+	line = *pline;
 	if (!line || !*line)
 		return (last_status);
 	if (isatty(STDIN_FILENO))
@@ -38,6 +40,8 @@ static int	ft_run_line(char *line, t_env *env, int last_status)
 		return (2);
 	cmds = create_cmds(tokens);
 	clear_queue(tokens);
+	free(*pline);
+	*pline = NULL;
 	if (!cmds)
 		return (last_status);
 	last_status = ft_exec_cmd_list(cmds, env, last_status);
@@ -84,7 +88,7 @@ static int	ft_readline_loop(t_env *env)
 			break ;
 		}
 		last_status = ft_handle_signal(last_status);
-		last_status = ft_run_line(line, env, last_status);
+		last_status = ft_run_line(&line, env, last_status);
 		free(line);
 		if (env->exit_flag)
 			return (env->exit_code);
