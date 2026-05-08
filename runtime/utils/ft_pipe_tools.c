@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 12:14:56 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 11:31:32 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/08 13:50:54 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	exec.cmd = cmd;
 	exec.pids = fds->pids;
 	if (ft_is_builtin(cmd->args[0]))
+	{
+		free(exec.pids);
 		exit(ft_exec_builtin(cmd, env));
+	}
 	exec.envp = ft_env_to_envp(env);
 	path = ft_resolve_path(&exec);
 	ft_exec_child(&exec, path);
