@@ -10,10 +10,5 @@ libft/
 minishell
 minishell_tester
 readline.supp
-run_all.sh
-test_crash.sh
-test_errors.sh
-test_nopath.sh
-test_valgrind.sh
 minishell.supp
 logs_full_test.txt
