@@ -61,7 +61,7 @@ fi
 MINI="./minishell"
 VG="valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes \
     --track-origins=yes --suppressions=./readline.supp \
-    --error-exitcode=42 -q"
+    --error-exitcode=99 -q"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -161,7 +161,7 @@ check() {
 	[ "$mini_out"  != "$bash_out"  ] && fail=1
 	[ "$mini_err"  != "$bash_err"  ] && warn=1
 
-	if [ $vg_code -eq 42 ] || [ -n "$vg_leak" ] || [ -n "$vg_err2" ]; then
+	if [ $vg_code -eq 99 ] || [ -n "$vg_leak" ] || [ -n "$vg_err2" ]; then
 		leak=1
 		((TOTAL_LEAK++))
 	fi
@@ -244,7 +244,7 @@ vcheck() {
 	vg_errs=$(grep "ERROR SUMMARY" /tmp/ra_vg_$$ | grep -v "0 errors")
 	rm -f /tmp/ra_vg_$$
 
-	if [ $vg_code -eq 42 ] || [ -n "$vg_leak" ] || [ -n "$vg_errs" ]; then
+	if [ $vg_code -eq 99 ] || [ -n "$vg_leak" ] || [ -n "$vg_errs" ]; then
 		echo -e "${RED}[LEAK  ]${NC} ${desc}"
 		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
 		echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}" | head -3 | tr '\n' ' ')"
