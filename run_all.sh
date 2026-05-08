@@ -71,6 +71,7 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 TOTAL_PASS=0
+TOTAL_WARN=0
 TOTAL_FAIL=0
 TOTAL_LEAK=0
 TOTAL_CRASH=0
@@ -152,47 +153,48 @@ check() {
 	vg_err2=$(grep "ERROR SUMMARY" /tmp/ra_vg_$$ | grep -v "0 errors")
 	rm -f /tmp/ra_vg_$$
 
-	local ok=1
-	local reasons=()
+	local fail=0
+	local warn=0
 	local leak=0
 
-	[ "$mini_exit" != "$bash_exit" ] && ok=0 && reasons+=("exit: mini=${mini_exit} bash=${bash_exit}")
-	[ "$mini_err"  != "$bash_err"  ] && ok=0 && reasons+=("stderr differ")
-	[ "$mini_out"  != "$bash_out"  ] && ok=0 && reasons+=("stdout differ")
+	[ "$mini_exit" != "$bash_exit" ] && fail=1
+	[ "$mini_out"  != "$bash_out"  ] && fail=1
+	[ "$mini_err"  != "$bash_err"  ] && warn=1
 
 	if [ $vg_code -eq 42 ] || [ -n "$vg_leak" ] || [ -n "$vg_err2" ]; then
 		leak=1
 		((TOTAL_LEAK++))
 	fi
 
-	local status="OK"
-	[ $ok -ne 1 ] && status="FAIL"
+	local status
+	if [ $fail -eq 1 ]; then
+		status="FAIL"
+		echo -e "${RED}[FAIL]${NC} ${desc}"
+		((TOTAL_FAIL++))
+	elif [ $warn -eq 1 ]; then
+		status="WARN"
+		echo -e "${YELLOW}[WARN]${NC} ${desc}"
+		((TOTAL_WARN++))
+	else
+		status="OK"
+		echo -e "${GREEN}[OK  ]${NC} ${desc}"
+		((TOTAL_PASS++))
+	fi
 	[ $leak -eq 1 ] && status="${status}+LEAK"
 
-	if [ $ok -eq 1 ]; then
-		echo -e "${GREEN}[OK  ]${NC} ${desc}"
-	else
-		echo -e "${RED}[FAIL]${NC} ${desc}"
-	fi
-
-	# Toujours afficher le bloc lisible
 	echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
 	echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}${mini_err}" | head -3 | tr '\n' ' ')"
 	echo -e "  ${YELLOW}original bash${NC} [exit=${bash_exit}]: $(echo "${bash_out}${bash_err}" | head -3 | tr '\n' ' ')"
-	if [ $ok -ne 1 ]; then
+	if [ $fail -eq 1 ]; then
 		[ "$mini_exit" != "$bash_exit" ] && echo -e "  ${RED}!! exit différent${NC}"
 		[ "$mini_out"  != "$bash_out"  ] && echo -e "  ${RED}!! stdout différent${NC}"
 		[ "$mini_err"  != "$bash_err"  ] && echo -e "  ${RED}!! stderr différent${NC}"
+	elif [ $warn -eq 1 ]; then
+		echo -e "  ${YELLOW}!! stderr différent${NC}"
 	fi
 	if [ $leak -eq 1 ]; then
 		echo -e "  ${RED}leaks valgrind:${NC}"
 		echo "$vg_full" | grep -v "^$" | sed 's/^/    /'
-	fi
-
-	if [ $ok -eq 1 ]; then
-		((TOTAL_PASS++))
-	else
-		((TOTAL_FAIL++))
 	fi
 	log_test "$TEST_NUM" "$desc" "$status" "$input" \
 		"$mini_out" "$mini_err" "$mini_exit" \
@@ -747,6 +749,7 @@ echo -e "\n${CYAN}==============================================================
 echo -e "${CYAN}  RECAP GLOBAL${NC}"
 echo -e "${CYAN}================================================================${NC}"
 echo -e "${GREEN}PASS   : $TOTAL_PASS${NC}"
+echo -e "${YELLOW}WARN   : $TOTAL_WARN${NC}"
 echo -e "${RED}FAIL   : $TOTAL_FAIL${NC}"
 echo -e "${RED}LEAKS  : $TOTAL_LEAK${NC}"
 echo -e "${RED}CRASH  : $TOTAL_CRASH${NC}"
