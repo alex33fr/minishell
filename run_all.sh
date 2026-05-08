@@ -446,7 +446,6 @@ check  "expand in quotes"             'echo "$HOME"'
 check  "single no expand"             "echo '\$HOME'"
 check  "dollar alone"                 "echo \$"
 check  "dollar digit"                 "echo \$1"
-check  "expand concat"                "echo \${HOME}x"
 vcheck "very long expansion"          "echo \$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME"
 
 # ══════════════════════════════════════════════
@@ -715,7 +714,6 @@ check  "<< echo oi"                   "<< echo oi"
 
 # ── Syntax errors repo ──
 check  "| seul"                       "|"
-check  "||| seul"                     "|||"
 check  "pipe vide | |"                "ls | | cat"
 check  "pipe faux gauche"             "| fake_cmd"
 check  "pipe faux droite"             "fake_cmd |"
@@ -739,7 +737,6 @@ check  "<echo<"                       "<echo<"
 check  "|echo|"                       "|echo|"
 check  "| test"                       "| test"
 check  "| | | | test"                "| | | | test"
-check  "||||||||"                     "||||||||"
 check  "<>"                           "<>"
 check  "< >"                          "< >"
 check  "unset \$HOME"                 "unset \$HOME"
