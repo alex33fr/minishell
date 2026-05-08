@@ -11,6 +11,17 @@ cd "$(dirname "$0")"
 LOGFILE="./logs_full_test.txt"
 > "$LOGFILE"
 
+# Compilation
+echo "Compilation en cours (make re)..."
+if ! make re 2>&1; then
+	echo ""
+	echo "================================================================"
+	echo "  ERROR — make re a échoué, tests annulés"
+	echo "================================================================"
+	exit 1
+fi
+echo ""
+
 # Crée readline.supp si absent
 if [ ! -f ./readline.supp ]; then
 	cat > ./readline.supp <<'SUPP'
