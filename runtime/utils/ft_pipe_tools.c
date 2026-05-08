@@ -40,10 +40,24 @@ int	ft_wait_all(pid_t *pids, int n_cmds)
  * Wire pipe fds, apply redirs, then exec builtin or external. Never returns.
  * @order 1.2.3.5.3.1.2.1.1
  */
+static void	ft_builtin_child_exit(t_exec *exec, int ret)
+{
+	t_cmd	*head;
+
+	head = exec->cmd;
+	while (head->prev)
+		head = head->prev;
+	free(exec->pids);
+	free_cmds(head);
+	ft_env_clear(exec->env);
+	exit(ret);
+}
+
 void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 {
 	t_exec	exec;
 	char	*path;
+	int		ret;
 
 	ft_signals_child();
 	if (fds->prev_fd != -1)
@@ -63,8 +77,8 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	exec.pids = fds->pids;
 	if (ft_is_builtin(cmd->args[0]))
 	{
-		free(exec.pids);
-		exit(ft_exec_builtin(cmd, env));
+		ret = ft_exec_builtin(cmd, env);
+		ft_builtin_child_exit(&exec, ret);
 	}
 	exec.envp = ft_env_to_envp(env);
 	path = ft_resolve_path(&exec);
