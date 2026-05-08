@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:12:57 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 14:20:22 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 13:25:15 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ static char	*replace(char *str, char *var_replaced, int pos)
 	if (prefix && suffix)
 	{
 		res = ft_strjoin_m(prefix, var_replaced);
+		if (!res)
+		{
+			clear_pre_suf(prefix, suffix, var_replaced);
+			suffix = NULL;
+		}
 		res = ft_strjoin_m(res, suffix);
 	}
 	else

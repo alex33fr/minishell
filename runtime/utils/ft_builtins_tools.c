@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 10:32:30 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 11:31:17 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/07 14:10:30 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,23 @@ int	ft_is_n_flag(char *s)
 		i++;
 	}
 	return (1);
+}
+
+char	*ft_cd_target(char **argv, t_env *env)
+{
+	char	*target;
+
+	target = argv[1];
+	if (!ft_strcmp(argv[1], "-"))
+	{
+		target = ft_env_get(env, "OLDPWD");
+		if (!target)
+		{
+			ft_putstr_fd("cd: OLDPWD not set\n", 2);
+			return (NULL);
+		}
+		ft_putstr_fd(target, 1);
+		ft_putstr_fd("\n", 1);
+	}
+	return (target);
 }

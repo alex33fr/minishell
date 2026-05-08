@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:38:54 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/28 11:01:19 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 15:17:54 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	search_pipe(t_queue *q, char *line)
 	if (line[0] == '|')
 	{
 		result = ft_strdup("|");
-		if (!result || !enqueue(q, T_PIPE, result))
+		if (!result || !enqueue(q, T_PIPE, result, 0))
 		{
 			free(result);
 			return (0);
@@ -57,7 +57,7 @@ static int	search_redirin(t_queue *q, char *line)
 		if (line[1] == '<')
 		{
 			result = ft_strdup("<<");
-			if (!result || !enqueue(q, T_HEREDOC, result))
+			if (!result || !enqueue(q, T_HEREDOC, result, 0))
 			{
 				free(result);
 				return (0);
@@ -66,7 +66,7 @@ static int	search_redirin(t_queue *q, char *line)
 		else
 		{
 			result = ft_strdup("<");
-			if (!result || !enqueue(q, T_REDIRIN, result))
+			if (!result || !enqueue(q, T_REDIRIN, result, 0))
 			{
 				free(result);
 				return (0);
@@ -85,7 +85,7 @@ static int	search_redirout(t_queue *q, char *line)
 		if (line[1] == '>')
 		{
 			result = ft_strdup(">>");
-			if (!result || !enqueue(q, T_APPEND, result))
+			if (!result || !enqueue(q, T_APPEND, result, 0))
 			{
 				free(result);
 				return (0);
@@ -94,7 +94,7 @@ static int	search_redirout(t_queue *q, char *line)
 		else
 		{
 			result = ft_strdup(">");
-			if (!result || !enqueue(q, T_REDIROUT, result))
+			if (!result || !enqueue(q, T_REDIROUT, result, 0))
 			{
 				free(result);
 				return (0);
@@ -106,22 +106,11 @@ static int	search_redirout(t_queue *q, char *line)
 
 int	search_token(t_queue *q, char *line)
 {
-	char	*result;
-
 	if (line[0] == '<')
 		return (search_redirin(q, line));
 	else if (line[0] == '>')
 		return (search_redirout(q, line));
 	else if (line[0] == '|')
 		return (search_pipe(q, line));
-	else
-	{
-		result = first_word(line);
-		if (!result || !enqueue(q, T_WORD, result))
-		{
-			free(result);
-			return (0);
-		}
-	}
 	return (1);
 }

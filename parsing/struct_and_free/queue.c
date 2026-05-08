@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 15:38:21 by byonis            #+#    #+#             */
-/*   Updated: 2026/04/23 12:54:05 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 14:10:46 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_queue	*empty_queue(void)
 	return (result);
 }
 
-int	enqueue(t_queue *queue, t_tok type, char *value)
+int	enqueue(t_queue *queue, t_tok type, char *value, int had_quotes)
 {
 	t_node	*new_node;
 
@@ -33,6 +33,7 @@ int	enqueue(t_queue *queue, t_tok type, char *value)
 		return (0);
 	new_node->token = type;
 	new_node->value = value;
+	new_node->had_quotes = had_quotes;
 	new_node->next = NULL;
 	if (queue->back == NULL)
 	{

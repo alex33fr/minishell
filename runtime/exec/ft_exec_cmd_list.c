@@ -14,29 +14,27 @@
 
 /**
  * @brief
- * Save stdin/stdout, apply redirs, run cmd, restore fds.
+ * Save stdin/stdout in cmd, apply redirs, run cmd, restore fds.
  * Return cmd exit status, 1 on redir error.
  * @order 1.2.3.5.2
  */
-static int	ft_exec_single(t_cmd *cmd, t_shell *shell)
+static int	ft_exec_single(t_cmd *cmd, t_env *env)
 {
-	int	saved_in;
-	int	saved_out;
 	int	status;
 
-	saved_in = dup(STDIN_FILENO);
-	saved_out = dup(STDOUT_FILENO);
+	cmd->saved_in = dup(STDIN_FILENO);
+	cmd->saved_out = dup(STDOUT_FILENO);
 	if (ft_apply_redirs(cmd->redir))
 	{
-		dup2(saved_in, STDIN_FILENO);
-		dup2(saved_out, STDOUT_FILENO);
-		ft_close(saved_in, saved_out);
+		dup2(cmd->saved_in, STDIN_FILENO);
+		dup2(cmd->saved_out, STDOUT_FILENO);
+		ft_close(cmd->saved_in, cmd->saved_out);
 		return (1);
 	}
-	status = ft_exec_cmd(cmd->args, shell);
-	dup2(saved_in, STDIN_FILENO);
-	dup2(saved_out, STDOUT_FILENO);
-	ft_close(saved_in, saved_out);
+	status = ft_exec_cmd(cmd, env);
+	dup2(cmd->saved_in, STDIN_FILENO);
+	dup2(cmd->saved_out, STDOUT_FILENO);
+	ft_close(cmd->saved_in, cmd->saved_out);
 	return (status);
 }
 
@@ -63,7 +61,7 @@ static int	ft_count_cmds(t_cmd *cmds)
  * Dispatch a command list: single cmd runs in parent, multiple cmds as pipeline.
  * @order 1.2.3.5
  */
-int	ft_exec_cmd_list(t_cmd *cmds, t_shell *shell, int last_status)
+int	ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status)
 {
 	int	n;
 	int	ret;
@@ -73,8 +71,8 @@ int	ft_exec_cmd_list(t_cmd *cmds, t_shell *shell, int last_status)
 		return (0);
 	n = ft_count_cmds(cmds);
 	if (n == 1)
-		ret = ft_exec_single(cmds, shell);
+		ret = ft_exec_single(cmds, env);
 	else
-		ret = ft_exec_pipeline(cmds, n, shell);
+		ret = ft_exec_pipeline(cmds, n, env);
 	return (ret);
 }

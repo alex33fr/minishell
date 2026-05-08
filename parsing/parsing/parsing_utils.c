@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 14:24:09 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 16:08:16 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ t_cmd	*init_cmd(t_queue *q)
 		return (NULL);
 	}
 	res->redir = NULL;
+	res->next = NULL;
 	return (res);
 }
 
@@ -102,12 +103,11 @@ void	manage_cmd_word(t_queue *q, t_cmd *res, int *i)
 {
 	char	*tmp;
 	int		had_quotes;
+	t_node	*front;
 
+	front = q->front;
+	had_quotes = front->had_quotes;
 	dequeue(q, &tmp);
-	if (ft_strchr(tmp, '\'') || ft_strchr(tmp, '"'))
-		had_quotes = 1;
-	else
-		had_quotes = 0;
 	tmp = remove_quotes(tmp);
 	if (tmp && tmp[0] == '\0' && !had_quotes)
 		free(tmp);

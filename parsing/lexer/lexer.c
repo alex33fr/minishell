@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 11:18:39 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/06 14:09:25 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/07 14:31:42 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	add_eof(t_queue *q)
 	end = ft_strdup("");
 	if (!end)
 		return (0);
-	if (!enqueue(q, T_EOF, end))
+	if (!enqueue(q, T_EOF, end, 0))
 	{
 		free(end);
 		return (0);
@@ -41,12 +41,17 @@ static int	process_next_token(t_queue *q, char *line)
 {
 	t_tok	type;
 	int		len;
+	char	*word;
+	int		node_had_quotes;
 
 	type = get_token_type(line);
 	len = next_token(line, type);
 	if (type == T_WORD)
 	{
-		if (!enqueue(q, type, first_word(line)))
+		word = first_word(line, &node_had_quotes);
+		if (!word)
+			return (-1);
+		if (!enqueue(q, type, word, node_had_quotes))
 			return (-1);
 	}
 	else

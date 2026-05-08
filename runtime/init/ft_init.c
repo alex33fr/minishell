@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/14 12:26:31 by aprivalo          #+#    #+#             */
+/*   Created: 2026/04/14 12:26:45 by aprivalo          #+#    #+#             */
 /*   Updated: 2026/04/14 12:26:45 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -17,19 +17,13 @@
  * Initialize shell: env from envp + setup signals
  * @order 1.1
  */
-t_shell	*ft_init(char **envp)
+t_env	*ft_init(char **envp)
 {
-	t_shell	*shell;
+	t_env	*env;
 
-	shell = ft_calloc(1, sizeof(t_shell));
-	if (!shell)
+	env = ft_env_init(envp);
+	if (!env)
 		return (NULL);
-	shell->env = ft_env_init(envp);
-	if (!shell->env)
-	{
-		free(shell);
-		return (NULL);
-	}
 	ft_setup_signals();
-	return (shell);
+	return (env);
 }
