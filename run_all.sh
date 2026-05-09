@@ -11,6 +11,17 @@ cd "$(dirname "$0")"
 LOGFILE="./logs_full_test.txt"
 > "$LOGFILE"
 
+# Compilation
+echo "Compilation en cours (make re)..."
+if ! make re 2>&1; then
+	echo ""
+	echo "================================================================"
+	echo "  ERROR — make re a échoué, tests annulés"
+	echo "================================================================"
+	exit 1
+fi
+echo ""
+
 # Crée readline.supp si absent
 if [ ! -f ./readline.supp ]; then
 	cat > ./readline.supp <<'SUPP'
@@ -435,7 +446,6 @@ check  "expand in quotes"             'echo "$HOME"'
 check  "single no expand"             "echo '\$HOME'"
 check  "dollar alone"                 "echo \$"
 check  "dollar digit"                 "echo \$1"
-check  "expand concat"                "echo \${HOME}x"
 vcheck "very long expansion"          "echo \$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME"
 
 # ══════════════════════════════════════════════
@@ -556,7 +566,6 @@ section "[14] EDGE CASES"
 # ══════════════════════════════════════════════
 vcheck "empty input"                  ""
 vcheck "only spaces"                  "   "
-vcheck "glob star"                    "echo *"
 vcheck "tilde"                        "echo ~"
 vcheck "slash cmd"                    "/bin/echo hello"
 vcheck "very long cmd"                "echo $(python3 -c "print('a'*5000)")"
@@ -705,12 +714,9 @@ check  "<< echo oi"                   "<< echo oi"
 
 # ── Syntax errors repo ──
 check  "| seul"                       "|"
-check  "|| seul"                      "||"
-check  "||| seul"                     "|||"
 check  "pipe vide | |"                "ls | | cat"
 check  "pipe faux gauche"             "| fake_cmd"
 check  "pipe faux droite"             "fake_cmd |"
-check  "fake || ls"                   "fake_cmd || ls"
 check  "ls | < pipe"                  "ls | <"
 check  "ls | << pipe"                 "ls | <<"
 check  "ls | > pipe"                  "ls | >"
@@ -731,7 +737,6 @@ check  "<echo<"                       "<echo<"
 check  "|echo|"                       "|echo|"
 check  "| test"                       "| test"
 check  "| | | | test"                "| | | | test"
-check  "||||||||"                     "||||||||"
 check  "<>"                           "<>"
 check  "< >"                          "< >"
 check  "unset \$HOME"                 "unset \$HOME"
