@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/07 15:27:02 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/09 12:43:52 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_queue	*do_expand(t_queue *q, char **envp, int last_status)
 	{
 		if (temp->token == T_WORD)
 		{
-			res = expand(temp->value, envp, last_status);
+			res = expand_and_remove_quotes(temp->value, envp, last_status);
 			if (!res)
 				return (NULL);
 			free(temp->value);
