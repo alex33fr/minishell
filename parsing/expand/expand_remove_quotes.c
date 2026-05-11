@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 11:52:08 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/09 17:00:20 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/11 13:56:33 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_dollar_expand(char *str, int i, t_expand *ex)
 	if (!str[i])
 		return (0);
 	if (str[i] == '$' && !ex->in_squote && str[i + 1]
-		&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+		&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
 		return (1);
 	return (0);
 }

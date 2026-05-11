@@ -22,6 +22,7 @@ MY_SOURCES = $(EXPAND)expand_utils.c \
              $(LEXER)lexer_utils.c \
              $(LEXER)lexer.c \
              $(LEXER)search_token.c \
+			 $(LEXER)manage_heredoc.c \
              $(PARSING)parsing_utils.c \
              $(PARSING)parsing.c \
              $(STRUCT)free.c \

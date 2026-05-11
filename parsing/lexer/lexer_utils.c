@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 10:41:48 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/09 12:43:52 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/11 16:32:14 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,35 @@ char	*first_word(char *line, int *had_quotes)
 t_queue	*do_expand(t_queue *q, char **envp, int last_status)
 {
 	t_node	*temp;
+	t_node	*prev;
 	char	*res;
 
 	temp = q->front;
+	prev = NULL;
 	while (temp->token != T_EOF)
 	{
 		if (temp->token == T_WORD)
 		{
-			res = expand_and_remove_quotes(temp->value, envp, last_status);
-			if (!res)
-				return (NULL);
-			free(temp->value);
-			temp->value = res;
+			if (prev && prev->token == T_HEREDOC)
+			{
+				temp->heredoc_quoted = has_quotes(temp->value);
+				if (!temp->heredoc_quoted)
+					res = expand_and_remove_quotes(temp->value, envp, last_status);
+				else
+					res = unquoted(temp->value);
+				free(temp->value);
+				temp->value = res;
+			}
+			else
+			{
+				res = expand_and_remove_quotes(temp->value, envp, last_status);
+				if (!res)
+					return (NULL);
+				free(temp->value);
+				temp->value = res;
+			}
 		}
+		prev = temp;
 		temp = temp->next;
 	}
 	return (q);
