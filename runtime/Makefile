@@ -18,7 +18,8 @@ GREEN    = \033[0;32m
 RED      = \033[0;31m
 RESET    = \033[0m
 
-MY_SOURCES = $(BUILTINS)ft_builtin_env.c \
+MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
+             $(BUILTINS)ft_builtin_env.c \
              $(BUILTINS)ft_builtin_simple.c \
              $(ENV)ft_env_access.c \
              $(ENV)ft_env_clear.c \

@@ -75,6 +75,11 @@ static int	process_syntax(char *line, int *i, int *last_was_pipe)
 	}
 	else
 	{
+		if (line[*i] == ';')
+		{
+			ft_putstr_fd("Syntax Error: unexpected token ';'\n", 2);
+			return (0);
+		}
 		if (!ft_isspace(line[*i]))
 			*last_was_pipe = 0;
 		(*i)++;

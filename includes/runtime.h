@@ -62,7 +62,7 @@ int		ft_is_path_cmd(char *cmd);
 char	*ft_find_path(char *cmd, t_env *env);
 char	*ft_join_cmd_path(char *dir, char *cmd);
 
-int		ft_builtin_pwd(void);
+int		ft_builtin_pwd(t_env *env);
 int		ft_builtin_env(t_env *env);
 int		ft_builtin_exit(t_cmd *cmd, t_env *env);
 int		ft_builtin_echo(char **argv);

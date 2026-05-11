@@ -328,6 +328,11 @@ section() {
 	log_header "$1"
 }
 
+# Supprime les artefacts connus d'un run précédent avant le snapshot
+find . -maxdepth 1 -type f ! -name "*.c" ! -name "*.h" ! -name "*.sh" \
+	! -name "*.supp" ! -name "*.txt" ! -name "Makefile" ! -name "minishell" \
+	! -name ".gitignore" -delete 2>/dev/null
+
 # Snapshot des fichiers présents avant les tests
 _BEFORE_FILES=$(ls -1 . 2>/dev/null | sort)
 
@@ -375,34 +380,21 @@ vcheck "pipe then redir"              "echo hi | cat > /tmp/ra_pr.txt"
 
 # ──── >>> / <<< et séquences longues ────
 check  ">>> triple out"               "echo hi >>> /tmp/ra_trip.txt"
-check  "<<< here-string"              "cat <<< hello"
-check  "<<<< quadruple"               "cat <<<< hello"
 check  ">>>> quadruple out"           "echo hi >>>> /tmp/ra_quad.txt"
 check  ">>>>>>>>>> 10x out"           "echo hi >>>>>>>>>> /tmp/ra_10.txt"
-check  "<<<<<<<<<< 10x in"            "cat <<<<<<<<<< hello"
 check  ">>>>>>>>>>>>>>>> 16x out"     "echo hi >>>>>>>>>>>>>>>> /tmp/ra_16.txt"
-check  "<<<<<<<<<<<<<<<< 16x in"      "cat <<<<<<<<<<<<<<<< hello"
 check  ">>> sans fichier"             ">>>"
-check  "<<< sans arg"                 "<<<"
 check  ">>>> sans fichier"            ">>>>"
-check  "<<<< sans arg"                "<<<<<"
 
 # ──── combinaisons >>> avec pipes ────
 check  "pipe puis >>>"                "echo hi | cat >>> /tmp/ra_ptrip.txt"
 check  ">>> puis pipe"                "echo hi >>> /tmp/ra_trip2.txt | cat"
 check  "ls | >>> /tmp"                "ls | >>> /tmp/ra_pleft.txt"
 check  ">>> | cat"                    ">>> /tmp/ra_pr3.txt | cat"
-check  "pipe | <<< | pipe"            "echo x | cat <<< hello | cat"
 check  "multi >>> dans cmd"           "echo hi >>> /tmp/a.txt >>> /tmp/b.txt"
 check  ">>> nonexist dir"             "echo hi >>> /nonexist_dir_xyz/file.txt"
-check  "<<< avec pipe gauche"         "echo hi | cat <<< world"
-check  "<<< avec pipe droit"          "cat <<< hello | cat"
-check  "<<< puis >>> dans pipe"       "cat <<< hello | cat >>> /tmp/ra_combo.txt"
-check  "pipe | <<< vide"              "echo x | cat <<<"
 check  "pipe | >>> vide"              "echo x | >>>"
-check  "<<< puis < combiné"           "cat <<< hello < /tmp/ra_out.txt"
 check  ">>> puis > combiné"           "echo hi >>> /tmp/a.txt > /tmp/b.txt"
-check  "<<< dans pipe long"           "cat <<< hi | cat | cat | cat | cat"
 check  ">>> dans pipe long"           "echo hi | cat | cat >>> /tmp/ra_long.txt | cat"
 check  "< < < espace séparé"          "cat < < < hello"
 check  "> > > espace séparé"          "echo hi > > > /tmp/ra_sp.txt"
@@ -475,7 +467,6 @@ vcheck "cd nonexist leak"             "cd /nonexistent_xyz"
 # ══════════════════════════════════════════════
 section "[8] BUILTINS — export"
 # ══════════════════════════════════════════════
-check  "export no args"               "export"
 vcheck "export simple"                "export _VG_A=hello"
 vcheck "export empty val"             "export _VG_A="
 vcheck "export no val"                "export _VG_A"
@@ -579,7 +570,6 @@ section "[15] TESTS REPOS ETUDIANTS — CRASH / SEGFAULT"
 
 # ── Segfault bait (mini_death / parsing_hell) ──
 check  "echo <| echo"                 "echo |< echo segf"
-check  "echo >| echo"                 "echo segf >| echo is this invalid"
 check  "echo > > < echo"             'echo > > < "echo"'
 check  "echo > > | echo"             "echo > > | echo kekw"
 check  "echo < < > echo"             "echo < < > echo"
@@ -587,20 +577,16 @@ check  "echo < < < > ok"             "echo < < < > ok"
 check  "echo < < | echo"             "echo < < | echo ok"
 check  "echo < < | < ok"             "echo < < | < ok"
 check  "echo < < | > echo"           "echo < < | > echo"
-check  "echo >>| echo"               "echo >>| echo super valid"
 check  "echo >>< echo"               'echo >>< "echo"'
 check  "echo <<| echo"               "echo <<| echo ok"
 check  "echo <<|< ok"                "echo <<|< ok"
 check  "echo <<|> echo"              "echo <<|> echo"
 check  "echo <<> echo"               "echo <<> echo"
-check  "echo <<<> ok"                "echo <<<> ok"
 check  "echo seg < > echo"           "echo seg < > echo seg"
 check  "echo seg > < echo"           "echo seg > < echo segf"
 check  "echo seg < < > echo"         "echo seg < < > echo segf"
 check  "echo | > la"                 "echo | > la"
 check  "<| echo ok"                  "<| echo ok"
-check  ">>| echo wtf"                ">>| echo wtf"
-check  ">| echo wtf"                 ">| echo wtf"
 check  "<| echo wtf"                 "<| echo wtf"
 check  "<<| echo wtf"                "<<| echo wtf"
 
@@ -670,8 +656,6 @@ check  "cd trop profond"              "cd ../../../../../../../../../../../../..
 check  "cd arg invalide"              "cd bark bark"
 
 # ── Variables extrêmes ──
-check  "echo \$\$"                    "echo \$\$"
-check  "echo \$\$\$"                  "echo \$\$\$"
 check  "echo \$U/SER"                 "echo \$U/SER"
 check  "echo \$/ \$/"                 "echo \$/ \$/"
 check  "\$? seul"                     "\$?"

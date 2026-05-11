@@ -122,6 +122,16 @@ char	*ft_cd_target(char **argv, t_env *env)
 {
 	char	*target;
 
+	if (!argv[1] || !ft_strcmp(argv[1], "--"))
+	{
+		target = ft_env_get(env, "HOME");
+		if (!target)
+		{
+			ft_putstr_fd("cd: HOME not set\n", 2);
+			return (NULL);
+		}
+		return (target);
+	}
 	target = argv[1];
 	if (!ft_strcmp(argv[1], "-"))
 	{
