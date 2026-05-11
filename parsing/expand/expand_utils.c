@@ -6,101 +6,89 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/07 15:26:49 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/09 17:07:41 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-int	find_the_next_valid_variable(char *s, int start, int *in_double_quotes)
+char	*append(char *res, char *to_add)
 {
-	int	i;
+	char	*tmp;
 
-	i = start;
-	while (s && s[i])
-	{
-		if (s[i] == '"')
-			*in_double_quotes = !(*in_double_quotes);
-		if (s[i] == '\'' && !(*in_double_quotes))
-		{
-			i++;
-			while (s[i] && s[i] != '\'')
-				i++;
-			if (!s[i])
-				break ;
-			i++;
-			continue ;
-		}
-		if (s[i] == '$' && s[i + 1]
-			&& (ft_isalpha(s[i + 1]) || s[i + 1] == '_' || s[i + 1] == '?'))
-			return (i);
-		i++;
-	}
-	return (-1);
+	tmp = ft_strjoin(res, to_add);
+	free(res);
+	return (tmp);
 }
 
-char	*var_extraction(char *str, int pos)
+static char	*get_env_value(char *name, char **envp, int last_status)
 {
-	int		len;
 	char	*res;
+	int		i;
+	size_t	len;
 
-	if (!str || pos == -1 || !str[pos + 1])
-		return (NULL);
-	if (str[pos + 1] == '?')
+	if (ft_strncmp(name, "?", 1) == 0)
 	{
-		res = ft_strdup("?");
+		res = ft_itoa(last_status);
 		return (res);
 	}
-	len = 0;
-	while (str[pos + len + 1]
-		&& (ft_isalnum(str[pos + len + 1]) || str[pos + len + 1] == '_'))
-		len++;
-	res = ft_substr(str, pos + 1, len);
-	return (res);
-}
-
-static char	*find_env_value(char *name, char **envp)
-{
-	size_t	len;
-	int		i;
-
 	i = 0;
 	len = ft_strlen(name);
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (&envp[i][len + 1]);
+		{
+			res = ft_strdup(&envp[i][len + 1]);
+			return (res);
+		}
 		i++;
 	}
-	return (NULL);
+	res = ft_strdup("");
+	return (res);
 }
 
-char	*var_replaced(char *str, char **envp, int pos, int last_status)
+static int	get_var_len(char *str, int i)
 {
-	char	*temp;
-	char	*res;
-	char	*val;
+	int	var_len;
 
-	if (!envp || !str)
+	if (str[i + 1] == '?')
+		return (1);
+	var_len = 0;
+	while (ft_isalnum(str[i + 1 + var_len]) || str[i + 1 + var_len] == '_')
+		var_len++;
+	return (var_len);
+}
+
+static char	*resolve_var(char *str, int *i, t_expand *ex, int var_len)
+{
+	char	*var_name;
+	char	*value;
+
+	var_name = ft_substr(str, *i + 1, var_len);
+	if (!var_name)
 		return (NULL);
-	temp = var_extraction(str, pos);
-	if (!temp)
+	value = get_env_value(var_name, ex->envp, ex->last_status);
+	free(var_name);
+	return (value);
+}
+
+char *handle_dollar(char *str, int *i, t_expand *ex, char *res)
+{
+	char	*value;
+	int		var_len;
+
+	var_len = get_var_len(str, *i);
+	if (var_len == 0)
+	{
+		(*i)++;
+		res = append(res, "$");
+		return (res);
+	}
+	value = resolve_var(str, i, ex, var_len);
+	if (!value)
 		return (NULL);
-	if (ft_strncmp(temp, "?", 1) == 0)
-	{
-		res = ft_itoa(last_status);
-		free(temp);
-		if (!res)
-			return (NULL);
-	}
-	else
-	{
-		val = find_env_value(temp, envp);
-		free(temp);
-		if (!val)
-			res = ft_strdup("");
-		else
-			res = ft_strdup(val);
-	}
+	res = append(res, value);
+	free(value);
+	*i += 1 + var_len;
 	return (res);
 }

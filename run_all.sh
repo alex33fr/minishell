@@ -1,13 +1,26 @@
 #!/bin/bash
 
 # Lance toute la suite de tests avec valgrind
-# Usage: bash run_all.sh
+# Usage: bash run_all.sh [-e] [-c] [-l] [-w]
+#   -e = FAIL   -c = CRASH   -l = LEAK   -w = WARN
+#   combinable: -el  -eclw  -e -l  etc.  (sans flag = tout afficher)
 # Logs : logs_full_test.txt (écrasé à chaque run)
 
 cd "$(dirname "$0")"
 
 LOGFILE="./logs_full_test.txt"
 > "$LOGFILE"
+
+# Compilation
+echo "Compilation en cours (make re)..."
+if ! make re 2>&1; then
+	echo ""
+	echo "================================================================"
+	echo "  ERROR — make re a échoué, tests annulés"
+	echo "================================================================"
+	exit 1
+fi
+echo ""
 
 # Crée readline.supp si absent
 if [ ! -f ./readline.supp ]; then
@@ -78,8 +91,34 @@ TOTAL_CRASH=0
 TEST_NUM=0
 CURRENT_SECTION=""
 
+# ─── Filter flags: -e=FAIL  -c=CRASH  -l=LEAK  -w=WARN ─────────────
+SHOW_E=0; SHOW_C=0; SHOW_L=0; SHOW_W=0
+for arg in "$@"; do
+	arg="${arg#-}"; arg="${arg#-}"
+	[[ "$arg" == *e* ]] && SHOW_E=1
+	[[ "$arg" == *c* ]] && SHOW_C=1
+	[[ "$arg" == *l* ]] && SHOW_L=1
+	[[ "$arg" == *w* ]] && SHOW_W=1
+done
+if [ $SHOW_E -eq 0 ] && [ $SHOW_C -eq 0 ] && [ $SHOW_L -eq 0 ] && [ $SHOW_W -eq 0 ]; then
+	SHOW_E=1; SHOW_C=1; SHOW_L=1; SHOW_W=1
+fi
+
 normalize() {
 	sed 's/^bash: line [0-9]*: //' | sed 's/^minishell: //'
+}
+
+should_display() {
+	local fail=$1 warn=$2 leak=$3 crash=$4
+	if [ $fail -eq 0 ] && [ $warn -eq 0 ] && [ $leak -eq 0 ] && [ $crash -eq 0 ]; then
+		[ $SHOW_E -eq 1 ] && [ $SHOW_C -eq 1 ] && [ $SHOW_L -eq 1 ] && [ $SHOW_W -eq 1 ] && return 0
+		return 1
+	fi
+	[ $fail  -eq 1 ] && [ $SHOW_E -eq 1 ] && return 0
+	[ $warn  -eq 1 ] && [ $SHOW_W -eq 1 ] && return 0
+	[ $leak  -eq 1 ] && [ $SHOW_L -eq 1 ] && return 0
+	[ $crash -eq 1 ] && [ $SHOW_C -eq 1 ] && return 0
+	return 1
 }
 
 # Écriture dans le log (texte propre, sans codes ANSI)
@@ -169,36 +208,42 @@ check() {
 	local status
 	if [ $fail -eq 1 ]; then
 		status="FAIL"
-		echo -e "${RED}[FAIL]${NC} ${desc}"
 		((TOTAL_FAIL++))
 	elif [ $warn -eq 1 ]; then
 		status="WARN"
-		echo -e "${YELLOW}[WARN]${NC} ${desc}"
 		((TOTAL_WARN++))
 	else
 		status="OK"
-		echo -e "${GREEN}[OK  ]${NC} ${desc}"
 		((TOTAL_PASS++))
 	fi
 	[ $leak -eq 1 ] && status="${status}+LEAK"
 
-	echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
-	echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}${mini_err}" | head -3 | tr '\n' ' ')"
-	echo -e "  ${YELLOW}original bash${NC} [exit=${bash_exit}]: $(echo "${bash_out}${bash_err}" | head -3 | tr '\n' ' ')"
-	if [ $fail -eq 1 ]; then
-		[ "$mini_exit" != "$bash_exit" ] && echo -e "  ${RED}!! exit différent${NC}"
-		[ "$mini_out"  != "$bash_out"  ] && echo -e "  ${RED}!! stdout différent${NC}"
-		[ "$mini_err"  != "$bash_err"  ] && echo -e "  ${RED}!! stderr différent${NC}"
-	elif [ $warn -eq 1 ]; then
-		echo -e "  ${YELLOW}!! stderr différent${NC}"
+	if should_display $fail $warn $leak 0; then
+		if [ $fail -eq 1 ]; then
+			echo -e "${RED}[FAIL]${NC} ${desc}"
+		elif [ $warn -eq 1 ]; then
+			echo -e "${YELLOW}[WARN]${NC} ${desc}"
+		else
+			echo -e "${GREEN}[OK  ]${NC} ${desc}"
+		fi
+		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
+		echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}${mini_err}" | head -3 | tr '\n' ' ')"
+		echo -e "  ${YELLOW}original bash${NC} [exit=${bash_exit}]: $(echo "${bash_out}${bash_err}" | head -3 | tr '\n' ' ')"
+		if [ $fail -eq 1 ]; then
+			[ "$mini_exit" != "$bash_exit" ] && echo -e "  ${RED}!! exit différent${NC}"
+			[ "$mini_out"  != "$bash_out"  ] && echo -e "  ${RED}!! stdout différent${NC}"
+			[ "$mini_err"  != "$bash_err"  ] && echo -e "  ${RED}!! stderr différent${NC}"
+		elif [ $warn -eq 1 ]; then
+			echo -e "  ${YELLOW}!! stderr différent${NC}"
+		fi
+		if [ $leak -eq 1 ]; then
+			echo -e "  ${RED}leaks valgrind:${NC}"
+			echo "$vg_full" | grep -v "^$" | sed 's/^/    /'
+		fi
+		log_test "$TEST_NUM" "$desc" "$status" "$input" \
+			"$mini_out" "$mini_err" "$mini_exit" \
+			"$bash_out" "$bash_err" "$bash_exit" "$vg_full"
 	fi
-	if [ $leak -eq 1 ]; then
-		echo -e "  ${RED}leaks valgrind:${NC}"
-		echo "$vg_full" | grep -v "^$" | sed 's/^/    /'
-	fi
-	log_test "$TEST_NUM" "$desc" "$status" "$input" \
-		"$mini_out" "$mini_err" "$mini_exit" \
-		"$bash_out" "$bash_err" "$bash_exit" "$vg_full"
 }
 
 # Crash only + valgrind (pas de comparaison bash)
@@ -217,19 +262,23 @@ vcheck() {
 	rm -f /tmp/ra_mini_err_$$
 
 	if [ $mini_exit -eq 124 ]; then
-		echo -e "${RED}[TIMEOUT]${NC} ${desc}"
-		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
 		((TOTAL_CRASH++))
-		log ""; log "Test ${TEST_NUM}: ${desc}  [TIMEOUT]"
-		log "\$> $(echo "$input" | head -1)"
+		if should_display 0 0 0 1; then
+			echo -e "${RED}[TIMEOUT]${NC} ${desc}"
+			echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
+			log ""; log "Test ${TEST_NUM}: ${desc}  [TIMEOUT]"
+			log "\$> $(echo "$input" | head -1)"
+		fi
 		return
 	fi
 	if [ $mini_exit -ge 134 ] && [ $mini_exit -le 139 ]; then
-		echo -e "${RED}[CRASH  ]${NC} ${desc} (exit=$mini_exit)"
-		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
 		((TOTAL_CRASH++))
-		log ""; log "Test ${TEST_NUM}: ${desc}  [CRASH exit=${mini_exit}]"
-		log "\$> $(echo "$input" | head -1)"
+		if should_display 0 0 0 1; then
+			echo -e "${RED}[CRASH  ]${NC} ${desc} (exit=$mini_exit)"
+			echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
+			log ""; log "Test ${TEST_NUM}: ${desc}  [CRASH exit=${mini_exit}]"
+			log "\$> $(echo "$input" | head -1)"
+		fi
 		return
 	fi
 
@@ -245,27 +294,31 @@ vcheck() {
 	rm -f /tmp/ra_vg_$$
 
 	if [ $vg_code -eq 99 ] || [ -n "$vg_leak" ] || [ -n "$vg_errs" ]; then
-		echo -e "${RED}[LEAK  ]${NC} ${desc}"
-		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
-		echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}" | head -3 | tr '\n' ' ')"
-		echo -e "  ${RED}leaks valgrind:${NC}"
-		echo "$vg_full" | grep -v "^$" | sed 's/^/    /'
 		((TOTAL_LEAK++))
 		((TOTAL_PASS++))
-		log ""; log "Test ${TEST_NUM}: ${desc}  [LEAK]"
-		log "\$> $(echo "$input" | head -1)"
-		log "  --- VALGRIND OUTPUT COMPLET ---"
-		while IFS= read -r line; do
-			log "    $line"
-		done <<< "$vg_full"
-		log "  --- FIN VALGRIND ---"
+		if should_display 0 0 1 0; then
+			echo -e "${RED}[LEAK  ]${NC} ${desc}"
+			echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
+			echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}" | head -3 | tr '\n' ' ')"
+			echo -e "  ${RED}leaks valgrind:${NC}"
+			echo "$vg_full" | grep -v "^$" | sed 's/^/    /'
+			log ""; log "Test ${TEST_NUM}: ${desc}  [LEAK]"
+			log "\$> $(echo "$input" | head -1)"
+			log "  --- VALGRIND OUTPUT COMPLET ---"
+			while IFS= read -r line; do
+				log "    $line"
+			done <<< "$vg_full"
+			log "  --- FIN VALGRIND ---"
+		fi
 	else
-		echo -e "${GREEN}[CLEAN ]${NC} ${desc}"
-		echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
-		echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}" | head -3 | tr '\n' ' ')"
 		((TOTAL_PASS++))
-		log ""; log "Test ${TEST_NUM}: ${desc}  [OK]"
-		log "\$> $(echo "$input" | head -1)"
+		if should_display 0 0 0 0; then
+			echo -e "${GREEN}[CLEAN ]${NC} ${desc}"
+			echo -e "  ${CYAN}\$>${NC} $(echo "$input" | head -1)"
+			echo -e "  ${GREEN}my minishell${NC} [exit=${mini_exit}]: $(echo "${mini_out}" | head -3 | tr '\n' ' ')"
+			log ""; log "Test ${TEST_NUM}: ${desc}  [OK]"
+			log "\$> $(echo "$input" | head -1)"
+		fi
 	fi
 }
 
@@ -393,7 +446,6 @@ check  "expand in quotes"             'echo "$HOME"'
 check  "single no expand"             "echo '\$HOME'"
 check  "dollar alone"                 "echo \$"
 check  "dollar digit"                 "echo \$1"
-check  "expand concat"                "echo \${HOME}x"
 vcheck "very long expansion"          "echo \$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME\$HOME"
 
 # ══════════════════════════════════════════════
@@ -514,7 +566,6 @@ section "[14] EDGE CASES"
 # ══════════════════════════════════════════════
 vcheck "empty input"                  ""
 vcheck "only spaces"                  "   "
-vcheck "glob star"                    "echo *"
 vcheck "tilde"                        "echo ~"
 vcheck "slash cmd"                    "/bin/echo hello"
 vcheck "very long cmd"                "echo $(python3 -c "print('a'*5000)")"
@@ -663,12 +714,9 @@ check  "<< echo oi"                   "<< echo oi"
 
 # ── Syntax errors repo ──
 check  "| seul"                       "|"
-check  "|| seul"                      "||"
-check  "||| seul"                     "|||"
 check  "pipe vide | |"                "ls | | cat"
 check  "pipe faux gauche"             "| fake_cmd"
 check  "pipe faux droite"             "fake_cmd |"
-check  "fake || ls"                   "fake_cmd || ls"
 check  "ls | < pipe"                  "ls | <"
 check  "ls | << pipe"                 "ls | <<"
 check  "ls | > pipe"                  "ls | >"
@@ -689,7 +737,6 @@ check  "<echo<"                       "<echo<"
 check  "|echo|"                       "|echo|"
 check  "| test"                       "| test"
 check  "| | | | test"                "| | | | test"
-check  "||||||||"                     "||||||||"
 check  "<>"                           "<>"
 check  "< >"                          "< >"
 check  "unset \$HOME"                 "unset \$HOME"

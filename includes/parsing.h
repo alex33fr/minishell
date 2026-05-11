@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/08 17:29:36 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/09 17:03:25 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,14 @@ typedef struct s_cmd
 	int				saved_out;
 }	t_cmd;
 
+typedef struct s_expand
+{
+	char	**envp;
+	int		last_status;
+	int		in_squote;
+	int		in_dquote;
+}	t_expand;
+
 t_queue	*empty_queue(void);
 int		enqueue(t_queue *queue, t_tok type, char *value, int had_quotes);
 t_tok	dequeue(t_queue *queue, char **val_ptr);
@@ -88,8 +96,11 @@ t_cmd	*create_cmds(t_queue *q);
 char	*var_replaced(char *var, char **envp, int pos, int last_status);
 char	*var_extraction(char *str, int pos);
 
-char	*remove_quotes(char *str);
-char	*expand(char *str, char **envp, int last_status);
-int		find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
+// char	*remove_quotes(char *str);
+// char	*expand(char *str, char **envp, int last_status);
+char	*append(char *res, char *to_add);
+char 	*handle_dollar(char *str, int *i, t_expand *ex, char *res);
+char	*expand_and_remove_quotes(char *str, char **envp, int last_status);
+// int		find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif
