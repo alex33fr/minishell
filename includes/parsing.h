@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/09 17:03:25 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/11 16:40:25 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_node
 	t_tok			token;
 	char			*value;
 	int				had_quotes;
+	int				heredoc_quoted;
 	struct s_node	*next;
 }	t_node;
 
@@ -82,6 +83,9 @@ char	*first_word(char *line, int *had_quotes);
 
 int		ft_isspace(int c);
 int		skip_spaces(char *line);
+int		has_quotes(char *str);
+char	*unquoted(char *str);
+void	remove_quotes_delimiter(t_node *node);
 t_queue	*do_expand(t_queue *q, char **envp, int last_status);
 t_queue	*lexer(char *line, char **envp, int last_status);
 
@@ -93,8 +97,8 @@ void	manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
 t_cmd	*create_cmds(t_queue *q);
 
-char	*var_replaced(char *var, char **envp, int pos, int last_status);
-char	*var_extraction(char *str, int pos);
+// char	*var_replaced(char *var, char **envp, int pos, int last_status);
+// char	*var_extraction(char *str, int pos);
 
 // char	*remove_quotes(char *str);
 // char	*expand(char *str, char **envp, int last_status);
