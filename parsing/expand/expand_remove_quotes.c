@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 11:52:08 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 16:22:24 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/13 17:08:11 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,24 @@ static int	is_dollar_expand(char *str, int i, t_expand *ex)
 	return (0);
 }
 
+static int	manage_dollar_before_quote(char *str, int *i, t_expand *ex)
+{
+	if (str[*i] == '$' && (str[*i + 1] == '"' || str[*i + 1] == '\'')
+		&& !ex->in_dquote && !ex->in_squote)
+	{
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
 static char	*process_char(char *str, int *i, t_expand *ex, char *res)
 {
 	char	buf[2];
 
 	buf[1] = '\0';
-	if (str[*i] == '$' && (str[*i  + 1] == '"' || str[*i + 1] == '\'')
-		&& !ex->in_dquote && !ex->in_squote)
-	{
-		(*i)++;
+	if (manage_dollar_before_quote(str, i, ex))
 		return (res);
-	}
 	if (str[*i] == '\'' && !ex->in_dquote)
 	{
 		ex->in_squote = !ex->in_squote;
