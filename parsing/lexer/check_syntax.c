@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/12 13:51:21 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/13 13:27:52 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	first_quote(char *line)
 	return (i);
 }
 
-static int	next_quote(char *line)
+int	next_quote(char *line)
 {
 	int		i;
 	int		j;
@@ -43,16 +43,6 @@ static int	next_quote(char *line)
 	return (-1);
 }
 
-static int	error_syntax(char *line, char *token)
-{
-	ft_putstr_fd("syntax error near unexpected token `", 2);
-	ft_putstr_fd(token, 2);
-	ft_putstr_fd("' `", 2);
-	ft_putstr_fd(line, 2);
-	ft_putstr_fd("'\n", 2);
-	return (0);
-}
-
 static int	check_start_pipe(char *line, int *i)
 {
 	*i = skip_spaces(line);
@@ -61,34 +51,11 @@ static int	check_start_pipe(char *line, int *i)
 	return (1);
 }
 
-static void	get_redir_str(char *line, int i, char *buf)
+static int process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
 {
-	if (line[i] == '<' && line[i + 1] == '<')
-		ft_strlcpy(buf, "<<", 3);
-	else if (line[i] == '>' && line[i + 1] == '>')
-		ft_strlcpy(buf, ">>", 3);
-	else if (line[i] == '<')
-		ft_strlcpy(buf, "<", 2);
-	else
-		ft_strlcpy(buf, ">", 2);
-}
-
-static int	process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
-{
-	char	buf[3];
-	char	next_buf[3];
-	int		next_pos;
-
 	if (line[*i] == '"' || line[*i] == '\'')
-	{
-		next_pos = next_quote(line + *i);
-		if (next_pos == -1)
-			return (0);
-		*i += next_pos + 1;
-		*l_w_pipe = 0;
-		*l_w_redir = 0;
-	}
-	else if (line[*i] == '|')
+		return (manage_syntax_quotes(line, i, l_w_pipe, l_w_redir));
+	if (line[*i] == '|')
 	{
 		if (*l_w_pipe || *l_w_redir)
 			return (error_syntax(line, "|"));
@@ -97,24 +64,10 @@ static int	process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
 		(*i)++;
 	}
 	else if (line[*i] == '<' || line[*i] == '>')
-	{
-		get_redir_str(line, *i, buf);
-		if (*l_w_redir)
-			return (error_syntax(line, buf));
-		if (line[*i + 1] == line[*i])
-			(*i)++;
-		if (line[*i + 1] == '>' || line[*i + 1] == '<')
-		{
-			get_redir_str(line, *i + 1, next_buf);
-			return (error_syntax(line, next_buf));
-		}
-		*l_w_pipe = 0;
-		*l_w_redir = 1;
-		(*i)++;
-	}
+		return (manage_syntax_redir(line, i, l_w_pipe, l_w_redir));
 	else if (line[*i] == ';')
 		return (error_syntax(line, ";"));
-	else
+		else
 	{ 
 		if (!ft_isspace(line[*i]))
 		{

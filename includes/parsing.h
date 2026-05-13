@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/11 16:40:25 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/13 12:50:41 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ t_tok	dequeue(t_queue *queue, char **val_ptr);
 void	clear_queue(t_queue *queue);
 
 int		check_redir(t_queue *queue);
+int		next_quote(char *line);
+int		error_syntax(char *line, char *token);
+int		manage_syntax_quotes(char *line, int *i, int *l_wp, int *l_wr);
+int		manage_syntax_redir(char *line, int *i, int *l_wp, int *l_wr);
 int		check_syntax(char *line);
 
 int		search_token(t_queue *q, char *line);
@@ -97,14 +101,8 @@ void	manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
 t_cmd	*create_cmds(t_queue *q);
 
-// char	*var_replaced(char *var, char **envp, int pos, int last_status);
-// char	*var_extraction(char *str, int pos);
-
-// char	*remove_quotes(char *str);
-// char	*expand(char *str, char **envp, int last_status);
 char	*append(char *res, char *to_add);
-char 	*handle_dollar(char *str, int *i, t_expand *ex, char *res);
+char	*handle_dollar(char *str, int *i, t_expand *ex, char *res);
 char	*expand_and_remove_quotes(char *str, char **envp, int last_status);
-// int		find_the_next_valid_variable(char *s, int start, int *in_double_quotes);
 
 #endif
