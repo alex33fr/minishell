@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 13:27:52 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/13 13:32:12 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	check_start_pipe(char *line, int *i)
 	return (1);
 }
 
-static int process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
+static int	process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
 {
 	if (line[*i] == '"' || line[*i] == '\'')
 		return (manage_syntax_quotes(line, i, l_w_pipe, l_w_redir));
@@ -67,8 +67,8 @@ static int process_syntax(char *line, int *i, int *l_w_pipe, int *l_w_redir)
 		return (manage_syntax_redir(line, i, l_w_pipe, l_w_redir));
 	else if (line[*i] == ';')
 		return (error_syntax(line, ";"));
-		else
-	{ 
+	else
+	{
 		if (!ft_isspace(line[*i]))
 		{
 			*l_w_pipe = 0;
@@ -83,7 +83,7 @@ int	check_syntax(char *line)
 {
 	int	i;
 	int	last_was_pipe;
-	int last_was_redir;
+	int	last_was_redir;
 
 	i = skip_spaces(line);
 	if (!check_start_pipe(line, &i))
