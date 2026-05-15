@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 12:50:41 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 14:11:10 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_redir
 {
 	t_tok			type;
 	char			*file;
+	int				fd;
 	struct s_redir	*next;
 }	t_redir;
 

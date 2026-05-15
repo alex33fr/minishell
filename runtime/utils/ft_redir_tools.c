@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 10:37:52 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 11:31:46 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:35:58 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,17 @@ int	ft_apply_redirs(t_redir *redir)
 			return (1);
 		if (redir->type == T_APPEND && ft_redir_append(redir->file))
 			return (1);
-		if (redir->type == T_HEREDOC && ft_redir_heredoc(redir->file))
-			return (1);
+		if (redir->type == T_HEREDOC)
+		{
+			if (redir->fd != -1)
+			{
+				if (dup2(redir->fd, STDIN_FILENO) < 0)
+					return (1);
+				close(redir->fd);
+			}
+			else if (ft_redir_heredoc(redir->file))
+				return (1);
+		}
 		redir = redir->next;
 	}
 	return (0);

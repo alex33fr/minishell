@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 11:10:56 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 14:12:05 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 	new_node->file = file;
 	new_node->type = tok;
 	new_node->next = NULL;
+	new_node->fd = -1;
 	if (!*redirs)
 		*redirs = new_node;
 	else

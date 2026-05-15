@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/15 13:22:05 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:27:09 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int		ft_is_valid_name(char *s);
 int		ft_is_n_flag(char *s);
 char	*ft_read_heredoc_line(void);
 void	sig_int_heredoc(int sig);
+int		ft_preread_heredocs(t_cmd *cmds);
+void	ft_heredoc_loop(int fd, char *delimiter);
 
 /**
  * @brief

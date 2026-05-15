@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 11:36:18 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 13:23:14 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 14:42:48 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	manage_syntax_redir(char *line, int *i, int *l_wp, int *l_wr)
 		return (error_syntax(line, buf));
 	if (line[*i + 1] == line[*i])
 		(*i)++;
-	if (line[*i + 1] == '>' | line[*i + 1] == '<')
+	if (line[*i + 1] == '>' || line[*i + 1] == '<')
 	{
 		get_redir_str(line, *i + 1, next_buf);
 		return (error_syntax(line, next_buf));
