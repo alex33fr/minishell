@@ -118,6 +118,11 @@ int	ft_is_n_flag(char *s)
 	return (1);
 }
 
+/**
+ * @brief
+ * Resolve cd target: HOME if no arg or "--", OLDPWD if "-", else argv[1].
+ * @order 1.2.3.5.2.2.2.2.2
+ */
 char	*ft_cd_target(char **argv, t_env *env)
 {
 	char	*target;

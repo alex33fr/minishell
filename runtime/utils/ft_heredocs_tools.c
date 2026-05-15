@@ -13,10 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * 
- * @param cmds 
- * @return int 
+ * @brief
+ * Pre-read all heredocs in the command list and store their content in pipes.
+ * @order 1.2.3.5.3.2
  */
 int	ft_preread_heredocs(t_cmd *cmds)
 {

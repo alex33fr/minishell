@@ -13,9 +13,9 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * Quit CTRL + \
- * @param sig 
+ * @brief
+ * SIGINT handler during heredoc input: store signal number and newline.
+ * @order 1.2.3.5.2.1.4.1.2
  */
 void	sig_int_heredoc(int sig)
 {
