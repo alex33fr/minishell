@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 11:52:08 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 17:08:11 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 15:02:45 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ char	*expand_and_remove_quotes(char *str, char **envp, int last_status)
 	while (res && str[i])
 	{
 		res = process_char(str, &i, &ex, res);
+		if (!res)
+			return (NULL);
 	}
 	return (res);
 }
