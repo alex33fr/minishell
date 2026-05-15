@@ -27,3 +27,4 @@ Run the shell by executing the following command:
 ## Resources
 
 - [Redirect](https://tuteurs.ens.fr/unix/shell/entreesortie.html)
+- [Signals] (http://manpagesfr.free.fr/) (https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/)
