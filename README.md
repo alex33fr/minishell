@@ -21,7 +21,7 @@ This will produce the minishell executable.
 Run the shell by executing the following command:
 
 ```
-./minishell
+./minishell 
 ```
 
 ## Resources

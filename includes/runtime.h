@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/07 08:05:12 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 13:22:05 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ long	ft_exit_atol(char *s, int *overflow);
 int		ft_is_valid_name(char *s);
 int		ft_is_n_flag(char *s);
 char	*ft_read_heredoc_line(void);
+void	sig_int_heredoc(int sig);
 
 /**
  * @brief
@@ -114,6 +115,7 @@ t_env	*ft_init(char **envp);
  * SIGNALS
  */
 void	ft_setup_signals(void);
+void	ft_setup_signals_exec(void);
 void	ft_signals_child(void);
 
 /**

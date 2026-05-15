@@ -21,6 +21,7 @@ static void	ft_run_process(t_exec *exec)
 {
 	char	*path;
 
+	ft_signals_child();
 	if (exec->cmd->saved_in > STDERR_FILENO)
 		close(exec->cmd->saved_in);
 	if (exec->cmd->saved_out > STDERR_FILENO)

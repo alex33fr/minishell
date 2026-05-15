@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/08 15:17:13 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 13:24:22 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	ft_heredoc_loop(int fd, char *delimiter)
 	char	*line;
 	int		size;
 
+	signal(SIGINT, sig_int_heredoc);
 	while (1)
 	{
 		line = ft_read_heredoc_line();
@@ -72,6 +73,7 @@ static void	ft_heredoc_loop(int fd, char *delimiter)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	ft_setup_signals();
 }
 
 /**

@@ -43,6 +43,7 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(UTILS)ft_errors.c \
              $(UTILS)ft_redir_tools.c \
              $(UTILS)ft_builtins_tools.c \
+             $(UTILS)ft_signal_tools.c \
              $(UTILS)ft_pipe_tools.c
 
 MY_OBJECTS     = $(addprefix $(OBJ_DIR)/, $(MY_SOURCES:.c=.o))

@@ -23,8 +23,17 @@ int	ft_wait_child(pid_t pid)
 {
 	int	status;
 
+	ft_setup_signals_exec();
 	waitpid(pid, &status, 0);
+	ft_setup_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (130);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+	{
+		ft_putstr_fd("Quit\n", 1);
+		return (131);
+	}
 	return (1);
 }

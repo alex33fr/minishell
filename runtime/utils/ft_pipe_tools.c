@@ -25,13 +25,22 @@ int	ft_wait_all(pid_t *pids, int n_cmds)
 
 	i = 0;
 	last = 0;
+	ft_setup_signals_exec();
 	while (i < n_cmds)
 	{
 		waitpid(pids[i], &status, 0);
-		if (i == n_cmds - 1 && WIFEXITED(status))
-			last = WEXITSTATUS(status);
+		if (i == n_cmds - 1)
+		{
+			if (WIFEXITED(status))
+				last = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+				last = 130;
+			else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+				last = 131;
+		}
 		i++;
 	}
+	ft_setup_signals();
 	return (last);
 }
 
