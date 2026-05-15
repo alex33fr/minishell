@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 10:36:32 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 13:32:12 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 10:28:46 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,7 @@ int	check_syntax(char *line)
 	while (line && line[i])
 	{
 		if (!process_syntax(line, &i, &last_was_pipe, &last_was_redir))
-		{
-			ft_putstr_fd("Syntax Error\n", 2);
 			return (0);
-		}
 	}
 	if (last_was_pipe || last_was_redir)
 		return (error_syntax(line, "newline"));

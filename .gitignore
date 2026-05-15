@@ -8,7 +8,3 @@ obj/
 libft/libft.a
 libft/
 minishell
-minishell_tester
-readline.supp
-minishell.supp
-logs_full_test.txt
