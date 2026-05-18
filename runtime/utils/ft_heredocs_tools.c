@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 15:30:17 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 15:34:10 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 		if (!expanded)
 			break ;
 		ft_heredoc_write(fd, expanded);
-	}		
+	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
 	ft_setup_signals();
 }
