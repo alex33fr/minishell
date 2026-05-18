@@ -26,13 +26,18 @@ static void	ft_heredoc_write(int fd, char *line)
 
 /**
  * @brief
- * Set SIGINT handler to sig_int_heredoc via sigaction. Ignore SIGQUIT.
+ * Disable ECHOCTL on stdin (storing original in *saved), set SIGINT/SIGQUIT.
  * @order 1.2.3.5.2.1.4.1.3
  */
-static void	ft_set_heredoc_sig(void)
+static void	ft_set_heredoc_sig(struct termios *saved)
 {
 	struct sigaction	sa;
+	struct termios		raw;
 
+	tcgetattr(STDIN_FILENO, saved);
+	raw = *saved;
+	raw.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 	sa.sa_handler = sig_int_heredoc;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
@@ -78,13 +83,8 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	char			**envp;
 	char			*expanded;
 	struct termios	saved;
-	struct termios	raw;
 
-	tcgetattr(STDIN_FILENO, &saved);
-	raw = saved;
-	raw.c_lflag = raw.c_lflag & ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
-	ft_set_heredoc_sig();
+	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
 		write(STDOUT_FILENO, "> ", 2);

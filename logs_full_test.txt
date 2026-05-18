@@ -55,29 +55,97 @@
   [14] EDGE CASES
 ════════════════════════════════════════════════════
 
+Test 155: very long cmd  [TIMEOUT]
+$> echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 ════════════════════════════════════════════════════
   [15] TESTS REPOS ETUDIANTS — CRASH / SEGFAULT
 ════════════════════════════════════════════════════
 
-Test 267: heredoc + redirect combo  [FAIL]
+Test 267: heredoc + redirect combo  [FAIL+LEAK]
 $> cat << here -e
   minishell [exit=0]:
     stdout : > > hello$�
   bash      [exit=0]:
     stdout : hello$�
   !! stdout différent
+  --- VALGRIND OUTPUT COMPLET ---
+    ==244029== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==244029==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==244029==    by 0x4025EF: ft_set_heredoc_sig (ft_heredocs_tools.c:40)
+    ==244029==    by 0x4024EB: ft_heredoc_loop (ft_heredocs_tools.c:87)
+    ==244029==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==244029==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==244029==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==244029==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==244029==    by 0x40157D: ft_run_line (main.c:47)
+    ==244029==    by 0x401410: ft_readline_loop (main.c:91)
+    ==244029==    by 0x401356: main (main.c:113)
+    ==244029==  Address 0x1ffefff770 is on thread 1's stack
+    ==244029==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==244029==  Uninitialised value was created by a stack allocation
+    ==244029==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==244029== 
+    ==244029== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==244029==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==244029==    by 0x40258D: ft_heredoc_loop (ft_heredocs_tools.c:102)
+    ==244029==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==244029==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==244029==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==244029==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==244029==    by 0x40157D: ft_run_line (main.c:47)
+    ==244029==    by 0x401410: ft_readline_loop (main.c:91)
+    ==244029==    by 0x401356: main (main.c:113)
+    ==244029==  Address 0x1ffefff860 is on thread 1's stack
+    ==244029==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==244029==  Uninitialised value was created by a stack allocation
+    ==244029==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==244029== 
+  --- FIN VALGRIND ---
 
-Test 268: << echo oi  [FAIL]
+Test 268: << echo oi  [FAIL+LEAK]
 $> << echo oi
   minishell [exit=127]:
     stdout : > �
-    stderr : warning: heredoc delimited by EOF�oi: command not found�
+    stderr : �warning: here-document delimited by EOF�oi: command not found�
   bash      [exit=127]:
     stderr : warning: here-document at line 1 delimited by end-of-file (wanted `echo')�oi: command not found�
   !! stdout différent
   !! stderr différent
   --- VALGRIND OUTPUT COMPLET ---
-    warning: heredoc delimited by EOF
+    ==244090== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==244090==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==244090==    by 0x4025EF: ft_set_heredoc_sig (ft_heredocs_tools.c:40)
+    ==244090==    by 0x4024EB: ft_heredoc_loop (ft_heredocs_tools.c:87)
+    ==244090==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==244090==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==244090==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==244090==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==244090==    by 0x40157D: ft_run_line (main.c:47)
+    ==244090==    by 0x401410: ft_readline_loop (main.c:91)
+    ==244090==    by 0x401356: main (main.c:113)
+    ==244090==  Address 0x1ffefff770 is on thread 1's stack
+    ==244090==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==244090==  Uninitialised value was created by a stack allocation
+    ==244090==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==244090== 
+    
+    warning: here-document delimited by EOF
+    ==244090== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==244090==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==244090==    by 0x40258D: ft_heredoc_loop (ft_heredocs_tools.c:102)
+    ==244090==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==244090==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==244090==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==244090==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==244090==    by 0x40157D: ft_run_line (main.c:47)
+    ==244090==    by 0x401410: ft_readline_loop (main.c:91)
+    ==244090==    by 0x401356: main (main.c:113)
+    ==244090==  Address 0x1ffefff860 is on thread 1's stack
+    ==244090==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==244090==  Uninitialised value was created by a stack allocation
+    ==244090==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==244090== 
     oi: command not found
   --- FIN VALGRIND ---
 
@@ -85,7 +153,7 @@ $> << echo oi
   [16] FILESYSTEM — DOSSIER/FICHIER SUPPRIMÉ SOUS LES PIEDS
 ════════════════════════════════════════════════════
 
-Test 309: heredoc+rm+cat  [FAIL]
+Test 309: heredoc+rm+cat  [FAIL+LEAK]
 $> cat <<EOF > /tmp/ms_fs_file4
   minishell [exit=1]:
     stdout : > > �
@@ -94,15 +162,46 @@ $> cat <<EOF > /tmp/ms_fs_file4
     stderr : cat: /tmp/ms_fs_file4: No such file or directory�
   !! stdout différent
   --- VALGRIND OUTPUT COMPLET ---
+    ==246378== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==246378==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==246378==    by 0x4025EF: ft_set_heredoc_sig (ft_heredocs_tools.c:40)
+    ==246378==    by 0x4024EB: ft_heredoc_loop (ft_heredocs_tools.c:87)
+    ==246378==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==246378==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==246378==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==246378==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==246378==    by 0x40157D: ft_run_line (main.c:47)
+    ==246378==    by 0x401410: ft_readline_loop (main.c:91)
+    ==246378==    by 0x401356: main (main.c:113)
+    ==246378==  Address 0x1ffefff770 is on thread 1's stack
+    ==246378==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==246378==  Uninitialised value was created by a stack allocation
+    ==246378==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==246378== 
+    ==246378== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+    ==246378==    at 0x49E5E65: tcsetattr (tcsetattr.c:83)
+    ==246378==    by 0x40258D: ft_heredoc_loop (ft_heredocs_tools.c:102)
+    ==246378==    by 0x401EFC: ft_redir_heredoc (ft_redir.c:64)
+    ==246378==    by 0x402247: ft_apply_redirs (ft_redir_tools.c:38)
+    ==246378==    by 0x4019C3: ft_exec_single (ft_exec_cmd_list.c:27)
+    ==246378==    by 0x40190C: ft_exec_cmd_list (ft_exec_cmd_list.c:74)
+    ==246378==    by 0x40157D: ft_run_line (main.c:47)
+    ==246378==    by 0x401410: ft_readline_loop (main.c:91)
+    ==246378==    by 0x401356: main (main.c:113)
+    ==246378==  Address 0x1ffefff860 is on thread 1's stack
+    ==246378==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+    ==246378==  Uninitialised value was created by a stack allocation
+    ==246378==    at 0x4024D0: ft_heredoc_loop (ft_heredocs_tools.c:81)
+    ==246378== 
     cat: /tmp/ms_fs_file4: No such file or directory
   --- FIN VALGRIND ---
 
 ════════════════════════════════════════════════════
-  RECAP GLOBAL  (2026-05-18 10:12:05)
+  RECAP GLOBAL  (2026-05-18 14:44:11)
 ════════════════════════════════════════════════════
   TOTAL TESTS : 319
   PASS        : 245
   FAIL        : 3
-  LEAKS       : 0
+  LEAKS       : 13
   CRASH       : 1
 
