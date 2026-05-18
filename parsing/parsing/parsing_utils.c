@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/09 12:45:30 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/15 14:12:05 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 	new_node->file = file;
 	new_node->type = tok;
 	new_node->next = NULL;
+	new_node->fd = -1;
 	if (!*redirs)
 		*redirs = new_node;
 	else
@@ -89,7 +90,6 @@ int	manage_cmd_redir(t_queue *q, t_cmd *res)
 	if (q->front->token == T_WORD)
 	{
 		dequeue(q, &file);
-		// file = remove_quotes(file);
 		if (!add_redir_back(&res->redir, redir_type, file))
 		{
 			free_cmds(res);
@@ -108,7 +108,6 @@ void	manage_cmd_word(t_queue *q, t_cmd *res, int *i)
 	front = q->front;
 	had_quotes = front->had_quotes;
 	dequeue(q, &tmp);
-	// tmp = remove_quotes(tmp);
 	if (tmp && tmp[0] == '\0' && !had_quotes)
 		free(tmp);
 	else

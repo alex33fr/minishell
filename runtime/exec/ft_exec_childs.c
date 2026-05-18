@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:28:44 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/07 08:05:12 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/11 16:29:52 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ char	*ft_resolve_path(t_exec *exec)
 	path = ft_find_path(exec->argv[0], exec->env);
 	if (!path)
 	{
-		ft_putstr_fd(exec->argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_err_3(exec->argv[0], ft_is_path_cmd(exec->argv[0]));
 		ft_child_free(exec);
 		exit(127);
 	}

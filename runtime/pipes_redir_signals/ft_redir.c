@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/08 15:17:13 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 00:00:00 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,36 +42,6 @@ char	*ft_read_heredoc_line(void)
 	if (!res)
 		return (NULL);
 	return (res);
-}
-
-/**
- * @brief
- * Read lines from stdin and write them to fd until delimiter or EOF is seen.
- * @order 1.2.3.5.2.1.4.1
- */
-static void	ft_heredoc_loop(int fd, char *delimiter)
-{
-	char	*line;
-	int		size;
-
-	while (1)
-	{
-		line = ft_read_heredoc_line();
-		if (!line)
-		{
-			ft_putstr_fd("warning: heredoc delimited by EOF\n", 2);
-			break ;
-		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		size = ft_strlen(line);
-		write(fd, line, size);
-		write(fd, "\n", 1);
-		free(line);
-	}
 }
 
 /**

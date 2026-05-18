@@ -57,7 +57,7 @@ int	ft_exec_builtin(t_cmd *cmd, t_env *env)
 	else if (!ft_strcmp(cmd->args[0], "cd"))
 		status = ft_builtin_cd(cmd->args, env);
 	else if (!ft_strcmp(cmd->args[0], "pwd"))
-		status = ft_builtin_pwd();
+		status = ft_builtin_pwd(env);
 	else if (!ft_strcmp(cmd->args[0], "export"))
 		status = ft_builtin_export(cmd->args, env);
 	else if (!ft_strcmp(cmd->args[0], "unset"))

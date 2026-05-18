@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/07 08:05:12 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:27:09 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		ft_is_path_cmd(char *cmd);
 char	*ft_find_path(char *cmd, t_env *env);
 char	*ft_join_cmd_path(char *dir, char *cmd);
 
-int		ft_builtin_pwd(void);
+int		ft_builtin_pwd(t_env *env);
 int		ft_builtin_env(t_env *env);
 int		ft_builtin_exit(t_cmd *cmd, t_env *env);
 int		ft_builtin_echo(char **argv);
@@ -75,6 +75,9 @@ long	ft_exit_atol(char *s, int *overflow);
 int		ft_is_valid_name(char *s);
 int		ft_is_n_flag(char *s);
 char	*ft_read_heredoc_line(void);
+void	sig_int_heredoc(int sig);
+int		ft_preread_heredocs(t_cmd *cmds);
+void	ft_heredoc_loop(int fd, char *delimiter);
 
 /**
  * @brief
@@ -100,7 +103,7 @@ void	ft_update_fds(t_pipe_fds *fds);
 int		ft_apply_redirs(t_redir *redir);
 int		ft_redir_in(char *file);
 int		ft_redir_out(char *file);
-int		ft_redir_append(char *file);
+int		ft_redir_join(char *file);
 int		ft_redir_heredoc(char *delimiter);
 
 /**
@@ -114,6 +117,7 @@ t_env	*ft_init(char **envp);
  * SIGNALS
  */
 void	ft_setup_signals(void);
+void	ft_setup_signals_exec(void);
 void	ft_signals_child(void);
 
 /**
@@ -124,5 +128,11 @@ void	ft_free_tab(char **tab);
 void	ft_close(int in_1, int in_2);
 int		ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status);
 int		ft_export_err(char *s);
+void	ft_err_1(void);
+void	ft_err_2(void);
+void	ft_err_3(char *cmd, int is_path);
+void	ft_err_4(char *target);
+int		ft_exit_err(t_env *env, char *arg);
+int		ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val);
 
 #endif

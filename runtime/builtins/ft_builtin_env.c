@@ -17,7 +17,7 @@
  * Append the value after sep[1] to the existing env entry for key.
  * @order 1.2.3.5.2.2.2.4.1.2
  */
-static void	ft_do_append(t_env *env, char *key, char *sep)
+static void	ft_do_join(t_env *env, char *key, char *sep)
 {
 	char	*old;
 	char	*new;
@@ -34,23 +34,23 @@ static void	ft_do_append(t_env *env, char *key, char *sep)
 
 /**
  * @brief
- * Handle "KEY=val" or "KEY+=val" export: set or append value in env.
+ * Handle "KEY=val" or "KEY+=val" export: set or join value in env.
  * @order 1.2.3.5.2.2.2.4.1
  */
 static int	ft_export_sep(char *arg, char *sep, t_env *env)
 {
-	int		append;
+	int		join;
 	char	*key;
 
-	append = (sep > arg && *(sep - 1) == '+');
-	key = ft_substr(arg, 0, sep - arg - append);
+	join = (sep > arg && *(sep - 1) == '+');
+	key = ft_substr(arg, 0, sep - arg - join);
 	if (!key || !ft_is_valid_name(key))
 	{
 		free(key);
 		return (1);
 	}
-	if (append)
-		ft_do_append(env, key, sep);
+	if (join)
+		ft_do_join(env, key, sep);
 	else
 		ft_env_set(env, key, sep + 1);
 	free(key);

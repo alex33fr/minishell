@@ -25,19 +25,28 @@ int	ft_wait_all(pid_t *pids, int n_cmds)
 
 	i = 0;
 	last = 0;
+	ft_setup_signals_exec();
 	while (i < n_cmds)
 	{
 		waitpid(pids[i], &status, 0);
-		if (i == n_cmds - 1 && WIFEXITED(status))
-			last = WEXITSTATUS(status);
+		if (i == n_cmds - 1)
+		{
+			if (WIFEXITED(status))
+				last = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+				last = 130;
+			else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+				last = 131;
+		}
 		i++;
 	}
+	ft_setup_signals();
 	return (last);
 }
 
 /**
  * @brief
- * Wire pipe fds, apply redirs, then exec builtin or external. Never returns.
+ * Free child resources and exit with ret. Never returns.
  * @order 1.2.3.5.3.1.2.1.1
  */
 static void	ft_builtin_child_exit(t_exec *exec, int ret)
@@ -53,6 +62,27 @@ static void	ft_builtin_child_exit(t_exec *exec, int ret)
 	exit(ret);
 }
 
+/**
+ * @brief
+ * Wire stdin/stdout to pipe fds then close unused ends.
+ * @order 1.2.3.5.3.1.2.1.2
+ */
+static void	ft_setup_pipes(t_pipe_fds *fds)
+{
+	if (fds->prev_fd != -1)
+		dup2(fds->prev_fd, STDIN_FILENO);
+	if (!fds->last)
+		dup2(fds->pipefd[1], STDOUT_FILENO);
+	ft_close(fds->prev_fd, -1);
+	if (!fds->last)
+		ft_close(fds->pipefd[0], fds->pipefd[1]);
+}
+
+/**
+ * @brief
+ * Wire pipe fds, apply redirs, then exec builtin or external. Never returns.
+ * @order 1.2.3.5.3.1.2.1
+ */
 void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 {
 	t_exec	exec;
@@ -65,13 +95,7 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	exec.pids = fds->pids;
 	exec.envp = NULL;
 	ft_signals_child();
-	if (fds->prev_fd != -1)
-		dup2(fds->prev_fd, STDIN_FILENO);
-	if (!fds->last)
-		dup2(fds->pipefd[1], STDOUT_FILENO);
-	ft_close(fds->prev_fd, -1);
-	if (!fds->last)
-		ft_close(fds->pipefd[0], fds->pipefd[1]);
+	ft_setup_pipes(fds);
 	if (ft_apply_redirs(cmd->redir))
 		ft_builtin_child_exit(&exec, 1);
 	if (!cmd->args || !cmd->args[0])

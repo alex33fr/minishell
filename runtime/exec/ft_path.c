@@ -128,7 +128,7 @@ char	*ft_find_path(char *cmd, t_env *env)
 	if (ft_is_path_cmd(cmd))
 	{
 		path = NULL;
-		if (access(cmd, X_OK) == 0)
+		if (access(cmd, F_OK) == 0)
 			path = ft_strdup(cmd);
 		return (path);
 	}

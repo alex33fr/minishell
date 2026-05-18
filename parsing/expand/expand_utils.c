@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/09 17:07:41 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/13 11:09:30 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static char	*resolve_var(char *str, int *i, t_expand *ex, int var_len)
 	return (value);
 }
 
-char *handle_dollar(char *str, int *i, t_expand *ex, char *res)
+char	*handle_dollar(char *str, int *i, t_expand *ex, char *res)
 {
 	char	*value;
 	int		var_len;

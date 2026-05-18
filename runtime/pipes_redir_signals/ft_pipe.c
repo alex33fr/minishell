@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:01:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/08 13:13:32 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:37:02 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
 	pids = malloc(sizeof(pid_t) * n_cmds);
 	if (!pids)
 		return (1);
+	ft_preread_heredocs(cmds);
 	if (ft_fork_loop(cmds, n_cmds, env, pids))
 	{
 		free(pids);
