@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 15:34:10 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 17:17:48 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	ft_heredoc_write(int fd, char *line)
 {
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
+	ft_close(fd, -1);
 	free(line);
 }
 
@@ -88,7 +89,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
-		write(STDOUT_FILENO, "> ", 2);
+		//write(STDOUT_FILENO, "> ", 2);
 		line = ft_read_heredoc_line();
 		if (ft_heredoc_check(line, delimiter))
 			break ;
