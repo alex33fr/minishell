@@ -103,7 +103,7 @@ void	ft_update_fds(t_pipe_fds *fds);
 int		ft_apply_redirs(t_redir *redir);
 int		ft_redir_in(char *file);
 int		ft_redir_out(char *file);
-int		ft_redir_append(char *file);
+int		ft_redir_join(char *file);
 int		ft_redir_heredoc(char *delimiter);
 
 /**
@@ -128,5 +128,11 @@ void	ft_free_tab(char **tab);
 void	ft_close(int in_1, int in_2);
 int		ft_exec_cmd_list(t_cmd *cmds, t_env *env, int last_status);
 int		ft_export_err(char *s);
+void	ft_err_1(void);
+void	ft_err_2(void);
+void	ft_err_3(char *cmd, int is_path);
+void	ft_err_4(char *target);
+int		ft_exit_err(t_env *env, char *arg);
+int		ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val);
 
 #endif

@@ -50,7 +50,7 @@ static t_env_n	*ft_new_env_node(char *str)
  * @param last
  * @order 1.1.1.2
  */
-static void	ft_env_append(t_env *env, t_env_n *node, t_env_n **last)
+static void	ft_env_join(t_env *env, t_env_n *node, t_env_n **last)
 {
 	if (!env->head)
 		env->head = node;
@@ -88,7 +88,7 @@ t_env	*ft_env_init(char **envp)
 	{
 		node = ft_new_env_node(envp[i]);
 		if (node)
-			ft_env_append(env, node, &last);
+			ft_env_join(env, node, &last);
 		i++;
 	}
 	return (env);

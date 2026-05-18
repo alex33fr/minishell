@@ -41,8 +41,10 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(UTILS)ft_clear.c \
              $(UTILS)ft_close.c \
              $(UTILS)ft_errors.c \
+             $(UTILS)ft_errors2.c \
              $(UTILS)ft_redir_tools.c \
              $(UTILS)ft_builtins_tools.c \
+             $(UTILS)ft_builtins_tools2.c \
              $(UTILS)ft_signal_tools.c \
              $(UTILS)ft_heredocs_tools.c \
              $(UTILS)ft_pipe_tools.c

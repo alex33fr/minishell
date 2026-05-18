@@ -58,11 +58,7 @@ char	*ft_resolve_path(t_exec *exec)
 	path = ft_find_path(exec->argv[0], exec->env);
 	if (!path)
 	{
-		ft_putstr_fd(exec->argv[0], 2);
-		if (ft_is_path_cmd(exec->argv[0]))
-			ft_putstr_fd(": No such file or directory\n", 2);
-		else
-			ft_putstr_fd(": command not found\n", 2);
+		ft_err_3(exec->argv[0], ft_is_path_cmd(exec->argv[0]));
 		ft_child_free(exec);
 		exit(127);
 	}

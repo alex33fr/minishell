@@ -25,7 +25,7 @@ int	ft_apply_redirs(t_redir *redir)
 			return (1);
 		if (redir->type == T_REDIROUT && ft_redir_out(redir->file))
 			return (1);
-		if (redir->type == T_APPEND && ft_redir_append(redir->file))
+		if (redir->type == T_APPEND && ft_redir_join(redir->file))
 			return (1);
 		if (redir->type == T_HEREDOC)
 		{
@@ -104,7 +104,7 @@ int	ft_redir_out(char *file)
  * Open file in append mode and redirect stdout to it. Return 1 on error.
  * @order 1.2.3.5.2.1.3
  */
-int	ft_redir_append(char *file)
+int	ft_redir_join(char *file)
 {
 	int	fd_old;
 	int	fd_new;

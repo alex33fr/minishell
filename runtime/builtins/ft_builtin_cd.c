@@ -22,9 +22,7 @@ static void	ft_cd_update_pwd(t_env *env, char *old_pwd, char *buffer)
 	ft_env_set(env, "OLDPWD", old_pwd);
 	if (!getcwd(buffer, PATH_MAX))
 	{
-		ft_putstr_fd("cd: error retrieving current directory: getcwd:"
-			" cannot access parent directories:"
-			" No such file or directory\n", 2);
+		ft_err_2();
 		return ;
 	}
 	ft_env_set(env, "PWD", buffer);
@@ -54,8 +52,7 @@ int	ft_builtin_cd(char **argv, t_env *env)
 		return (1);
 	if (chdir(target) != 0)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		perror(target);
+		ft_err_4(target);
 		return (1);
 	}
 	ft_cd_update_pwd(env, old_pwd, buffer);
