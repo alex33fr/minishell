@@ -6,21 +6,18 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 13:41:11 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 14:19:27 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/18 15:49:16 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-static char	*manage_herredoc_word(t_node *temp, char **envp, int last_status)
+static char	*manage_herredoc_word(t_node *temp)
 {
 	char	*res;
 
 	temp->heredoc_quoted = has_quotes(temp->value);
-	if (!temp->heredoc_quoted)
-		res = expand_and_remove_quotes(temp->value, envp, last_status);
-	else
-		res = unquoted(temp->value);
+	res = unquoted(temp->value);
 	return (res);
 }
 
@@ -29,7 +26,7 @@ static int	transform_word_node(t_node *node, t_node *prev, char **envp, int ls)
 	char	*res;
 
 	if (prev && prev->token == T_HEREDOC)
-		res = manage_herredoc_word(node, envp, ls);
+		res = manage_herredoc_word(node);
 	else
 		res = expand_and_remove_quotes(node->value, envp, ls);
 	if (!res)
