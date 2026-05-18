@@ -25,6 +25,7 @@
 # include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 # include "globals.h"
 # include "parsing.h"
 # include "runtime.h"
