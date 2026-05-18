@@ -5,7 +5,7 @@
 ## Description
 
 Minishell is a project designed to create a simple shell. The goal is to develop a functional command-line interpreter inspired by Bash. This project provides extensive knowledge about process management using forks and signals, as well as handling file descriptors, pipes, the global variable, and the environment.
-
+```
 Tree of project:
 main()
   └── ft_init(envp)                   → t_env* (env linked list)
@@ -53,7 +53,7 @@ main()
                                       └── ft_exec_cmd()
                                       └── exit()
                           └── ft_wait_all()
-
+```
 ## Instructions
 
 ### Compilation
