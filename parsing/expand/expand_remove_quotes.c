@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 11:52:08 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/15 15:02:45 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/18 16:38:20 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,16 @@ static char	*process_char(char *str, int *i, t_expand *ex, char *res)
 	}
 	else if (is_dollar_expand(str, *i, ex))
 		res = handle_dollar(str, i, ex, res);
+	else if (str[*i] == '\\' && !ex->in_squote && !ex->in_dquote)
+	{
+		(*i)++;
+    	if (str[*i])
+    	{
+        	buf[0] = str[*i];
+        	res = append(res, buf);
+        	(*i)++;
+    	}
+	}
 	else
 	{
 		buf[0] = str[*i];
