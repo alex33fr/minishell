@@ -104,7 +104,12 @@ int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
 	pids = malloc(sizeof(pid_t) * n_cmds);
 	if (!pids)
 		return (1);
-	ft_preread_heredocs(cmds, env);
+	if (ft_preread_heredocs(cmds, env))
+	{
+		ft_close_heredoc_fds(cmds, NULL);
+		free(pids);
+		return (130);
+	}
 	if (ft_fork_loop(cmds, n_cmds, env, pids))
 	{
 		free(pids);

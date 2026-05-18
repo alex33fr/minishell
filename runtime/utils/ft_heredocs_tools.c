@@ -122,6 +122,8 @@ int	ft_preread_heredocs(t_cmd *cmds, t_env *env)
 		{
 			if (redir->type == T_HEREDOC)
 			{
+				if (g_signal)
+					return (1);
 				if (pipe(pipefd) == -1)
 					return (1);
 				ft_heredoc_loop(pipefd[1], redir->file, env);
