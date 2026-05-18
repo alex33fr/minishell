@@ -17,7 +17,7 @@
  * Apply all redirections in the list in order. Return 1 on first failure.
  * @order 1.2.3.5.2.1
  */
-int	ft_apply_redirs(t_redir *redir)
+int	ft_apply_redirs(t_redir *redir, t_env *env)
 {
 	while (redir)
 	{
@@ -35,7 +35,7 @@ int	ft_apply_redirs(t_redir *redir)
 					return (1);
 				close(redir->fd);
 			}
-			else if (ft_redir_heredoc(redir->file))
+			else if (ft_redir_heredoc(redir->file, env))
 				return (1);
 		}
 		redir = redir->next;

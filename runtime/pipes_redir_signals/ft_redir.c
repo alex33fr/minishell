@@ -52,7 +52,7 @@ char	*ft_read_heredoc_line(void)
  * @return int
  * @order 1.2.3.5.2.1.4
  */
-int	ft_redir_heredoc(char *delimiter)
+int	ft_redir_heredoc(char *delimiter, t_env *env)
 {
 	int	pipefd[2];
 
@@ -61,7 +61,7 @@ int	ft_redir_heredoc(char *delimiter)
 		perror("pipe");
 		return (1);
 	}
-	ft_heredoc_loop(pipefd[1], delimiter);
+	ft_heredoc_loop(pipefd[1], delimiter, env);
 	ft_close(pipefd[1], -1);
 	if (dup2(pipefd[0], STDIN_FILENO) < 0)
 	{

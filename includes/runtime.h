@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/15 14:27:09 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 14:21:36 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ int		ft_is_valid_name(char *s);
 int		ft_is_n_flag(char *s);
 char	*ft_read_heredoc_line(void);
 void	sig_int_heredoc(int sig);
-int		ft_preread_heredocs(t_cmd *cmds);
-void	ft_heredoc_loop(int fd, char *delimiter);
+int		ft_preread_heredocs(t_cmd *cmds, t_env *env);
+void	ft_heredoc_loop(int fd, char *delimiter, t_env *env);
 
 /**
  * @brief
@@ -100,11 +100,11 @@ void	ft_update_fds(t_pipe_fds *fds);
  * @brief
  * REDIRECTIONS
  */
-int		ft_apply_redirs(t_redir *redir);
+int		ft_apply_redirs(t_redir *redir, t_env *env);
 int		ft_redir_in(char *file);
 int		ft_redir_out(char *file);
 int		ft_redir_join(char *file);
-int		ft_redir_heredoc(char *delimiter);
+int		ft_redir_heredoc(char *delimiter, t_env *env);
 
 /**
  * @brief

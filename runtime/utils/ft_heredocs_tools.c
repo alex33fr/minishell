@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 12:14:26 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 14:24:37 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	ft_set_heredoc_sig(void)
 
 /**
  * @brief
- * Check stop conditions: signal, EOF, or delimiter match. Free line and return 1 to break.
+ * Check stop conditions: signal, EOF, or delimiter match.
+ * Free line and return 1 to break.
  * @order 1.2.3.5.2.1.4.1.4
  */
 static int	ft_heredoc_check(char *line, char *delimiter)
@@ -71,9 +72,11 @@ static int	ft_heredoc_check(char *line, char *delimiter)
  * Disables ECHOCTL to suppress ^\ and ^C terminal echo, restores settings after.
  * @order 1.2.3.5.2.1.4.1
  */
-void	ft_heredoc_loop(int fd, char *delimiter)
+void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 {
 	char			*line;
+	char			**envp;
+	char			*expanded;
 	struct termios	saved;
 	struct termios	raw;
 
@@ -88,7 +91,13 @@ void	ft_heredoc_loop(int fd, char *delimiter)
 		line = ft_read_heredoc_line();
 		if (ft_heredoc_check(line, delimiter))
 			break ;
-		ft_heredoc_write(fd, line);
+		envp = ft_env_to_envp(env);
+		expanded = expand_and_remove_quotes(line, envp, env->exit_code);
+		free(line);
+		ft_free_tab(envp);
+		if (!expanded)
+			break ;
+		ft_heredoc_write(fd, expanded);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
 	ft_setup_signals();
@@ -99,7 +108,7 @@ void	ft_heredoc_loop(int fd, char *delimiter)
  * Pre-read all heredocs in the command list and store their content in pipes.
  * @order 1.2.3.5.3.2
  */
-int	ft_preread_heredocs(t_cmd *cmds)
+int	ft_preread_heredocs(t_cmd *cmds, t_env *env)
 {
 	t_redir	*redir;
 	int		pipefd[2];
@@ -115,7 +124,7 @@ int	ft_preread_heredocs(t_cmd *cmds)
 			{
 				if (pipe(pipefd) == -1)
 					return (1);
-				ft_heredoc_loop(pipefd[1], redir->file);
+				ft_heredoc_loop(pipefd[1], redir->file, env);
 				ft_close(pipefd[1], -1);
 				redir->fd = pipefd[0];
 			}

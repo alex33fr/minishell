@@ -96,7 +96,7 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	exec.envp = NULL;
 	ft_signals_child();
 	ft_setup_pipes(fds);
-	if (ft_apply_redirs(cmd->redir))
+	if (ft_apply_redirs(cmd->redir, env))
 		ft_builtin_child_exit(&exec, 1);
 	if (!cmd->args || !cmd->args[0])
 		ft_builtin_child_exit(&exec, 0);
