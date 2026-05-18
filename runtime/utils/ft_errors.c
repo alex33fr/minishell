@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:48:14 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 12:07:34 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 19:30:44 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_export_err(char *s)
  */
 void	ft_err_1(void)
 {
-	ft_putstr_fd("\nwarning: here-document delimited by EOF\n", 2);
+	ft_putstr_fd("> \nwarning: here-document delimited by EOF\n", 2);
 }
 
 /**

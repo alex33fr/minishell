@@ -70,6 +70,7 @@ int		ft_builtin_cd(char **argv, t_env *env);
 char	*ft_cd_target(char **argv, t_env *env);
 int		ft_builtin_export(char **argv, t_env *env);
 int		ft_builtin_unset(char **argv, t_env *env);
+int		ft_builtin_declare(char **argv, t_env *env);
 int		ft_is_valid_num(char *s);
 long	ft_exit_atol(char *s, int *overflow);
 int		ft_is_valid_name(char *s);
@@ -95,6 +96,7 @@ int		ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env);
 int		ft_wait_all(pid_t *pids, int n_cmds);
 void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds);
 void	ft_update_fds(t_pipe_fds *fds);
+void	ft_close_heredoc_fds(t_cmd *head, t_cmd *skip);
 
 /**
  * @brief

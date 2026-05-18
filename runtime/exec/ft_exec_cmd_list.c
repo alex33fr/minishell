@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 11:29:55 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 18:40:20 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 
 	cmd->saved_in = dup(STDIN_FILENO);
 	cmd->saved_out = dup(STDOUT_FILENO);
+	ft_preread_heredocs(cmd, env);
 	if (ft_apply_redirs(cmd->redir, env))
 	{
 		dup2(cmd->saved_in, STDIN_FILENO);

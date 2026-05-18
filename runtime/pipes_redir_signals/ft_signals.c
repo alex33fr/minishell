@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 15:14:09 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 19:28:48 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	sig_int(int sig)
 void	ft_setup_signals(void)
 {
 	signal(SIGINT, sig_int);
-	signal(SIGQUIT, sig_int);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 /**

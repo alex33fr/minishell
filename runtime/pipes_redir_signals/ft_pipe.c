@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:01:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 14:20:11 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/18 18:57:20 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
 		free(pids);
 		return (1);
 	}
+	ft_close_heredoc_fds(cmds, NULL);
 	ret = ft_wait_all(pids, n_cmds);
 	free(pids);
 	return (ret);
