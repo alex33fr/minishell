@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 06:51:17 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 06:56:17 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ static void	ft_heredoc_write(int fd, char *line)
 /**
  * @brief
  * Disable ECHOCTL on stdin (storing original in *saved), set SIGINT/SIGQUIT.
+ * `c_lflag &= ~ECHOCTL` clears only the ECHOCTL bit, leaving all others intact:
+ *   c_lflag  : 1 1 1 1
+ *   ~ECHOCTL : 1 1 0 1  <- only ECHOCTL bit is 0
+ *   result   : 1 1 0 1  <- ECHOCTL cleared, rest unchanged
+ * This prevents the terminal from printing "^C" when SIGINT fires in heredoc.
  * @order 1.2.3.5.2.1.4.1.3
  */
 static void	ft_set_heredoc_sig(struct termios *saved)
@@ -36,7 +41,7 @@ static void	ft_set_heredoc_sig(struct termios *saved)
 
 	tcgetattr(STDIN_FILENO, saved);
 	raw = *saved;
-	raw.c_lflag &= ~ECHOCTL;
+	raw.c_lflag = raw.c_lflag & ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 	sa.sa_handler = sig_int_heredoc;
 	sa.sa_flags = 0;

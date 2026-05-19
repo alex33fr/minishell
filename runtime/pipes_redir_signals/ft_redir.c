@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 00:00:00 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 07:25:25 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * @brief
  * Read one line from stdin character by character. Return NULL on EOF.
+ * 4095 chars max, to avoid overflow. Caller must free the result.
  * @order 1.2.1 / 1.2.3.5.2.1.4.1.1
  */
 char	*ft_read_heredoc_line(void)
