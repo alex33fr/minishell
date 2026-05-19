@@ -46,7 +46,7 @@ minishell/
 ```
 main()
   ├── ft_init(envp)                   → t_env* (env linked list)
-  ├── ft_setup_signals()              → SIGINT=sig_int, SIGQUIT=SIG_IGN
+  │     └── ft_setup_signals()        → SIGINT=sig_int, SIGQUIT=SIG_IGN
   └── ft_readline_loop()
         ├── readline("minishell$ ")
         ├── ft_handle_signal()        → if SIGINT → last_status=130
@@ -62,6 +62,7 @@ main()
               └── ft_exec_cmd_list()
                     ├── n==1 → ft_exec_single()
                     │     ├── dup() save stdin/stdout
+                    │     ├── ft_preread_heredocs()  → << delim (pre-read)
                     │     ├── ft_apply_redirs()
                     │     │     ├── ft_redir_in()       → < file
                     │     │     ├── ft_redir_out()      → > file

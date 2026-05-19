@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * @brief
+ * Collect all env nodes into a malloc'd pointer array; set *size.
+ * @order 1.2.3.5.2.2.2.4.2.1
+ */
 static t_env_n	**ft_collect_nodes(t_env *env, int *size)
 {
 	t_env_n		**nodes;
@@ -35,6 +40,11 @@ static t_env_n	**ft_collect_nodes(t_env *env, int *size)
 	return (nodes);
 }
 
+/**
+ * @brief
+ * Sort nodes array alphabetically by key using bubble sort.
+ * @order 1.2.3.5.2.2.2.4.2.2
+ */
 static void	ft_bubble_sort_nodes(t_env_n **nodes, int size)
 {
 	t_env_n	*tmp;
@@ -59,6 +69,11 @@ static void	ft_bubble_sort_nodes(t_env_n **nodes, int size)
 	}
 }
 
+/**
+ * @brief
+ * Print all env entries sorted alphabetically as "declare -x KEY=\"val\"".
+ * @order 1.2.3.5.2.2.2.4.2
+ */
 int	ft_export_print_sorted(t_env *env)
 {
 	t_env_n	**nodes;

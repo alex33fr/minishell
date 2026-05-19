@@ -13,10 +13,8 @@
 #include "minishell.h"
 
 /**
- * @brief 
- * Find builtin in cmd argv[0]
- * @param cmd
- * @return int
+ * @brief
+ * Return 1 if cmd name matches a known builtin, 0 otherwise.
  * @order 1.2.3.5.2.2.1
  */
 int	ft_is_builtin(char *cmd)
