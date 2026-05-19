@@ -120,34 +120,19 @@ int	ft_is_n_flag(char *s)
 
 /**
  * @brief
- * Resolve cd target: HOME if no arg or "--", OLDPWD if "-", else argv[1].
+ * Resolve cd target: HOME if no arg or "--", else argv[1].
  * @order 1.2.3.5.2.2.2.2.2
  */
 char	*ft_cd_target(char **argv, t_env *env)
 {
-	char	*target;
-
 	if (!argv[1] || !ft_strcmp(argv[1], "--"))
 	{
-		target = ft_env_get(env, "HOME");
-		if (!target)
+		if (!ft_env_get(env, "HOME"))
 		{
 			ft_putstr_fd("cd: HOME not set\n", 2);
 			return (NULL);
 		}
-		return (target);
+		return (ft_env_get(env, "HOME"));
 	}
-	target = argv[1];
-	if (!ft_strcmp(argv[1], "-"))
-	{
-		target = ft_env_get(env, "OLDPWD");
-		if (!target)
-		{
-			ft_putstr_fd("cd: OLDPWD not set\n", 2);
-			return (NULL);
-		}
-		ft_putstr_fd(target, 1);
-		ft_putstr_fd("\n", 1);
-	}
-	return (target);
+	return (argv[1]);
 }
