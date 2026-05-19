@@ -38,7 +38,7 @@ $(RUNTIME_LIB):
 	@$(MAKE) -C $(RUNTIME_DIR) 2>&1 | grep -v "^make" || true
 	@printf ""
 
-$(OBJ_DIR)/main.o: main.c
+$(OBJ_DIR)/main.o: main.c includes/minishell.h
 	@mkdir -p $(OBJ_DIR)
 	@printf "$(GREEN)[Compiling]$(RESET) main.c\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c main.c -o $@ || (printf "$(RED)Error in main.c$(RESET)\n"; exit 1)
@@ -64,5 +64,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re $(LIBFT_LIB) $(PARSING_LIB) $(RUNTIME_LIB)
 
