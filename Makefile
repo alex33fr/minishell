@@ -45,7 +45,7 @@ $(OBJ_DIR)/main.o: main.c includes/minishell.h
 
 $(NAME): $(OBJ_DIR)/main.o $(LIBFT_LIB) $(PARSING_LIB) $(RUNTIME_LIB)
 	@printf "\r$(GREEN)[Linking]$(RESET)                     "
-	@$(CC) $(CFLAGS) $< $(RUNTIME_LIB) $(PARSING_LIB) $(LIBFT_LIB) -lreadline -o $(NAME) || (printf "\n$(RED)Link error$(RESET)\n"; exit 1)
+	@$(CC) $(CFLAGS) -no-pie $< $(RUNTIME_LIB) $(PARSING_LIB) $(LIBFT_LIB) -lreadline -o $(NAME) || (printf "\n$(RED)Link error$(RESET)\n"; exit 1)
 	@printf "\r$(GREEN)[100%%] ========[ $(NAME) is ready to work ]======== [OK] $(RESET)\n"
 
 clean:

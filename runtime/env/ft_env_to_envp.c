@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 15:03:18 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/07 09:52:16 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:16:06 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static int	ft_env_size(t_env *env)
 	node = env->head;
 	while (node)
 	{
-		i++;
+		if (node->value)
+			i++;
 		node = node->next;
 	}
 	return (i);
@@ -70,6 +71,32 @@ static char	*ft_env_join_entry(char *key, char *value)
 
 /**
  * @brief
+ * Fill tab_envp with KEY=value entries, skip nodes without value.
+ * @order 1.2.3.2.3
+ */
+static int	ft_process_envp(char **tab_envp, t_env *env)
+{
+	t_env_n	*node;
+	int		i;
+
+	i = -1;
+	node = env->head;
+	while (node)
+	{
+		if (node->value)
+		{
+			tab_envp[++i] = ft_env_join_entry(node->key, node->value);
+			if (!tab_envp[i])
+				return (1);
+		}
+		node = node->next;
+	}
+	tab_envp[++i] = NULL;
+	return (0);
+}
+
+/**
+ * @brief
  * Convert node to char ** for execve, format KEY=value finished by NULL
  * @param env
  * @return char**
@@ -77,10 +104,8 @@ static char	*ft_env_join_entry(char *key, char *value)
  */
 char	**ft_env_to_envp(t_env *env)
 {
-	int		i;
 	int		size;
 	char	**tab_envp;
-	t_env_n	*node;
 
 	if (!env)
 		return (NULL);
@@ -88,18 +113,10 @@ char	**ft_env_to_envp(t_env *env)
 	tab_envp = ft_calloc(size + 1, sizeof(char *));
 	if (!tab_envp)
 		return (NULL);
-	i = -1;
-	node = env->head;
-	while (node)
+	if (ft_process_envp(tab_envp, env))
 	{
-		tab_envp[++i] = ft_env_join_entry(node->key, node->value);
-		if (!tab_envp[i])
-		{
-			ft_free_tab(tab_envp);
-			return (NULL);
-		}
-		node = node->next;
+		ft_free_tab(tab_envp);
+		return (NULL);
 	}
-	tab_envp[++i] = NULL;
 	return (tab_envp);
 }

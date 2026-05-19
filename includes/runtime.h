@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 13:00:17 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:08:06 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	ft_err_3(char *cmd, int is_path);
 void	ft_err_4(char *target);
 int		ft_exit_err(t_env *env, char *arg);
 int		ft_export_print_sorted(t_env *env);
+int		ft_export_no_value(char *key, t_env *env);
 int		ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 00:00:00 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:13:41 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,20 @@ int	ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val)
 		return (2);
 	}
 	return (0);
+}
+
+int	ft_export_no_value(char *key, t_env *env)
+{
+	t_env_n	*node;
+	int		status;
+
+	node = env->head;
+	while (node)
+	{
+		if (ft_strcmp(node->key, key) == 0)
+			return (0);
+		node = node->next;
+	}
+	status = ft_env_set(env, key, NULL);
+	return (status);
 }

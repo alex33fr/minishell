@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:12:43 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 13:04:35 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:01:10 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	ft_builtin_export(char **argv, t_env *env)
 			status = ft_export_err(argv[i]);
 		else if (!sep && !ft_is_valid_name(argv[i]))
 			status = ft_export_err(argv[i]);
+		else if (!sep)
+			status = ft_export_no_value(argv[i], env);
 		i++;
 	}
 	return (status);
