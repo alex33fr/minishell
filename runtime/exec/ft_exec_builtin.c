@@ -31,8 +31,6 @@ int	ft_is_builtin(char *cmd)
 		return (1);
 	if (!ft_strcmp(cmd, "export"))
 		return (1);
-	if (!ft_strcmp(cmd, "declare"))
-		return (1);
 	if (!ft_strcmp(cmd, "unset"))
 		return (1);
 	if (!ft_strcmp(cmd, "env"))
@@ -62,8 +60,6 @@ int	ft_exec_builtin(t_cmd *cmd, t_env *env)
 		status = ft_builtin_pwd(env);
 	else if (!ft_strcmp(cmd->args[0], "export"))
 		status = ft_builtin_export(cmd->args, env);
-	else if (!ft_strcmp(cmd->args[0], "declare"))
-		status = ft_builtin_declare(cmd->args, env);
 	else if (!ft_strcmp(cmd->args[0], "unset"))
 		status = ft_builtin_unset(cmd->args, env);
 	else if (!ft_strcmp(cmd->args[0], "env"))

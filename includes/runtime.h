@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 14:21:36 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 13:00:17 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int		ft_builtin_cd(char **argv, t_env *env);
 char	*ft_cd_target(char **argv, t_env *env);
 int		ft_builtin_export(char **argv, t_env *env);
 int		ft_builtin_unset(char **argv, t_env *env);
-int		ft_builtin_declare(char **argv, t_env *env);
 int		ft_is_valid_num(char *s);
 long	ft_exit_atol(char *s, int *overflow);
 int		ft_is_valid_name(char *s);
@@ -135,6 +134,7 @@ void	ft_err_2(void);
 void	ft_err_3(char *cmd, int is_path);
 void	ft_err_4(char *target);
 int		ft_exit_err(t_env *env, char *arg);
+int		ft_export_print_sorted(t_env *env);
 int		ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val);
 
 #endif

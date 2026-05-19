@@ -19,7 +19,6 @@ RED      = \033[0;31m
 RESET    = \033[0m
 
 MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
-             $(BUILTINS)ft_builtin_declare.c \
              $(BUILTINS)ft_builtin_env.c \
              $(BUILTINS)ft_builtin_simple.c \
              $(ENV)ft_env_access.c \
@@ -46,6 +45,7 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(UTILS)ft_redir_tools.c \
              $(UTILS)ft_builtins_tools.c \
              $(UTILS)ft_builtins_tools2.c \
+             $(UTILS)ft_builtins_export_sort.c \
              $(UTILS)ft_signal_tools.c \
              $(UTILS)ft_heredocs_tools.c \
              $(UTILS)ft_pipe_tools.c \

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:12:43 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/04/27 12:13:30 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 13:04:35 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ int	ft_builtin_export(char **argv, t_env *env)
 	char	*sep;
 	int		i;
 	int		status;
-	int		ret;
+	int		sort;
 
 	if (!argv[1])
 	{
-		ret = ft_builtin_env(env);
-		return (ret);
+		sort = ft_export_print_sorted(env);
+		return (sort);
 	}
 	i = 1;
 	status = 0;
