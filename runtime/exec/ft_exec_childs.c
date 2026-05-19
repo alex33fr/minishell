@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:28:44 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/11 16:29:52 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 15:36:32 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	ft_exec_child(t_exec *exec, char *path)
 	{
 		free(path);
 		ft_child_free(exec);
-		exit(127);
 	}
 	code = ft_exit_code(&st, ft_strchr(exec->argv[0], '/') != NULL);
 	free(path);
