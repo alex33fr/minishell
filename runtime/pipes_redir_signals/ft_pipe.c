@@ -94,6 +94,7 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 /**
  * @brief
  * Execute a pipeline of n_cmds commands, wait for all children.
+ * Returns 130 if heredoc reading was interrupted by SIGINT.
  * @order 1.2.3.5.3
  */
 int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)

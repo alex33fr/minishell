@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 18:40:20 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 06:51:42 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /**
  * @brief
  * Save stdin/stdout in cmd, apply redirs, run cmd, restore fds.
- * Return cmd exit status, 1 on redir error.
+ * Return 130 if heredoc interrupted by SIGINT,
+ * 1 on redir error, else cmd status.
  * @order 1.2.3.5.2
  */
 static int	ft_exec_single(t_cmd *cmd, t_env *env)

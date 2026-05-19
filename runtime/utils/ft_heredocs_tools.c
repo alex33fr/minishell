@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 21:02:08 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 06:51:17 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 /**
  * @brief
  * Pre-read all heredocs in the command list and store their content in pipes.
+ * Returns 1 immediately if g_signal is set (SIGINT),
+ * leaving remaining heredocs unread.
  * @order 1.2.3.5.3.2
  */
 int	ft_preread_heredocs(t_cmd *cmds, t_env *env)

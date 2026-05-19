@@ -67,11 +67,11 @@ static char	*process_char(char *str, int *i, t_expand *ex, char *res)
 	{
 		(*i)++;
 		if (str[*i])
-    	{
-        	buf[0] = str[*i];
-        	res = append(res, buf);
-        	(*i)++;
-    	}
+		{
+			buf[0] = str[*i];
+			res = append(res, buf);
+			(*i)++;
+		}
 	}
 	else
 	{
