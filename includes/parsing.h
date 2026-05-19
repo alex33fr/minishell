@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/15 14:11:10 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:08:31 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,42 +68,44 @@ typedef struct s_expand
 	int		in_dquote;
 }	t_expand;
 
-t_queue	*empty_queue(void);
-int		enqueue(t_queue *queue, t_tok type, char *value, int had_quotes);
-t_tok	dequeue(t_queue *queue, char **val_ptr);
-void	clear_queue(t_queue *queue);
+t_queue		*empty_queue(void);
+int			enqueue(t_queue *queue, t_tok type, char *value, int had_quotes);
+t_tok		dequeue(t_queue *queue, char **val_ptr);
+void		clear_queue(t_queue *queue);
 
-int		check_redir(t_queue *queue);
-int		next_quote(char *line);
-int		error_syntax(char *line, char *token);
-int		manage_syntax_quotes(char *line, int *i, int *l_wp, int *l_wr);
-int		manage_syntax_redir(char *line, int *i, int *l_wp, int *l_wr);
-int		check_syntax(char *line);
+int			check_redir(t_queue *queue);
+int			next_quote(char *line);
+int			error_syntax(char *line, char *token);
+int			manage_syntax_quotes(char *line, int *i, int *l_wp, int *l_wr);
+int			manage_syntax_redir(char *line, int *i, int *l_wp, int *l_wr);
+int			check_syntax(char *line);
 
-int		search_token(t_queue *q, char *line);
+int			search_token(t_queue *q, char *line);
 
-int		next_token(char *line, t_tok tok);
-t_tok	get_token_type(char *line);
-char	*first_word(char *line, int *had_quotes);
+int			next_token(char *line, t_tok tok);
+t_tok		get_token_type(char *line);
+char		*first_word(char *line, int *had_quotes);
 
-int		ft_isspace(int c);
-int		skip_spaces(char *line);
-int		has_quotes(char *str);
-char	*unquoted(char *str);
-void	remove_quotes_delimiter(t_node *node);
-t_queue	*do_expand(t_queue *q, char **envp, int last_status);
-t_queue	*lexer(char *line, char **envp, int last_status);
+int			ft_isspace(int c);
+int			skip_spaces(char *line);
+int			has_quotes(char *str);
+char		*unquoted(char *str);
+void		remove_quotes_delimiter(t_node *node);
+t_queue		*do_expand(t_queue *q, char **envp, int last_status);
+t_queue		*lexer(char *line, char **envp, int last_status);
 
-void	free_cmds(t_cmd *cmds);
+void		free_cmds(t_cmd *cmds);
 
-t_cmd	*init_cmd(t_queue *q);
-int		manage_cmd_redir(t_queue *q, t_cmd *res);
-void	manage_cmd_word(t_queue *q, t_cmd *res, int *i);
+t_cmd		*init_cmd(t_queue *q);
+int			manage_cmd_redir(t_queue *q, t_cmd *res);
+void		manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
-t_cmd	*create_cmds(t_queue *q);
+t_cmd		*create_cmds(t_queue *q);
 
-char	*append(char *res, char *to_add);
-char	*handle_dollar(char *str, int *i, t_expand *ex, char *res);
-char	*expand_and_remove_quotes(char *str, char **envp, int last_status);
+char		*append(char *res, char *to_add);
+char		*handle_dollar(char *str, int *i, t_expand *ex, char *res);
+t_expand	init_expand(char **envp, int l_status, int squote, int dquote);
+char		*process_char(char *str, int *i, t_expand *ex, char *res);
+char		*expand_and_remove_quotes(char *str, char **envp, int last_status);
 
 #endif

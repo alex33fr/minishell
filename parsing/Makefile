@@ -17,6 +17,7 @@ RED     = \033[0;31m
 RESET   = \033[0m
 
 MY_SOURCES = $(EXPAND)expand_utils.c \
+			 $(EXPAND)expand_tools.c \
 			 $(EXPAND)expand_remove_quotes.c \
              $(LEXER)check_syntax.c \
 			 $(LEXER)check_syntax_utils.c \
