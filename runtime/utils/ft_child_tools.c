@@ -88,7 +88,8 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	int		ret;
 
 	ft_child_init_exec(&exec, cmd, fds, env);
-	ft_signals_child();
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	ft_child_setup_pipes(fds);
 	ft_child_close_heredocs(cmd);
 	if (ft_apply_redirs(cmd->redir, env))
@@ -102,5 +103,6 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	}
 	exec.envp = ft_env_to_envp(env);
 	path = ft_resolve_path(&exec);
+	ft_signals_child();
 	ft_exec_child(&exec, path);
 }
