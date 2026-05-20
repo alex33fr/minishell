@@ -34,6 +34,7 @@ int	ft_apply_redirs(t_redir *redir, t_env *env)
 				if (dup2(redir->fd, STDIN_FILENO) < 0)
 					return (1);
 				close(redir->fd);
+				redir->fd = -1;
 			}
 			else if (ft_redir_heredoc(redir->file, env))
 				return (1);

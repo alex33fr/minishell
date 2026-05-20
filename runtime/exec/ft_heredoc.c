@@ -93,7 +93,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
-		write(1, "> ", 2);
+		write(2, "> ", 2);
 		line = ft_read_heredoc_line();
 		if (ft_heredoc_check(line, delimiter))
 			break ;
@@ -134,6 +134,7 @@ int	ft_preread_heredocs(t_cmd *cmds, t_env *env)
 					return (1);
 				if (pipe(pipefd) == -1)
 					return (1);
+				fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
 				ft_heredoc_loop(pipefd[1], redir->file, env);
 				ft_close(pipefd[1], -1);
 				redir->fd = pipefd[0];

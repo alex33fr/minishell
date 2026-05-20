@@ -23,6 +23,8 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 {
 	int	status;
 
+	if (!cmd->redir)
+		return (ft_exec_cmd(cmd, env));
 	cmd->saved_in = dup(STDIN_FILENO);
 	cmd->saved_out = dup(STDOUT_FILENO);
 	if (ft_preread_heredocs(cmd, env))
@@ -35,6 +37,7 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 	}
 	if (ft_apply_redirs(cmd->redir, env))
 	{
+		ft_close_heredoc_fds(cmd, NULL);
 		dup2(cmd->saved_in, STDIN_FILENO);
 		dup2(cmd->saved_out, STDOUT_FILENO);
 		ft_close(cmd->saved_in, cmd->saved_out);

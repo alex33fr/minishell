@@ -126,6 +126,7 @@ int	main(int ac, char **av, char **envp)
 	env = ft_init(envp);
 	if (!env)
 		return (1);
+	env->main_pid = getpid();
 	status = ft_readline_loop(env);
 	ft_env_clear(env);
 	rl_clear_history();

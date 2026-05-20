@@ -29,6 +29,7 @@ typedef struct s_env
 	t_env_n	*head;
 	int		exit_flag;
 	int		exit_code;
+	pid_t	main_pid;
 }	t_env;
 
 t_env	*ft_env_init(char **envp);

@@ -81,7 +81,7 @@ int	ft_is_valid_name(char *s)
 	i = 0;
 	if (!s || !s[0])
 		return (0);
-	if (ft_isdigit(s[0]))
+	if (!ft_isalpha(s[0]) && s[0] != '_')
 		return (0);
 	while (s[i])
 	{
