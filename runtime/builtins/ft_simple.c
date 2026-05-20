@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_builtin_simple.c                                :+:      :+:    :+:   */
+/*   ft_simple.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -46,6 +46,7 @@ int	ft_builtin_pwd(t_env *env)
  */
 static int	ft_exit_set(t_env *env, int code)
 {
+	ft_putstr_fd("exit\n", STDERR_FILENO);
 	env->exit_flag = 1;
 	env->exit_code = code;
 	return (code);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_heredocs_tools.c                                :+:      :+:    :+:   */
+/*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 16:39:43 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/20 07:29:13 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
+		write(1, "> ", 2);
 		line = ft_read_heredoc_line();
 		if (ft_heredoc_check(line, delimiter))
 			break ;

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 17:09:41 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/20 07:48:22 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,22 @@
  * Call + init 1 global var, for receiving signal 2 SIGINT from CTRL+C
  */
 int	g_signal = 0;
+
+/**
+ * @brief
+ * Initialize shell: env from envp + setup signals
+ * @order 1.1
+ */
+t_env	*ft_init(char **envp)
+{
+	t_env	*env;
+
+	env = ft_env_init(envp);
+	if (!env)
+		return (NULL);
+	ft_setup_signals();
+	return (env);
+}
 
 /**
  * @brief [1.2.3] Tokenize, parse and execute one line. Free intermediates.

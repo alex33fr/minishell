@@ -22,6 +22,7 @@ int	ft_exec_cmd(t_cmd *cmd, t_env *env)
 	int	status;
 
 	if (!cmd->args || !cmd->args[0])
+		return (0);
 	if (!env)
 		return (1);
 	status = 1;

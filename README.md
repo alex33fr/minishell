@@ -20,7 +20,7 @@ Minishell is a project designed to create a simple shell. The goal is to develop
 
 ```
 minishell/
-├── main.c
+├── main.c                  → entry point, readline loop, ft_init
 ├── includes/
 │   ├── minishell.h
 │   ├── parsing.h
@@ -32,12 +32,15 @@ minishell/
 │   ├── parsing/        → build t_cmd list
 │   └── struct_and_free/
 ├── runtime/
-│   ├── builtins/       → cd, echo, env, export, unset, pwd, exit
-│   ├── env/            → env linked list (get/set/unset/to_envp)
-│   ├── exec/           → exec single cmd, pipeline, builtins, external
-│   ├── init/
-│   ├── pipes_redir_signals/
-│   └── utils/
+│   ├── builtins/           → ft_cd, ft_env, ft_simple (pwd/exit), ft_tools,
+│   │                          ft_tools2 (echo/export), ft_export_sort
+│   ├── env/                → env linked list: ft_core, ft_access, ft_set,
+│   │                          ft_unset, ft_clear, ft_to_envp
+│   ├── exec/               → ft_exec, ft_cmd_list, ft_builtin_switch, ft_external,
+│   │                          ft_childs, ft_child_tools, ft_wait, ft_heredoc, ft_path
+│   ├── pipes_redir_signals/ → ft_pipe, ft_pipe_tools, ft_redir, ft_redir_tools,
+│   │                          ft_signals, ft_signal_tools
+│   └── utils/              → ft_clear, ft_close, ft_errors, ft_errors2
 └── libft/
 ```
 
