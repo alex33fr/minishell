@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <linux/limits.h>
 # include <limits.h>
+# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>

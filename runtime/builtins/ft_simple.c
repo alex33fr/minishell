@@ -46,7 +46,8 @@ int	ft_builtin_pwd(t_env *env)
  */
 static int	ft_exit_set(t_env *env, int code)
 {
-	ft_putstr_fd("exit\n", STDERR_FILENO);
+	if (isatty(STDIN_FILENO))
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	env->exit_flag = 1;
 	env->exit_code = code;
 	return (code);

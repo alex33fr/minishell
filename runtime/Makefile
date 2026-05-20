@@ -33,6 +33,7 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(EXEC)ft_exec_cmd_list.c \
              $(EXEC)ft_exec_external.c \
              $(EXEC)ft_exec_wait.c \
+             $(EXEC)ft_heredoc.c \
              $(EXEC)ft_path.c \
              $(INIT)ft_init.c \
              $(PIPES)ft_pipe.c \
@@ -47,7 +48,6 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(UTILS)ft_builtins_tools2.c \
              $(UTILS)ft_builtins_export_sort.c \
              $(UTILS)ft_signal_tools.c \
-             $(UTILS)ft_heredocs_tools.c \
              $(UTILS)ft_pipe_tools.c \
              $(UTILS)ft_pipe_tools2.c \
              $(UTILS)ft_child_tools.c

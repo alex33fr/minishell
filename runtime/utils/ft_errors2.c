@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 00:00:00 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:37:37 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
  */
 int	ft_exit_err(t_env *env, char *arg)
 {
-	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("exit: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
