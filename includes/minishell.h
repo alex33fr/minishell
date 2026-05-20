@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:32:17 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/05 10:15:26 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/20 08:17:03 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <errno.h>
 # include "parsing.h"
-# include <stdio.h>
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <signal.h>
