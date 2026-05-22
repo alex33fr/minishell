@@ -49,8 +49,10 @@ SRCS =	main.c \
 		runtime/exec/ft_external.c \
 		runtime/exec/ft_child_tools.c \
 		runtime/exec/ft_heredoc.c \
+		runtime/exec/ft_preread_heredoc.c \
 		runtime/exec/ft_wait.c \
 		runtime/exec/ft_path.c \
+		runtime/init/ft_init.c \
 		runtime/pipes_redir_signals/ft_pipe.c \
 		runtime/pipes_redir_signals/ft_pipe_tools.c \
 		runtime/pipes_redir_signals/ft_redir.c \

@@ -22,13 +22,17 @@
 int	ft_wait_child(pid_t pid)
 {
 	int	status;
+	int	exit_code;
 
 	ft_setup_signals_exec();
 	waitpid(pid, &status, 0);
 	ft_setup_signals();
 	g_signal = 0;
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	{
+		exit_code = WEXITSTATUS(status);
+		return (exit_code);
+	}
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		return (130);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)

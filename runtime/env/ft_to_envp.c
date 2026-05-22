@@ -105,6 +105,7 @@ static int	ft_process_envp(char **tab_envp, t_env *env)
 char	**ft_env_to_envp(t_env *env)
 {
 	int		size;
+	int		err;
 	char	**tab_envp;
 
 	if (!env)
@@ -113,7 +114,8 @@ char	**ft_env_to_envp(t_env *env)
 	tab_envp = ft_calloc(size + 1, sizeof(char *));
 	if (!tab_envp)
 		return (NULL);
-	if (ft_process_envp(tab_envp, env))
+	err = ft_process_envp(tab_envp, env);
+	if (err)
 	{
 		ft_free_tab(tab_envp);
 		return (NULL);

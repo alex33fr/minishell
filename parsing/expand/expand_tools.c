@@ -25,10 +25,12 @@ t_expand	init_expand(char **envp, int l_status, int squote, int dquote)
 
 static int	is_dollar_expand(char *str, int i, t_expand *ex)
 {
-	if (!str[i])
+	if (!str[i] || str[i] != '$' || ex->in_squote)
 		return (0);
-	if (str[i] == '$' && !ex->in_squote && str[i + 1]
-		&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+	if (str[i + 1] == '$')
+		return (1);
+	if (str[i + 1] && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'
+			|| str[i + 1] == '?'))
 		return (1);
 	return (0);
 }

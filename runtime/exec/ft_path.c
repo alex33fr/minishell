@@ -26,11 +26,10 @@ static char	**ft_get_path_splitted(t_env *env)
 	char	**paths;
 
 	path_val = ft_env_get(env, "PATH");
+	if (!path_val && !env->path_unset)
+		path_val = DEFAULT_PATH;
 	if (!path_val)
-	{
-		paths = ft_split(".", ':');
-		return (paths);
-	}
+		return (NULL);
 	paths = ft_split(path_val, ':');
 	if (!paths)
 		return (NULL);
@@ -122,13 +121,16 @@ char	*ft_find_path(char *cmd, t_env *env)
 {
 	char	**paths;
 	char	*path;
+	int		check;
 
 	if (!cmd || !env)
 		return (NULL);
-	if (ft_is_path_cmd(cmd))
+	check = ft_is_path_cmd(cmd);
+	if (check)
 	{
 		path = NULL;
-		if (access(cmd, F_OK) == 0)
+		check = access(cmd, F_OK);
+		if (check == 0)
 			path = ft_strdup(cmd);
 		return (path);
 	}

@@ -22,7 +22,8 @@ int	ft_builtin_pwd(t_env *env)
 	char	buffer[PATH_MAX];
 	char	*cached;
 
-	if (getcwd(buffer, PATH_MAX))
+	cached = getcwd(buffer, PATH_MAX);
+	if (cached)
 	{
 		ft_putstr_fd(buffer, 1);
 		ft_putstr_fd("\n", 1);
@@ -46,7 +47,12 @@ int	ft_builtin_pwd(t_env *env)
  */
 static int	ft_exit_set(t_env *env, int code)
 {
-	if (isatty(STDIN_FILENO) && getpid() == env->main_pid)
+	int	is_tty;
+	int	is_main;
+
+	is_tty = isatty(STDIN_FILENO);
+	is_main = (getpid() == env->main_pid);
+	if (is_tty && is_main)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	env->exit_flag = 1;
 	env->exit_code = code;
@@ -63,6 +69,7 @@ int	ft_builtin_exit(t_cmd *cmd, t_env *env)
 	char	*arg;
 	long	val;
 	int		ret;
+	int		valid;
 
 	if (!cmd->args[1] || !ft_strcmp(cmd->args[1], "--"))
 	{
@@ -70,7 +77,8 @@ int	ft_builtin_exit(t_cmd *cmd, t_env *env)
 		return (ret);
 	}
 	arg = ft_strtrim(cmd->args[1], " \t");
-	if (!arg || !ft_is_valid_num(arg))
+	valid = arg && ft_is_valid_num(arg);
+	if (!valid)
 	{
 		ret = ft_exit_err(env, arg);
 		return (ret);

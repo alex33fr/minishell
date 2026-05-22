@@ -51,7 +51,12 @@ static void	ft_fds_init(t_pipe_fds *fds)
  */
 static int	ft_iter_cmd(t_cmd **cmds, t_env *env, t_pipe_fds *fd, pid_t *pid)
 {
-	if (!fd->last && pipe(fd->pipefd) == -1)
+	int	status;
+
+	status = 0;
+	if (!fd->last)
+		status = pipe(fd->pipefd);
+	if (status == -1)
 	{
 		perror("pipe");
 		return (-1);
@@ -73,6 +78,7 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 {
 	t_pipe_fds	fds;
 	int			i;
+	int			status;
 
 	ft_fds_init(&fds);
 	fds.pids = pids;
@@ -80,7 +86,8 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 	while (cmds && i < n_cmds)
 	{
 		fds.last = (i == n_cmds - 1);
-		if (ft_iter_cmd(&cmds, env, &fds, &pids[i]) < 0)
+		status = ft_iter_cmd(&cmds, env, &fds, &pids[i]);
+		if (status < 0)
 		{
 			ft_wait_all(pids, i);
 			return (1);
@@ -100,24 +107,26 @@ static int	ft_fork_loop(t_cmd *cmds, int n_cmds, t_env *env, pid_t *pids)
 int	ft_exec_pipeline(t_cmd *cmds, int n_cmds, t_env *env)
 {
 	pid_t	*pids;
-	int		ret;
+	int		status;
 
 	pids = malloc(sizeof(pid_t) * n_cmds);
 	if (!pids)
 		return (130);
-	if (ft_preread_heredocs(cmds, env))
+	status = ft_preread_heredocs(cmds, env);
+	if (status)
 	{
 		ft_close_heredoc_fds(cmds, NULL);
 		free(pids);
 		return (0);
 	}
-	if (ft_fork_loop(cmds, n_cmds, env, pids))
+	status = ft_fork_loop(cmds, n_cmds, env, pids);
+	if (status)
 	{
 		free(pids);
 		return (1);
 	}
 	ft_close_heredoc_fds(cmds, NULL);
-	ret = ft_wait_all(pids, n_cmds);
+	status = ft_wait_all(pids, n_cmds);
 	free(pids);
-	return (ret);
+	return (status);
 }

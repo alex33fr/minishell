@@ -34,6 +34,7 @@ MY_SOURCES = $(BUILTINS)ft_builtin_cd.c \
              $(EXEC)ft_exec_external.c \
              $(EXEC)ft_exec_wait.c \
              $(EXEC)ft_heredoc.c \
+             $(EXEC)ft_preread_heredoc.c \
              $(EXEC)ft_path.c \
              $(INIT)ft_init.c \
              $(PIPES)ft_pipe.c \

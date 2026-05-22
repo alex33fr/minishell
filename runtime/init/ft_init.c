@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec.c                                          :+:      :+:    :+:   */
+/*   ft_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 14:23:07 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 16:53:46 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/05/22 10:15:32 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/05/22 10:15:32 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,31 @@
 
 /**
  * @brief
- * Dispatch argv[0] to builtin or external, return its exit status.
- * @order 1.2.3.5.2.2
+ * Init env from envp and setup signal handlers.
+ * @order 1.1
  */
-int	ft_exec_cmd(t_cmd *cmd, t_env *env)
+t_env	*ft_init(char **envp)
 {
-	int	status;
+	t_env	*env;
 
-	if (!cmd->args || !cmd->args[0])
-		return (0);
+	env = ft_env_init(envp);
 	if (!env)
-		return (1);
-	status = ft_is_builtin(cmd->args[0]);
-	if (status)
-		status = ft_exec_builtin(cmd, env);
-	else
-		status = ft_exec_external(cmd, env);
-	return (status);
+		return (NULL);
+	ft_setup_signals();
+	return (env);
+}
+
+int	ft_exec_cmds(t_queue *tokens, char **pline, t_env *env, int ls)
+{
+	t_cmd	*cmds;
+
+	cmds = create_cmds(tokens);
+	clear_queue(tokens);
+	free(*pline);
+	*pline = NULL;
+	if (!cmds)
+		return (ls);
+	ls = ft_exec_cmd_list(cmds, env, ls);
+	free_cmds(cmds);
+	return (ls);
 }

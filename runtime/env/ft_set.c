@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:52:06 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 14:21:29 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/22 18:33:01 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ static int	ft_env_add_back(t_env *env, t_env_n *new_node)
 int	ft_env_set(t_env *env, char *key, char *value)
 {
 	t_env_n	*node;
+	int		err;
 
 	if (!env || !key)
 		return (1);
@@ -133,7 +134,8 @@ int	ft_env_set(t_env *env, char *key, char *value)
 	node = ft_env_new_node_kv(key, value);
 	if (!node)
 		return (1);
-	if (ft_env_add_back(env, node))
+	err = ft_env_add_back(env, node);
+	if (err)
 		return (1);
 	return (0);
 }

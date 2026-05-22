@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/18 00:00:00 by aprivalo          #+#    #+#             */
+/*   Created: 2026/05/18 11:28:36 by aprivalo          #+#    #+#             */
 /*   Updated: 2026/05/19 14:40:04 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -92,11 +92,13 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	signal(SIGQUIT, SIG_IGN);
 	ft_child_setup_pipes(fds);
 	ft_child_close_heredocs(cmd);
-	if (ft_apply_redirs(cmd->redir, env))
+	ret = ft_apply_redirs(cmd->redir, env);
+	if (ret)
 		ft_builtin_child_exit(&exec, 1);
 	if (!cmd->args || !cmd->args[0])
 		ft_builtin_child_exit(&exec, 0);
-	if (ft_is_builtin(cmd->args[0]))
+	ret = ft_is_builtin(cmd->args[0]);
+	if (ret)
 	{
 		ret = ft_exec_builtin(cmd, env);
 		ft_builtin_child_exit(&exec, ret);

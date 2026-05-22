@@ -28,10 +28,13 @@ static char	*get_env_value(char *name, char **envp, int last_status)
 	size_t	len;
 
 	if (ft_strncmp(name, "?", 1) == 0)
-	{
 		res = ft_itoa(last_status);
+	else if (ft_strncmp(name, "$", 1) == 0 && ft_strlen(name) == 1)
+		res = ft_get_pid_str();
+	else
+		res = NULL;
+	if (res)
 		return (res);
-	}
 	i = 0;
 	len = ft_strlen(name);
 	while (envp[i])
@@ -51,7 +54,7 @@ static int	get_var_len(char *str, int i)
 {
 	int	var_len;
 
-	if (str[i + 1] == '?')
+	if (str[i + 1] == '?' || str[i + 1] == '$')
 		return (1);
 	var_len = 0;
 	while (ft_isalnum(str[i + 1 + var_len]) || str[i + 1 + var_len] == '_')

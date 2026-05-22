@@ -103,6 +103,7 @@ void		manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 t_cmd		*create_cmds(t_queue *q);
 
 char		*append(char *res, char *to_add);
+char		*ft_get_pid_str(void);
 char		*handle_dollar(char *str, int *i, t_expand *ex, char *res);
 t_expand	init_expand(char **envp, int l_status, int squote, int dquote);
 char		*process_char(char *str, int *i, t_expand *ex, char *res);

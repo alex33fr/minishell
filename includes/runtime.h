@@ -12,6 +12,8 @@
 
 #ifndef RUNTIME_H
 # define RUNTIME_H
+# define DEFAULT_PATH \
+	"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 /**
  * @brief
@@ -30,6 +32,7 @@ typedef struct s_env
 	int		exit_flag;
 	int		exit_code;
 	pid_t	main_pid;
+	int		path_unset;
 }	t_env;
 
 t_env	*ft_env_init(char **envp);
@@ -113,6 +116,7 @@ int		ft_redir_heredoc(char *delimiter, t_env *env);
  * INIT
  */
 t_env	*ft_init(char **envp);
+int		ft_exec_cmds(t_queue *tokens, char **pline, t_env *env, int ls);
 
 /**
  * @brief

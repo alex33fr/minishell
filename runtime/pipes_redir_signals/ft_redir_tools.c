@@ -17,28 +17,41 @@
  * Apply all redirections in the list in order. Return 1 on first failure.
  * @order 1.2.3.5.2.1
  */
+static int	ft_apply_one_redir(t_redir *redir, t_env *env)
+{
+	int	status;
+
+	if (redir->type == T_REDIRIN)
+		status = ft_redir_in(redir->file);
+	else if (redir->type == T_REDIROUT)
+		status = ft_redir_out(redir->file);
+	else if (redir->type == T_APPEND)
+		status = ft_redir_join(redir->file);
+	else if (redir->type == T_HEREDOC && redir->fd != -1)
+	{
+		status = dup2(redir->fd, STDIN_FILENO);
+		if (status < 0)
+			return (1);
+		close(redir->fd);
+		redir->fd = -1;
+		return (0);
+	}
+	else if (redir->type == T_HEREDOC)
+		status = ft_redir_heredoc(redir->file, env);
+	else
+		status = 0;
+	return (status);
+}
+
 int	ft_apply_redirs(t_redir *redir, t_env *env)
 {
+	int	status;
+
 	while (redir)
 	{
-		if (redir->type == T_REDIRIN && ft_redir_in(redir->file))
+		status = ft_apply_one_redir(redir, env);
+		if (status)
 			return (1);
-		if (redir->type == T_REDIROUT && ft_redir_out(redir->file))
-			return (1);
-		if (redir->type == T_APPEND && ft_redir_join(redir->file))
-			return (1);
-		if (redir->type == T_HEREDOC)
-		{
-			if (redir->fd != -1)
-			{
-				if (dup2(redir->fd, STDIN_FILENO) < 0)
-					return (1);
-				close(redir->fd);
-				redir->fd = -1;
-			}
-			else if (ft_redir_heredoc(redir->file, env))
-				return (1);
-		}
 		redir = redir->next;
 	}
 	return (0);

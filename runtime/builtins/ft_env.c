@@ -40,11 +40,14 @@ static void	ft_do_join(t_env *env, char *key, char *sep)
 static int	ft_export_sep(char *arg, char *sep, t_env *env)
 {
 	int		join;
+	int		valid;
+	int		is_path;
 	char	*key;
 
 	join = (sep > arg && *(sep - 1) == '+');
 	key = ft_substr(arg, 0, sep - arg - join);
-	if (!key || !ft_is_valid_name(key))
+	valid = key && ft_is_valid_name(key);
+	if (!valid)
 	{
 		free(key);
 		return (1);
@@ -53,6 +56,9 @@ static int	ft_export_sep(char *arg, char *sep, t_env *env)
 		ft_do_join(env, key, sep);
 	else
 		ft_env_set(env, key, sep + 1);
+	is_path = ft_strcmp(key, "PATH") == 0;
+	if (is_path)
+		env->path_unset = 0;
 	free(key);
 	return (0);
 }
@@ -98,12 +104,16 @@ int	ft_builtin_export(char **argv, t_env *env)
 int	ft_builtin_unset(char **argv, t_env *env)
 {
 	int	i;
+	int	is_path;
 
 	if (!argv[1])
 		return (0);
 	i = 1;
 	while (argv[i])
 	{
+		is_path = ft_strcmp(argv[i], "PATH") == 0;
+		if (is_path)
+			env->path_unset = 1;
 		ft_env_unset(env, argv[i]);
 		i++;
 	}

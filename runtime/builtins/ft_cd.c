@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/11 00:00:00 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/05/11 12:22:10 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/05/22 20:33:12 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@
  */
 static void	ft_cd_update_pwd(t_env *env, char *old_pwd, char *buffer)
 {
+	char	*cwd;
+
 	ft_env_set(env, "OLDPWD", old_pwd);
-	if (!getcwd(buffer, PATH_MAX))
+	cwd = getcwd(buffer, PATH_MAX);
+	if (!cwd)
 	{
 		ft_err_2();
 		return ;
@@ -38,6 +41,7 @@ int	ft_builtin_cd(char **argv, t_env *env)
 	char	buffer[PATH_MAX];
 	char	*old_pwd;
 	char	*target;
+	int		status;
 
 	if (argv[1] && argv[2])
 	{
@@ -50,7 +54,8 @@ int	ft_builtin_cd(char **argv, t_env *env)
 	target = ft_cd_target(argv, env);
 	if (!target)
 		return (1);
-	if (chdir(target) != 0)
+	status = chdir(target);
+	if (status != 0)
 	{
 		ft_err_4(target);
 		return (1);

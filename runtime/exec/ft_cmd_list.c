@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/22 00:00:00 by aprivalo          #+#    #+#             */
+/*   Created: 2026/04/22 13:47:05 by aprivalo          #+#    #+#             */
 /*   Updated: 2026/05/19 16:52:36 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -14,9 +14,47 @@
 
 /**
  * @brief
- * Save stdin/stdout in cmd, apply redirs, run cmd, restore fds.
- * Return 130 if heredoc interrupted by SIGINT,
- * 1 on redir error, else cmd status.
+ * Restore saved stdin/stdout and close the saved fds.
+ * @order 1.2.3.5.2.2.1
+ */
+static void	ft_restore_fds(t_cmd *cmd)
+{
+	dup2(cmd->saved_in, STDIN_FILENO);
+	dup2(cmd->saved_out, STDOUT_FILENO);
+	ft_close(cmd->saved_in, cmd->saved_out);
+}
+
+/**
+ * @brief
+ * Pre-read heredocs and apply redirs, then exec cmd. Return 130/1/status.
+ * @order 1.2.3.5.2.2
+ */
+static int	ft_exec_redir(t_cmd *cmd, t_env *env)
+{
+	int	status;
+
+	status = ft_preread_heredocs(cmd, env);
+	if (status)
+	{
+		ft_close_heredoc_fds(cmd, NULL);
+		ft_restore_fds(cmd);
+		return (130);
+	}
+	status = ft_apply_redirs(cmd->redir, env);
+	if (status)
+	{
+		ft_close_heredoc_fds(cmd, NULL);
+		ft_restore_fds(cmd);
+		return (1);
+	}
+	status = ft_exec_cmd(cmd, env);
+	ft_restore_fds(cmd);
+	return (status);
+}
+
+/**
+ * @brief
+ * Save stdin/stdout, then exec directly (no redir) or via ft_exec_redir.
  * @order 1.2.3.5.2
  */
 static int	ft_exec_single(t_cmd *cmd, t_env *env)
@@ -24,29 +62,13 @@ static int	ft_exec_single(t_cmd *cmd, t_env *env)
 	int	status;
 
 	if (!cmd->redir)
-		return (ft_exec_cmd(cmd, env));
+	{
+		status = ft_exec_cmd(cmd, env);
+		return (status);
+	}
 	cmd->saved_in = dup(STDIN_FILENO);
 	cmd->saved_out = dup(STDOUT_FILENO);
-	if (ft_preread_heredocs(cmd, env))
-	{
-		ft_close_heredoc_fds(cmd, NULL);
-		dup2(cmd->saved_in, STDIN_FILENO);
-		dup2(cmd->saved_out, STDOUT_FILENO);
-		ft_close(cmd->saved_in, cmd->saved_out);
-		return (130);
-	}
-	if (ft_apply_redirs(cmd->redir, env))
-	{
-		ft_close_heredoc_fds(cmd, NULL);
-		dup2(cmd->saved_in, STDIN_FILENO);
-		dup2(cmd->saved_out, STDOUT_FILENO);
-		ft_close(cmd->saved_in, cmd->saved_out);
-		return (1);
-	}
-	status = ft_exec_cmd(cmd, env);
-	dup2(cmd->saved_in, STDIN_FILENO);
-	dup2(cmd->saved_out, STDOUT_FILENO);
-	ft_close(cmd->saved_in, cmd->saved_out);
+	status = ft_exec_redir(cmd, env);
 	return (status);
 }
 

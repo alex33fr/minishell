@@ -75,15 +75,19 @@ void	ft_exec_child(t_exec *exec, char *path)
 {
 	struct stat	st;
 	int			code;
+	int			status;
+	int			is_path;
 
 	execve(path, exec->argv, exec->envp);
 	perror(exec->argv[0]);
-	if (stat(path, &st) != 0)
+	status = stat(path, &st);
+	if (status != 0)
 	{
 		free(path);
 		ft_child_free(exec);
 	}
-	code = ft_exit_code(&st, ft_strchr(exec->argv[0], '/') != NULL);
+	is_path = (ft_strchr(exec->argv[0], '/') != NULL);
+	code = ft_exit_code(&st, is_path);
 	free(path);
 	ft_child_free(exec);
 	exit(code);

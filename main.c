@@ -6,41 +6,17 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/20 07:48:22 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/22 00:00:00 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-/**
- * @brief
- * Call + init 1 global var, for receiving signal 2 SIGINT from CTRL+C
- */
+
 int	g_signal = 0;
 
-/**
- * @brief
- * Initialize shell: env from envp + setup signals
- * @order 1.1
- */
-t_env	*ft_init(char **envp)
-{
-	t_env	*env;
-
-	env = ft_env_init(envp);
-	if (!env)
-		return (NULL);
-	ft_setup_signals();
-	return (env);
-}
-
-/**
- * @brief [1.2.3] Tokenize, parse and execute one line. Free intermediates.
- * @order 1.2.3
- */
 static int	ft_run_line(char **pline, t_env *env, int last_status)
 {
 	t_queue	*tokens;
-	t_cmd	*cmds;
 	char	**envp;
 	char	*line;
 
@@ -53,22 +29,18 @@ static int	ft_run_line(char **pline, t_env *env, int last_status)
 	tokens = lexer(line, envp, last_status);
 	ft_free_tab(envp);
 	if (!tokens)
+	{
+		if (!isatty(STDIN_FILENO))
+		{
+			env->exit_flag = 1;
+			env->exit_code = 2;
+		}
 		return (2);
-	cmds = create_cmds(tokens);
-	clear_queue(tokens);
-	free(*pline);
-	*pline = NULL;
-	if (!cmds)
-		return (last_status);
-	last_status = ft_exec_cmd_list(cmds, env, last_status);
-	free_cmds(cmds);
+	}
+	last_status = ft_exec_cmds(tokens, pline, env, last_status);
 	return (last_status);
 }
 
-/**
- * @brief [1.2.2] Return 130 if SIGINT was received and reset the flag.
- * @order 1.2.2
- */
 static int	ft_handle_signal(int last_status)
 {
 	if (g_signal == SIGINT)
@@ -79,10 +51,6 @@ static int	ft_handle_signal(int last_status)
 	return (last_status);
 }
 
-/**
- * @brief [1.2] Read-eval loop. Exits on EOF.
- * @order 1.2
- */
 static int	ft_readline_loop(t_env *env)
 {
 	char	*line;
@@ -112,10 +80,6 @@ static int	ft_readline_loop(t_env *env)
 	return (last_status);
 }
 
-/**
- * @brief [1] Entry point.
- * @order 1
- */
 int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;

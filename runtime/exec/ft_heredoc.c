@@ -88,6 +88,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	char			**envp;
 	char			*expanded;
 	struct termios	saved;
+	int				status;
 
 	ft_bzero(&saved, sizeof(saved));
 	ft_set_heredoc_sig(&saved);
@@ -95,7 +96,8 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	{
 		write(2, "> ", 2);
 		line = ft_read_heredoc_line();
-		if (ft_heredoc_check(line, delimiter))
+		status = ft_heredoc_check(line, delimiter);
+		if (status)
 			break ;
 		envp = ft_env_to_envp(env);
 		expanded = expand_and_remove_quotes(line, envp, env->exit_code);
@@ -107,41 +109,4 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
 	ft_setup_signals();
-}
-
-/**
- * @brief
- * Pre-read all heredocs in the command list and store their content in pipes.
- * Returns 1 immediately if g_signal is set (SIGINT),
- * leaving remaining heredocs unread.
- * @order 1.2.3.5.3.2
- */
-int	ft_preread_heredocs(t_cmd *cmds, t_env *env)
-{
-	t_redir	*redir;
-	int		pipefd[2];
-
-	if (!cmds)
-		return (0);
-	while (cmds)
-	{
-		redir = cmds->redir;
-		while (redir)
-		{
-			if (redir->type == T_HEREDOC)
-			{
-				if (g_signal)
-					return (1);
-				if (pipe(pipefd) == -1)
-					return (1);
-				fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
-				ft_heredoc_loop(pipefd[1], redir->file, env);
-				ft_close(pipefd[1], -1);
-				redir->fd = pipefd[0];
-			}
-			redir = redir->next;
-		}
-		cmds = cmds->next;
-	}
-	return (0);
 }

@@ -5,12 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/18 00:00:00 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 14:13:41 by aprivalo         ###   ########.fr       */
+/*   Created: 2026/05/18 10:02:48 by aprivalo          #+#    #+#             */
+/*   Updated: 2026/05/23 00:38:47 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_get_pid_str(void)
+{
+	pid_t	pid;
+	char	*res;
+
+	pid = getpid();
+	res = ft_itoa(pid);
+	return (res);
+}
 
 /**
  * @brief
@@ -20,10 +30,12 @@
 static int	ft_echo_words(char **argv, int i)
 {
 	int	state;
+	int	size;
 
+	size = ft_strlen(argv[i]);
 	while (argv[i])
 	{
-		state = write(1, argv[i], ft_strlen(argv[i]));
+		state = write(1, argv[i], size);
 		if (state == -1)
 			return (1);
 		if (argv[i + 1])
@@ -55,7 +67,8 @@ int	ft_builtin_echo(char **argv)
 		newline = 0;
 		i++;
 	}
-	if (ft_echo_words(argv, i))
+	state = ft_echo_words(argv, i);
+	if (state)
 		return (1);
 	if (newline)
 	{
@@ -82,7 +95,7 @@ int	ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val)
 	{
 		free(arg);
 		ft_putstr_fd("exit: too many arguments\n", 2);
-		return (2);
+		return (1);
 	}
 	err = 0;
 	*val = ft_exit_atol(arg, &err);

@@ -11,7 +11,7 @@ Minishell is a project designed to create a simple shell. The goal is to develop
 - Interactive prompt with command history (readline)
 - Pipes (`|`) between commands
 - Redirections : `<` `>` `>>` `<<` (heredoc)
-- Variable expansion (`$VAR`, `$?`)
+- Variable expansion (`$VAR`, `$?`, `$$` → PID)
 - Single and double quote handling
 - Signals : `Ctrl+C`, `Ctrl+D`, `Ctrl+\`
 - Built-in commands : `cd`, `echo`, `env`, `export`, `unset`, `pwd`, `exit`
@@ -58,30 +58,31 @@ main()
               ├── lexer()
               │     ├── check_syntax()
               │     ├── tokenize_line()
-              │     ├── do_expand()      → $VAR, $?, quote removal
+              │     ├── do_expand()      → $VAR, $?, $$, quote removal
               │     └── check_redir()
               ├── create_cmds()
               │     └── first_cmd() × N
               └── ft_exec_cmd_list()
                     ├── n==1 → ft_exec_single()
-                    │     ├── dup() save stdin/stdout
-                    │     ├── ft_preread_heredocs()  → << delim (pre-read)
-                    │     ├── ft_apply_redirs()
-                    │     │     ├── ft_redir_in()       → < file
-                    │     │     ├── ft_redir_out()      → > file
-                    │     │     ├── ft_redir_join()     → >> file
-                    │     │     └── ft_redir_heredoc()  → << delim
-                    │     │           └── ft_heredoc_loop()
-                    │     ├── ft_exec_cmd()
-                    │     │     ├── ft_exec_builtin()   → cd, echo, env,
-                    │     │     │                          export, unset,
-                    │     │     │                          pwd, exit
-                    │     │     └── ft_exec_external()
-                    │     │           ├── fork()
-                    │     │           ├── ft_resolve_path() → ft_find_path()
-                    │     │           ├── ft_exec_child()   → execve()
-                    │     │           └── ft_wait_child()
-                    │     └── dup2() restore stdin/stdout
+                    │     ├── (no redir) ft_exec_cmd()
+                    │     └── (redir) dup() + ft_exec_redir()
+                    │           ├── ft_preread_heredocs()  → << delim (pre-read)
+                    │           ├── ft_apply_redirs()
+                    │           │     ├── ft_redir_in()       → < file
+                    │           │     ├── ft_redir_out()      → > file
+                    │           │     ├── ft_redir_join()     → >> file
+                    │           │     └── ft_redir_heredoc()  → << delim
+                    │           │           └── ft_heredoc_loop()
+                    │           ├── ft_exec_cmd()
+                    │           │     ├── ft_exec_builtin()   → cd, echo, env,
+                    │           │     │                          export, unset,
+                    │           │     │                          pwd, exit
+                    │           │     └── ft_exec_external()
+                    │           │           ├── fork()
+                    │           │           ├── ft_resolve_path() → ft_find_path()
+                    │           │           ├── ft_exec_child()   → execve()
+                    │           │           └── ft_wait_child()
+                    │           └── ft_restore_fds()
                     └── n>1 → ft_exec_pipeline()
                           ├── ft_preread_heredocs()
                           │     └── ft_heredoc_loop() × N

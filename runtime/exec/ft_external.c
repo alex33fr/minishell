@@ -20,12 +20,16 @@
 static void	ft_run_process(t_exec *exec)
 {
 	char	*path;
+	int		saved_in;
+	int		saved_out;
 
 	ft_signals_child();
-	if (exec->cmd->saved_in > STDERR_FILENO)
-		close(exec->cmd->saved_in);
-	if (exec->cmd->saved_out > STDERR_FILENO)
-		close(exec->cmd->saved_out);
+	saved_in = exec->cmd->saved_in;
+	saved_out = exec->cmd->saved_out;
+	if (saved_in > STDERR_FILENO)
+		close(saved_in);
+	if (saved_out > STDERR_FILENO)
+		close(saved_out);
 	path = ft_resolve_path(exec);
 	ft_exec_child(exec, path);
 }

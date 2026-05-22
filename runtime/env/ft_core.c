@@ -59,6 +59,20 @@ static void	ft_env_join(t_env *env, t_env_n *node, t_env_n **last)
 	*last = node;
 }
 
+static void	ft_env_set_defaults(t_env *env)
+{
+	char	buffer[PATH_MAX];
+	char	*pwd;
+	char	*cwd;
+
+	pwd = ft_env_get(env, "PWD");
+	cwd = NULL;
+	if (!pwd)
+		cwd = getcwd(buffer, PATH_MAX);
+	if (cwd)
+		ft_env_set(env, "PWD", buffer);
+}
+
 /**
  * @brief
  * Init env linked list from envp array.
@@ -91,5 +105,6 @@ t_env	*ft_env_init(char **envp)
 			ft_env_join(env, node, &last);
 		i++;
 	}
+	ft_env_set_defaults(env);
 	return (env);
 }

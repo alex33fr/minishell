@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/10 00:00:00 by aprivalo          #+#    #+#             */
+/*   Created: 2026/04/10 09:41:07 by aprivalo          #+#    #+#             */
 /*   Updated: 2026/05/20 14:13:57 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -56,15 +56,18 @@ char	*ft_read_heredoc_line(void)
 int	ft_redir_heredoc(char *delimiter, t_env *env)
 {
 	int	pipefd[2];
+	int	status;
 
-	if (pipe(pipefd) == -1)
+	status = pipe(pipefd);
+	if (status == -1)
 	{
 		perror("pipe");
 		return (1);
 	}
 	ft_heredoc_loop(pipefd[1], delimiter, env);
 	ft_close(pipefd[1], -1);
-	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+	status = dup2(pipefd[0], STDIN_FILENO);
+	if (status < 0)
 	{
 		perror("dup2");
 		ft_close(pipefd[0], -1);
