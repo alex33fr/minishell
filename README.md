@@ -52,7 +52,7 @@ main()
   │     └── ft_setup_signals()        → SIGINT=sig_int, SIGQUIT=SIG_IGN
   └── ft_readline_loop()
         ├── readline("minishell🔥66🔥$ ")          ← interactive
-        ├── ft_readline_nointeractive()             ← non-interactive
+        ├── ft_readline_nointeractive()            ← no-interactive
         │     └── ft_read_heredoc_line() [×2 if line ends with |]
         ├── ft_handle_signal()        → if SIGINT → last_status=130
         └── ft_run_line()
@@ -119,8 +119,7 @@ Run the shell by executing:
 
 ## Resources
 
-- [Redirect](https://tuteurs.ens.fr/unix/shell/entreesortie.html)
-- [Signals — manpages](http://manpagesfr.free.fr/)
-- [Signals — codequoi](https://www.codequoi.com/envoyer-et-intercepter-un-signal-en-c/)
-- [Built-in — manpages](http://manpagesfr.free.fr/)
+- [Redirections — GNU Bash manual](https://www.gnu.org/software/bash/manual/bash.html#Redirections)
+- [Signals — man7.org](https://man7.org/linux/man-pages/man7/signal.7.html)
+- [Built-ins — GNU Bash manual](https://www.gnu.org/software/bash/manual/bash.html#Shell-Builtin-Commands)
 - AI: used for explaining concepts, debugging complex problems, and building test cases.

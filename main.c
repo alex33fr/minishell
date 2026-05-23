@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/23 12:30:24 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/23 13:00:33 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	g_signal = 0;
 
 /**
  * @brief
- * Lex and execute one input line. On non-interactive parse failure, set
+ * Lex and execute one input line. On no-interactive parse failure, set
  * exit_flag so the shell exits with code 2 (matches bash script behaviour).
  * @order 1.2.1
  */
@@ -50,10 +50,10 @@ static int	ft_run_line(char **pline, t_env *env, int last_status)
 /**
  * @brief
  * Read one line from stdin. If it ends with '|', concatenate the next line
- * so bash-style pipe continuation works in non-interactive mode.
+ * so bash-style pipe continuation works in no-interactive mode.
  * @order 1.2.2
  */
-static char	*ft_readline_nointeractive(void)
+static char	*ft_readline_noninteractive(void)
 {
 	char	*line;
 	char	*next;
@@ -80,7 +80,7 @@ static char	*ft_readline_nointeractive(void)
 /**
  * @brief
  * Main read-eval loop.
- * Uses readline in interactive mode, ft_readline_nointeractive
+ * Uses readline in interactive mode, ft_readline_noninteractive
  * otherwise. Exits when EOF or exit_flag is set.
  * @order 1.2.3
  */
@@ -97,7 +97,7 @@ static int	ft_readline_loop(t_env *env)
 		if (interactive)
 			line = readline("minishell🔥66🔥$ ");
 		else
-			line = ft_readline_nointeractive();
+			line = ft_readline_noninteractive();
 		if (!line)
 		{
 			if (interactive)
