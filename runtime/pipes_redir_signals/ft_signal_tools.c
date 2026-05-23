@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 13:18:06 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/18 12:11:19 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/23 11:37:07 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,14 @@ void	sig_int_heredoc(int sig)
 	g_signal = sig;
 	write(1, "^C", 2);
 	write(1, "\n", 1);
+}
+
+int	ft_handle_signal(int last_status)
+{
+	if (g_signal == SIGINT)
+	{
+		g_signal = 0;
+		return (130);
+	}
+	return (last_status);
 }

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/22 00:00:00 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/23 12:30:24 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 int	g_signal = 0;
 
+/**
+ * @brief
+ * Lex and execute one input line. On non-interactive parse failure, set
+ * exit_flag so the shell exits with code 2 (matches bash script behaviour).
+ * @order 1.2.1
+ */
 static int	ft_run_line(char **pline, t_env *env, int last_status)
 {
 	t_queue	*tokens;
@@ -41,16 +47,43 @@ static int	ft_run_line(char **pline, t_env *env, int last_status)
 	return (last_status);
 }
 
-static int	ft_handle_signal(int last_status)
+/**
+ * @brief
+ * Read one line from stdin. If it ends with '|', concatenate the next line
+ * so bash-style pipe continuation works in non-interactive mode.
+ * @order 1.2.2
+ */
+static char	*ft_readline_nointeractive(void)
 {
-	if (g_signal == SIGINT)
-	{
-		g_signal = 0;
-		return (130);
-	}
-	return (last_status);
+	char	*line;
+	char	*next;
+	char	*tmp;
+	int		len;
+
+	line = ft_read_heredoc_line();
+	if (!line)
+		return (NULL);
+	len = (int)ft_strlen(line);
+	if (!len || line[len - 1] != '|')
+		return (line);
+	next = ft_read_heredoc_line();
+	if (!next)
+		return (line);
+	tmp = ft_strjoin(line, " ");
+	free(line);
+	line = ft_strjoin(tmp, next);
+	free(tmp);
+	free(next);
+	return (line);
 }
 
+/**
+ * @brief
+ * Main read-eval loop.
+ * Uses readline in interactive mode, ft_readline_nointeractive
+ * otherwise. Exits when EOF or exit_flag is set.
+ * @order 1.2.3
+ */
 static int	ft_readline_loop(t_env *env)
 {
 	char	*line;
@@ -64,7 +97,7 @@ static int	ft_readline_loop(t_env *env)
 		if (interactive)
 			line = readline("minishell🔥66🔥$ ");
 		else
-			line = ft_read_heredoc_line();
+			line = ft_readline_nointeractive();
 		if (!line)
 		{
 			if (interactive)
@@ -80,6 +113,12 @@ static int	ft_readline_loop(t_env *env)
 	return (last_status);
 }
 
+/**
+ * @brief
+ * Entry point. Init env, run readline loop,
+ * clean up and return exit status.
+ * @order 1
+ */
 int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;

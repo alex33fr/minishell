@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 09:33:22 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/20 11:37:37 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/23 12:00:55 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,15 @@ int	ft_exit_err(t_env *env, char *arg)
 	env->exit_flag = 1;
 	env->exit_code = 2;
 	return (2);
+}
+
+/**
+ * @brief
+ * Print "cd: too many arguments" to stderr, return 1.
+ * @order 1.2.3.5.2.2.2.2.3
+ */
+int	ft_error5(void)
+{
+	ft_putstr_fd("cd: too many arguments\n", 2);
+	return (1);
 }

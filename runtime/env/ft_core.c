@@ -59,18 +59,20 @@ static void	ft_env_join(t_env *env, t_env_n *node, t_env_n **last)
 	*last = node;
 }
 
+/**
+ * @brief
+ * Set PWD from getcwd and export OLDPWD without value (like bash at startup).
+ * @order 1.1.1.3
+ */
 static void	ft_env_set_defaults(t_env *env)
 {
 	char	buffer[PATH_MAX];
-	char	*pwd;
 	char	*cwd;
 
-	pwd = ft_env_get(env, "PWD");
-	cwd = NULL;
-	if (!pwd)
-		cwd = getcwd(buffer, PATH_MAX);
+	cwd = getcwd(buffer, PATH_MAX);
 	if (cwd)
 		ft_env_set(env, "PWD", buffer);
+	ft_env_set(env, "OLDPWD", NULL);
 }
 
 /**

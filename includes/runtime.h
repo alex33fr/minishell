@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 16:40:21 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/05/23 11:38:04 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int		ft_exec_cmds(t_queue *tokens, char **pline, t_env *env, int ls);
 void	ft_setup_signals(void);
 void	ft_setup_signals_exec(void);
 void	ft_signals_child(void);
+int		ft_handle_signal(int last_status);
 
 /**
  * @brief
@@ -138,6 +139,7 @@ void	ft_err_1(void);
 void	ft_err_2(void);
 void	ft_err_3(char *cmd, int is_path);
 void	ft_err_4(char *target);
+int		ft_error5(void);
 int		ft_exit_err(t_env *env, char *arg);
 int		ft_export_print_sorted(t_env *env);
 int		ft_export_no_value(char *key, t_env *env);

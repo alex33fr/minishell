@@ -32,9 +32,9 @@ static int	ft_echo_words(char **argv, int i)
 	int	state;
 	int	size;
 
-	size = ft_strlen(argv[i]);
 	while (argv[i])
 	{
+		size = ft_strlen(argv[i]);
 		state = write(1, argv[i], size);
 		if (state == -1)
 			return (1);

@@ -11,7 +11,7 @@ Minishell is a project designed to create a simple shell. The goal is to develop
 - Interactive prompt with command history (readline)
 - Pipes (`|`) between commands
 - Redirections : `<` `>` `>>` `<<` (heredoc)
-- Variable expansion (`$VAR`, `$?`, `$$` → PID)
+- Variable expansion (`$VAR`, `$?`)
 - Single and double quote handling
 - Signals : `Ctrl+C`, `Ctrl+D`, `Ctrl+\`
 - Built-in commands : `cd`, `echo`, `env`, `export`, `unset`, `pwd`, `exit`
@@ -51,14 +51,16 @@ main()
   ├── ft_init(envp)                   → t_env* (env linked list)
   │     └── ft_setup_signals()        → SIGINT=sig_int, SIGQUIT=SIG_IGN
   └── ft_readline_loop()
-        ├── readline("minishell$ ")
+        ├── readline("minishell🔥66🔥$ ")          ← interactive
+        ├── ft_readline_nointeractive()             ← non-interactive
+        │     └── ft_read_heredoc_line() [×2 if line ends with |]
         ├── ft_handle_signal()        → if SIGINT → last_status=130
         └── ft_run_line()
               ├── ft_env_to_envp()    → t_env* list → char**
               ├── lexer()
               │     ├── check_syntax()
               │     ├── tokenize_line()
-              │     ├── do_expand()      → $VAR, $?, $$, quote removal
+              │     ├── do_expand()      → $VAR, $?, quote removal
               │     └── check_redir()
               ├── create_cmds()
               │     └── first_cmd() × N
