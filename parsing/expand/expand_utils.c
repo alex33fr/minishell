@@ -6,20 +6,20 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 11:09:30 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/28 13:22:16 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-char	*append(char *res, char *to_add)
-{
-	char	*tmp;
+// char	*append(char *res, char *to_add)
+// {
+// 	char	*tmp;
 
-	tmp = ft_strjoin(res, to_add);
-	free(res);
-	return (tmp);
-}
+// 	tmp = ft_strjoin(res, to_add);
+// 	free(res);
+// 	return (tmp);
+// }
 
 static char	*get_env_value(char *name, char **envp, int last_status)
 {
@@ -62,7 +62,7 @@ static int	get_var_len(char *str, int i)
 	return (var_len);
 }
 
-static char	*resolve_var(char *str, int *i, t_expand *ex, int var_len)
+char	*resolve_var(char *str, int *i, t_expand *ex, int var_len)
 {
 	char	*var_name;
 	char	*value;
@@ -75,23 +75,30 @@ static char	*resolve_var(char *str, int *i, t_expand *ex, int var_len)
 	return (value);
 }
 
-char	*handle_dollar(char *str, int *i, t_expand *ex, char *res)
+int	handle_dollar(char *str, int *i, t_expand *ex)
 {
 	char	*value;
 	int		var_len;
+	int		k;
 
 	var_len = get_var_len(str, *i);
 	if (var_len == 0)
 	{
+		ex->res[(ex->j)++] = '$';
 		(*i)++;
-		res = append(res, "$");
-		return (res);
+		return (1);
 	}
 	value = resolve_var(str, i, ex, var_len);
 	if (!value)
-		return (NULL);
-	res = append(res, value);
+		return (0);
+	k = 0;
+	while (value[k])
+	{
+		ex->res[ex->j] = value[k];
+		(ex->j)++;
+		k++;
+	}
 	free(value);
 	*i += 1 + var_len;
-	return (res);
+	return (1);
 }

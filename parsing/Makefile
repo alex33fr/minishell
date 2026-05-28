@@ -19,6 +19,7 @@ RESET   = \033[0m
 MY_SOURCES = $(EXPAND)expand_utils.c \
 			 $(EXPAND)expand_tools.c \
 			 $(EXPAND)expand_remove_quotes.c \
+			 $(EXPAND)expand_len.c \
              $(LEXER)check_syntax.c \
 			 $(LEXER)check_syntax_utils.c \
 			 $(LEXER)do_expand.c \

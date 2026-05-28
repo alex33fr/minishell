@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/19 11:08:31 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/28 13:44:09 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ typedef struct s_expand
 	int		last_status;
 	int		in_squote;
 	int		in_dquote;
+	char	*res;
+	int		j;
 }	t_expand;
 
 t_queue		*empty_queue(void);
@@ -90,7 +92,7 @@ int			ft_isspace(int c);
 int			skip_spaces(char *line);
 int			has_quotes(char *str);
 char		*unquoted(char *str);
-void		remove_quotes_delimiter(t_node *node);
+// void		remove_quotes_delimiter(t_node *node);
 t_queue		*do_expand(t_queue *q, char **envp, int last_status);
 t_queue		*lexer(char *line, char **envp, int last_status);
 
@@ -102,11 +104,14 @@ void		manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
 t_cmd		*create_cmds(t_queue *q);
 
-char		*append(char *res, char *to_add);
 char		*ft_get_pid_str(void);
-char		*handle_dollar(char *str, int *i, t_expand *ex, char *res);
+int			handle_dollar(char *str, int *i, t_expand *ex);
+size_t		get_expanded_len(char *str, char **envp, int last_status);
 t_expand	init_expand(char **envp, int l_status, int squote, int dquote);
-char		*process_char(char *str, int *i, t_expand *ex, char *res);
+int			manage_dollar_before_quote(char *str, int *i, t_expand *ex);
+int			manage_quotes(char *str, int *i, t_expand *ex);
+char		*resolve_var(char *str, int *i, t_expand *ex, int var_len);
+int			process_char(char *str, int *i, t_expand *ex);
 char		*expand_and_remove_quotes(char *str, char **envp, int last_status);
 
 #endif

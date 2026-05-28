@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 15:34:34 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/13 11:19:45 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/28 13:44:01 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,34 +32,37 @@ static void	quote_def(int *quote, char c)
 char	*unquoted(char *str)
 {
 	char	*res;
-	char	buf[2];
 	int		i;
+	int		j;
 	int		quote;
 
-	res = ft_strdup("");
-	buf[1] = '\0';
+	if (!str)
+		return (NULL);
+	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!res)
+		return (NULL);
 	i = 0;
+	j = 0;
 	quote = 0;
 	while (res && str[i])
 	{
-		if (!quote && (str[i] == '\'' || str[i] == '"'))
-			quote_def(&quote, str[i++]);
-		else if (quote && str[i] == quote)
+		if ((!quote && (str[i] == '\'' || str[i] == '"'))
+			|| (quote && str[i] == quote))
 			quote_def(&quote, str[i++]);
 		else
-		{
-			buf[0] = str[i++];
-			res = append(res, buf);
-		}
+			res[j++] = str[i++];
 	}
+	res[j] = '\0';
 	return (res);
 }
 
-void	remove_quotes_delimiter(t_node *node)
-{
-	char	*res;
+// void	remove_quotes_delimiter(t_node *node)
+// {
+// 	char	*res;
 
-	res = unquoted(node->value);
-	free(node->value);
-	node->value = res;
-}
+// 	if (!node || !node->value)
+// 		return ;
+// 	res = unquoted(node->value);
+// 	free(node->value);
+// 	node->value = res;
+// }

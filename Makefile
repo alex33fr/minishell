@@ -18,6 +18,7 @@ RESET = \033[0m
 SRCS =	main.c \
 		parsing/expand/expand_utils.c \
 		parsing/expand/expand_tools.c \
+		parsing/expand/expand_len.c \
 		parsing/expand/expand_remove_quotes.c \
 		parsing/lexer/check_syntax.c \
 		parsing/lexer/check_syntax_utils.c \
