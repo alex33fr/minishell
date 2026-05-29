@@ -6,20 +6,24 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 10:18:41 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/28 13:22:16 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/29 13:05:57 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-// char	*append(char *res, char *to_add)
-// {
-// 	char	*tmp;
+t_expand	init_expand(char **envp, int l_status, int squote, int dquote)
+{
+	t_expand	res;
 
-// 	tmp = ft_strjoin(res, to_add);
-// 	free(res);
-// 	return (tmp);
-// }
+	res.envp = envp;
+	res.last_status = l_status;
+	res.in_dquote = dquote;
+	res.in_squote = squote;
+	res.res = NULL;
+	res.j = 0;
+	return (res);
+}
 
 static char	*get_env_value(char *name, char **envp, int last_status)
 {

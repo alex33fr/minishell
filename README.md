@@ -51,7 +51,7 @@ main()
   ├── ft_init(envp)                   → t_env* (env linked list)
   │     └── ft_setup_signals()        → SIGINT=sig_int, SIGQUIT=SIG_IGN
   └── ft_readline_loop()
-        ├── readline("minishell🔥66🔥$ ")          ← interactive
+        ├── readline("🔥66🔥$ ")          ← interactive
         ├── ft_readline_nointeractive()            ← no-interactive
         │     └── ft_read_heredoc_line() [×2 if line ends with |]
         ├── ft_handle_signal()        → if SIGINT → last_status=130

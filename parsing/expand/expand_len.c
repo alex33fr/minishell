@@ -6,7 +6,7 @@
 /*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:55:13 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/28 13:54:43 by byonis           ###   ########.fr       */
+/*   Updated: 2026/05/29 11:42:38 by byonis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static size_t	get_env_len(char *str, int *i, t_expand *ex)
 		var_len = 1;
 	else
 	{
-		while (ft_isalnum(str[*i + 1 + var_len]) || str[*i + 1 + var_len] == '_')
+		while (ft_isalnum(str[*i + 1 + var_len])
+			|| str[*i + 1 + var_len] == '_')
 			var_len++;
 	}
 	if (var_len == 0)
@@ -40,6 +41,27 @@ static size_t	get_env_len(char *str, int *i, t_expand *ex)
 	return (len);
 }
 
+static size_t	process_len_char(char *str, int *i, t_expand *ex)
+{
+	if (manage_dollar_before_quote(str, i, ex)
+		|| manage_quotes(str, i, ex))
+		return (0) ;
+	if (!str[*i] || (str[*i] == '$' && !ex->in_squote))
+		return (get_env_len(str, i, ex));
+	if (str[*i] == '\\' && !ex->in_dquote && !ex->in_squote)
+	{
+		(*i)++;
+		if (str[*i])
+		{
+			(*i)++;
+			return (1);
+		}
+		return (0);
+	}
+	(*i)++;
+	return (1);
+}
+
 size_t	get_expanded_len(char *str, char **envp, int last_status)
 {
 	t_expand	ex;
@@ -50,30 +72,6 @@ size_t	get_expanded_len(char *str, char **envp, int last_status)
 	len = 0;
 	i = 0;
 	while (str[i])
-	{
-		if (manage_dollar_before_quote(str, &i, &ex)
-			|| manage_quotes(str, &i, &ex))
-			continue ;
-		else if (!str[i] || (str[i] == '$' && !ex.in_squote))
-		{
-			if (!str[i])
-				break ;
-			len += get_env_len(str, &i, &ex);
-		}
-		else if (str[i] == '\\' && !ex.in_dquote && !ex.in_squote)
-		{
-			i++;
-			if (str[i])
-			{
-				len++;
-				i++;
-			}
-		}
-		else
-		{
-			len++;
-			i++;
-		}
-	}
+		len += process_len_char(str, &i, &ex);
 	return (len);
 }

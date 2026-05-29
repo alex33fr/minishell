@@ -81,7 +81,7 @@ $(OBJ_DIR)/%.o: %.c
 
 $(NAME): $(OBJS) $(LIBFT_LIB)
 	@printf "$(GREEN)[Linking]$(RESET)\n"
-	@$(CC) $(CFLAGS) -no-pie $(OBJS) $(LIBFT_LIB) -lreadline -o $(NAME) || (printf "$(RED)Link error$(RESET)\n"; exit 1)
+	@$(CC) $(CFLAGS) -no-pie $(OBJS) $(LIBFT_LIB) -lreadline -lhistory -o $(NAME) || (printf "$(RED)Link error$(RESET)\n"; exit 1)
 	@printf "$(GREEN)[100%%] ========[ $(NAME) is ready to work ]======== [OK]$(RESET)\n"
 
 clean:
