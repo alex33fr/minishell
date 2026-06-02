@@ -106,6 +106,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 {
 	char			*line;
 	struct termios	saved;
+	int				status;
 
 	ft_bzero(&saved, sizeof(saved));
 	ft_set_heredoc_sig(&saved);
@@ -115,9 +116,11 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 			line = readline("> ");
 		else
 			line = ft_read_heredoc_line();
-		if (ft_heredoc_check(line, delimiter))
+		status = ft_heredoc_check(line, delimiter);
+		if (status)
 			break ;
-		if (ft_heredoc_process(fd, line, env))
+		status = ft_heredoc_process(fd, line, env);
+		if (status)
 			break ;
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
