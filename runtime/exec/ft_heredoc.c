@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/20 07:29:13 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/01 21:46:50 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,26 @@ static int	ft_heredoc_check(char *line, char *delimiter)
 
 /**
  * @brief
+ * Expand line, write to fd, free resources. Return 1 to break on failure.
+ * @order 1.2.3.5.2.1.4.1.5
+ */
+static int	ft_heredoc_process(int fd, char *line, t_env *env)
+{
+	char	**envp;
+	char	*expanded;
+
+	envp = ft_env_to_envp(env);
+	expanded = expand_and_remove_quotes(line, envp, env->exit_code);
+	free(line);
+	ft_free_tab(envp);
+	if (!expanded)
+		return (1);
+	ft_heredoc_write(fd, expanded);
+	return (0);
+}
+
+/**
+ * @brief
  * Read lines from stdin and write them to fd until delimiter or EOF is seen.
  * Disables ECHOCTL to suppress ^\ and ^C terminal echo, restores settings after.
  * @order 1.2.3.5.2.1.4.1
@@ -85,27 +105,20 @@ static int	ft_heredoc_check(char *line, char *delimiter)
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 {
 	char			*line;
-	char			**envp;
-	char			*expanded;
 	struct termios	saved;
-	int				status;
 
 	ft_bzero(&saved, sizeof(saved));
 	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
-		write(2, "> ", 2);
-		line = ft_read_heredoc_line();
-		status = ft_heredoc_check(line, delimiter);
-		if (status)
+		if (isatty(STDIN_FILENO))
+			line = readline("> ");
+		else
+			line = ft_read_heredoc_line();
+		if (ft_heredoc_check(line, delimiter))
 			break ;
-		envp = ft_env_to_envp(env);
-		expanded = expand_and_remove_quotes(line, envp, env->exit_code);
-		free(line);
-		ft_free_tab(envp);
-		if (!expanded)
+		if (ft_heredoc_process(fd, line, env))
 			break ;
-		ft_heredoc_write(fd, expanded);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
 	ft_setup_signals();
