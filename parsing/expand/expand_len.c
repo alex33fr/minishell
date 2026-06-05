@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_len.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:55:13 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/29 11:42:38 by byonis           ###   ########.fr       */
+/*   Updated: 2026/06/05 09:32:08 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static size_t	process_len_char(char *str, int *i, t_expand *ex)
 {
 	if (manage_dollar_before_quote(str, i, ex)
 		|| manage_quotes(str, i, ex))
-		return (0) ;
+		return (0);
 	if (!str[*i] || (str[*i] == '$' && !ex->in_squote))
 		return (get_env_len(str, i, ex));
 	if (str[*i] == '\\' && !ex->in_dquote && !ex->in_squote)
