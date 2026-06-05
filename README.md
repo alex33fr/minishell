@@ -14,6 +14,8 @@ Minishell is a project designed to create a simple shell. The goal is to develop
 - Variable expansion (`$VAR`, `$?`)
 - Single and double quote handling
 - Signals : `Ctrl+C`, `Ctrl+D`, `Ctrl+\`
+  - `Ctrl+C` during heredoc input cancels the heredoc and aborts the whole pipeline (no commands run)
+  - Empty-string commands (`""`, `''`) print the bash-style "Command '' not found" message instead of "Permission denied"
 - Built-in commands : `cd`, `echo`, `env`, `export`, `unset`, `pwd`, `exit`
 
 ## Project structure
@@ -37,9 +39,10 @@ minishell/
 │   ├── env/                → env linked list: ft_core, ft_access, ft_set,
 │   │                          ft_unset, ft_clear, ft_to_envp
 │   ├── exec/               → ft_exec, ft_cmd_list, ft_builtin_switch, ft_external,
-│   │                          ft_childs, ft_child_tools, ft_wait, ft_heredoc, ft_path
+│   │                          ft_childs, ft_child_tools, ft_wait, ft_heredoc,
+│   │                          ft_preread_heredoc, ft_path
 │   ├── pipes_redir_signals/ → ft_pipe, ft_pipe_tools, ft_redir, ft_redir_tools,
-│   │                          ft_signals, ft_signal_tools
+│   │                          ft_signals, ft_signal_tools (incl. ft_heredoc_getc)
 │   └── utils/              → ft_clear, ft_close, ft_errors, ft_errors2
 └── libft/
 ```
@@ -86,8 +89,11 @@ main()
                     │           │           └── ft_wait_child()
                     │           └── ft_restore_fds()
                     └── n>1 → ft_exec_pipeline()
-                          ├── ft_preread_heredocs()
-                          │     └── ft_heredoc_loop() × N
+                          ├── ft_preread_heredocs()          ← returns 1 on SIGINT
+                          │     └── ft_read_cmd_heredocs()   ← checks g_signal before+after loop
+                          │           └── ft_heredoc_loop()
+                          │                 └── readline() via ft_heredoc_getc()
+                          │                       └── on SIGINT: returns '\n' → readline exits cleanly
                           ├── ft_fork_loop()
                           │     ├── pipe() + fork() × N
                           │     └── child: ft_child()

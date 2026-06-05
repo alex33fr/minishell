@@ -68,6 +68,12 @@ char	*ft_resolve_path(t_exec *exec)
 /**
  * @brief
  * Call execve with path and argv from exec.
+ * If execve fails:
+ *   - argv[0] is empty string (from "" or '' input): print bash-style
+ *     "Command '' not found" instead of perror to avoid "Permission denied",
+ *     which occurs because ft_find_path("") resolves to a PATH directory
+ *     (access(dir, X_OK)==0) and execve on a directory returns EACCES.
+ *   - otherwise: perror(argv[0]) for the actual error.
  * Exit 126 if file exists but not executable, 127 if not found.
  * @order 1.2.3.5.2.2.3.1.2
  */

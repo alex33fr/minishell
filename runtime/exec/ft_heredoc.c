@@ -26,12 +26,19 @@ static void	ft_heredoc_write(int fd, char *line)
 
 /**
  * @brief
- * Disable ECHOCTL on stdin (storing original in *saved), set SIGINT/SIGQUIT.
- * `c_lflag &= ~ECHOCTL` clears only the ECHOCTL bit, leaving all others intact:
- *   c_lflag  : 1 1 1 1
- *   ~ECHOCTL : 1 1 0 1  <- only ECHOCTL bit is 0
- *   result   : 1 1 0 1  <- ECHOCTL cleared, rest unchanged
- * This prevents the terminal from printing "^C" when SIGINT fires in heredoc.
+ * Disable ECHOCTL on stdin (storing original in *saved), configure signals
+ * and readline for heredoc reading:
+ *   - ECHOCTL cleared so terminal does not auto-echo "^C" on SIGINT.
+ *     `c_lflag &= ~ECHOCTL` clears only the ECHOCTL bit:
+ *       c_lflag  : 1 1 1 1
+ *       ~ECHOCTL : 1 1 0 1
+ *       result   : 1 1 0 1
+ *   - rl_catch_signals = 0: prevents readline from installing its own SIGINT
+ *     handler, which would override ours and reset rl_done/internal state.
+ *   - rl_getc_function = ft_heredoc_getc: replaces readline's character reader
+ *     so EINTR/g_signal is checked on every read, allowing a single Ctrl+C
+ *     to exit the heredoc loop cleanly.
+ *   - SIGINT -> sig_int_heredoc, SIGQUIT ignored.
  * @order 1.2.3.5.2.1.4.1.3
  */
 static void	ft_set_heredoc_sig(struct termios *saved)
@@ -43,6 +50,8 @@ static void	ft_set_heredoc_sig(struct termios *saved)
 	raw = *saved;
 	raw.c_lflag = raw.c_lflag & ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
+	rl_catch_signals = 0;
+	rl_getc_function = ft_heredoc_getc;
 	sa.sa_handler = sig_int_heredoc;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
@@ -99,7 +108,9 @@ static int	ft_heredoc_process(int fd, char *line, t_env *env)
 /**
  * @brief
  * Read lines from stdin and write them to fd until delimiter or EOF is seen.
- * Disables ECHOCTL to suppress ^\ and ^C terminal echo, restores settings after.
+ * Sets up heredoc-specific signal handling before the loop and restores
+ * normal shell signals (rl_catch_signals, rl_getc_function, ft_setup_signals)
+ * after, whether the loop ended on delimiter, EOF, or SIGINT.
  * @order 1.2.3.5.2.1.4.1
  */
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
@@ -112,10 +123,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 	ft_set_heredoc_sig(&saved);
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			line = readline("> ");
-		else
-			line = ft_read_heredoc_line();
+		line = ft_read_heredoc_line();
 		status = ft_heredoc_check(line, delimiter);
 		if (status)
 			break ;
@@ -124,5 +132,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 			break ;
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
+	rl_catch_signals = 1;
+	rl_getc_function = rl_getc;
 	ft_setup_signals();
 }

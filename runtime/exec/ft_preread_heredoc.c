@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 11:04:17 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/22 11:04:17 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:00:30 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 /**
  * @brief
  * Open a pipe per heredoc in cmd, fill it via ft_heredoc_loop, store fd.
- * Returns 1 immediately if g_signal is set (SIGINT).
+ * Returns 1 immediately if g_signal is set before starting a heredoc.
+ * Also returns 1 (and closes the read end) if SIGINT fires during reading:
+ * without this second check the pipeline would fork and execute even though
+ * the heredoc was interrupted, running the commands with an empty stdin.
  * @order 1.2.3.5.3.2.1
  */
 static int	ft_read_cmd_heredocs(t_cmd *cmd, t_env *env)
@@ -37,6 +40,11 @@ static int	ft_read_cmd_heredocs(t_cmd *cmd, t_env *env)
 			fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
 			ft_heredoc_loop(pipefd[1], redir->file, env);
 			ft_close(pipefd[1], -1);
+			if (g_signal)
+			{
+				ft_close(pipefd[0], -1);
+				return (1);
+			}
 			redir->fd = pipefd[0];
 		}
 		redir = redir->next;

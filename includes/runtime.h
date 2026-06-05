@@ -80,6 +80,7 @@ int		ft_is_valid_name(char *s);
 int		ft_is_n_flag(char *s);
 char	*ft_read_heredoc_line(void);
 void	sig_int_heredoc(int sig);
+int		ft_heredoc_getc(FILE *stream);
 int		ft_preread_heredocs(t_cmd *cmds, t_env *env);
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env);
 
