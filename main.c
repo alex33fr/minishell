@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 09:24:03 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:20:07 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	ft_run_line(char **pline, t_env *env, int last_status)
  * so bash-style pipe continuation works in no-interactive mode.
  * @order 1.2.2
  */
-static char	*ft_readline_noninteractive(void)
+static char	*ft_readline_nointeractive(void)
 {
 	char	*line;
 	char	*next;
@@ -80,7 +80,7 @@ static char	*ft_readline_noninteractive(void)
 /**
  * @brief
  * Main read-eval loop.
- * Uses readline in interactive mode, ft_readline_noninteractive
+ * Uses readline in interactive mode, ft_readline_nointeractive
  * otherwise. Exits when EOF or exit_flag is set.
  * @order 1.2.3
  */
@@ -97,7 +97,7 @@ static int	ft_readline_loop(t_env *env)
 		if (interactive)
 			line = readline("minishell66$ ");
 		else
-			line = ft_readline_noninteractive();
+			line = ft_readline_nointeractive();
 		if (!line)
 		{
 			if (interactive)

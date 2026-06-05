@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:41:07 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 11:16:54 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:26:49 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,20 @@
 
 /**
  * @brief
- * Read one line from stdin character by character. Return NULL on EOF.
- * 4095 chars max, to avoid overflow. Caller must free the result.
+ * Read one heredoc line via readline (supports line editing). Return NULL on EOF.
+ * Caller must free the result.
  * @order 1.2.1 / 1.2.3.5.2.1.4.1.1
  */
 char	*ft_read_heredoc_line(void)
 {
-	char	buf[SHRT_MAX / 8];
-	char	c;
+	char	*line;
 	char	*res;
-	int		i;
-	int		r;
 
-	i = 0;
-	while (i < (SHRT_MAX / 8) - 1)
-	{
-		r = read(STDIN_FILENO, &c, 1);
-		if (r <= 0)
-			break ;
-		if (c == '\n')
-			break ;
-		buf[i++] = c;
-	}
-	if (r <= 0 && i == 0)
+	line = readline("> ");
+	if (!line)
 		return (NULL);
-	buf[i] = '\0';
-	res = ft_strdup(buf);
-	if (!res)
-		return (NULL);
+	res = ft_strdup(line);
+	free(line);
 	return (res);
 }
 
