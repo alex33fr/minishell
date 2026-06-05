@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:41:07 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 11:26:49 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 15:45:04 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 /**
  * @brief
- * Read one heredoc line via readline (supports line editing). Return NULL on EOF.
+ * Read one heredoc line via readline (supports line editing).
+ * Return NULL on EOF.
  * Caller must free the result.
  * @order 1.2.1 / 1.2.3.5.2.1.4.1.1
  */

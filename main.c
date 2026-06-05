@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 14:26:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 11:20:07 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 15:55:29 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	ft_readline_loop(t_env *env)
 	while (1)
 	{
 		if (interactive)
-			line = readline("minishell66$ ");
+			line = readline("minishell66:$ ");
 		else
 			line = ft_readline_nointeractive();
 		if (!line)

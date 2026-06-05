@@ -5,4 +5,5 @@ parsing/libparsing.a
 obj/
 libft/libft.a
 libft/
+minishell_tester
 minishell

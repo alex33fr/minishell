@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:28:44 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/19 15:36:32 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 15:44:09 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ void	ft_exec_child(t_exec *exec, char *path)
 	int			is_path;
 
 	execve(path, exec->argv, exec->envp);
-	perror(exec->argv[0]);
+	if (exec->argv[0][0] == '\0')
+		ft_putstr_fd("Command '' not found, but can be installed with:\n", 2);
+	else
+		perror(exec->argv[0]);
 	status = stat(path, &st);
 	if (status != 0)
 	{
