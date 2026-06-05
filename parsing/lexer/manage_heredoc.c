@@ -16,7 +16,7 @@ int	has_quotes(char *str)
 {
 	if (!str)
 		return (0);
-	if (ft_strchr(str, '\''))
+	if (ft_strchr(str, '\'') || ft_strchr(str, '"'))
 		return (1);
 	return (0);
 }

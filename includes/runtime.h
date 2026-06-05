@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/23 13:04:03 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:50:01 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*ft_read_heredoc_line(void);
 void	sig_int_heredoc(int sig);
 int		ft_heredoc_getc(FILE *stream);
 int		ft_preread_heredocs(t_cmd *cmds, t_env *env);
-void	ft_heredoc_loop(int fd, char *delimiter, t_env *env);
+void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q);
 
 /**
  * @brief
@@ -110,7 +110,7 @@ int		ft_apply_redirs(t_redir *redir, t_env *env);
 int		ft_redir_in(char *file);
 int		ft_redir_out(char *file);
 int		ft_redir_join(char *file);
-int		ft_redir_heredoc(char *delimiter, t_env *env);
+int		ft_redir_heredoc(char *delimiter, t_env *env, int h_q);
 
 /**
  * @brief

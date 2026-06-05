@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 11:04:17 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 17:00:30 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:48:41 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	ft_read_cmd_heredocs(t_cmd *cmd, t_env *env)
 			if (status == -1)
 				return (1);
 			fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
-			ft_heredoc_loop(pipefd[1], redir->file, env);
+			ft_heredoc_loop(pipefd[1], redir->file, env, redir->heredoc_quoted);
 			ft_close(pipefd[1], -1);
 			if (g_signal)
 			{

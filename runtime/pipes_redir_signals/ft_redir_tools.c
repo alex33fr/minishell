@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 10:37:52 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 14:56:26 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:51:08 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	ft_apply_one_redir(t_redir *redir, t_env *env)
 		return (0);
 	}
 	else if (redir->type == T_HEREDOC)
-		status = ft_redir_heredoc(redir->file, env);
+		status = ft_redir_heredoc(redir->file, env, redir->heredoc_quoted);
 	else
 		status = 0;
 	return (status);

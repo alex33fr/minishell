@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:41:07 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 15:45:04 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:49:51 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_read_heredoc_line(void)
  * @return int
  * @order 1.2.3.5.2.1.4
  */
-int	ft_redir_heredoc(char *delimiter, t_env *env)
+int	ft_redir_heredoc(char *delimiter, t_env *env, int h_q)
 {
 	int	pipefd[2];
 	int	status;
@@ -51,7 +51,7 @@ int	ft_redir_heredoc(char *delimiter, t_env *env)
 		perror("pipe");
 		return (1);
 	}
-	ft_heredoc_loop(pipefd[1], delimiter, env);
+	ft_heredoc_loop(pipefd[1], delimiter, env, h_q);
 	ft_close(pipefd[1], -1);
 	status = dup2(pipefd[0], STDIN_FILENO);
 	if (status < 0)

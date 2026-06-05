@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/01 21:46:50 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:46:42 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,16 @@ static int	ft_heredoc_check(char *line, char *delimiter)
  * Expand line, write to fd, free resources. Return 1 to break on failure.
  * @order 1.2.3.5.2.1.4.1.5
  */
-static int	ft_heredoc_process(int fd, char *line, t_env *env)
+static int	ft_heredoc_process(int fd, char *line, t_env *env, int h_q)
 {
 	char	**envp;
 	char	*expanded;
 
+	if (h_q)
+	{
+		ft_heredoc_write(fd, line);
+		return (0);
+	}
 	envp = ft_env_to_envp(env);
 	expanded = expand_and_remove_quotes(line, envp, env->exit_code);
 	free(line);
@@ -113,7 +118,7 @@ static int	ft_heredoc_process(int fd, char *line, t_env *env)
  * after, whether the loop ended on delimiter, EOF, or SIGINT.
  * @order 1.2.3.5.2.1.4.1
  */
-void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
+void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 {
 	char			*line;
 	struct termios	saved;
@@ -127,7 +132,7 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env)
 		status = ft_heredoc_check(line, delimiter);
 		if (status)
 			break ;
-		status = ft_heredoc_process(fd, line, env);
+		status = ft_heredoc_process(fd, line, env, h_q);
 		if (status)
 			break ;
 	}

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 13:32:55 by byonis            #+#    #+#             */
-/*   Updated: 2026/05/15 14:12:05 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:43:10 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	args_number_in_cmd(t_queue *q)
 	return (count_word);
 }
 
-static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
+static int	add_redir_back(t_redir **redirs, t_tok tok, char *file, int h_q)
 {
 	t_redir	*new_node;
 	t_redir	*temp;
@@ -47,6 +47,7 @@ static int	add_redir_back(t_redir **redirs, t_tok tok, char *file)
 	new_node->file = file;
 	new_node->type = tok;
 	new_node->next = NULL;
+	new_node->heredoc_quoted = h_q;
 	new_node->fd = -1;
 	if (!*redirs)
 		*redirs = new_node;
@@ -84,13 +85,16 @@ int	manage_cmd_redir(t_queue *q, t_cmd *res)
 {
 	t_tok	redir_type;
 	char	*file;
+	int		heredoc_quoted;
 
 	redir_type = q->front->token;
 	dequeue(q, NULL);
+	heredoc_quoted = 0;
 	if (q->front->token == T_WORD)
 	{
+		heredoc_quoted = q->front->heredoc_quoted;
 		dequeue(q, &file);
-		if (!add_redir_back(&res->redir, redir_type, file))
+		if (!add_redir_back(&res->redir, redir_type, file, heredoc_quoted))
 		{
 			free_cmds(res);
 			return (0);
