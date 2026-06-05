@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 09:41:07 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/20 14:13:57 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:16:54 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
  */
 char	*ft_read_heredoc_line(void)
 {
-	char	buf[4096];
+	char	buf[SHRT_MAX / 8];
 	char	c;
 	char	*res;
 	int		i;
 	int		r;
 
 	i = 0;
-	while (i < 4095)
+	while (i < (SHRT_MAX / 8) - 1)
 	{
 		r = read(STDIN_FILENO, &c, 1);
 		if (r <= 0)
