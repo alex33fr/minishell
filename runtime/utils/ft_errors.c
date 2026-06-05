@@ -31,7 +31,7 @@ int	ft_export_err(char *s)
  */
 void	ft_err_1(void)
 {
-	ft_putstr_fd("> \nwarning: here-document delimited by EOF\n", 2);
+	ft_putstr_fd("warning: here-document delimited by EOF\n", 2);
 }
 
 /**
