@@ -88,6 +88,7 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	int		ret;
 
 	ft_child_init_exec(&exec, cmd, fds, env);
+	env->in_child = 1;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	ft_child_setup_pipes(fds);

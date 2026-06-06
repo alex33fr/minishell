@@ -14,48 +14,16 @@
 
 /**
  * @brief
- * SIGINT handler during heredoc input: store signal number, write "^C".
- * No newline here: ft_heredoc_getc returns '\n' so readline echoes it,
- * avoiding a spurious blank line after ^C.
- * ECHOCTL is disabled so the terminal does not echo "^C" on its own.
+ * SIGINT handler during heredoc input: store the signal number, print a
+ * newline, then close stdin so readline's blocked read fails and returns
+ * NULL, which breaks the heredoc loop cleanly (no rl_getc_function needed).
  * @order 1.2.3.5.2.1.4.1.2
  */
 void	sig_int_heredoc(int sig)
 {
 	g_signal = sig;
-	write(1, "^C", 2);
-}
-
-/**
- * @brief
- * Custom rl_getc_function used during heredoc reading.
- * Replaces readline's default character reader so we control EINTR handling:
- *   - if g_signal is set (SIGINT arrived), return '\n' so readline closes
- *     the current line cleanly and returns "", which ft_heredoc_check catches.
- *   - if read() is interrupted (EINTR) without a signal, retry.
- *   - on any other error or EOF, return EOF to stop readline.
- * stream is ignored: we always read from STDIN_FILENO directly.
- * rl_catch_signals must be 0 when this is active so readline does not
- * reinstall its own SIGINT handler and override ours.
- * @order 1.2.3.5.2.1.4.1.2.1
- */
-int	ft_heredoc_getc(FILE *stream)
-{
-	unsigned char	c;
-	int				ret;
-
-	(void)stream;
-	while (1)
-	{
-		if (g_signal)
-			return ('\n');
-		ret = read(STDIN_FILENO, &c, 1);
-		if (ret == 1)
-			return ((int)c);
-		if (errno == EINTR && !g_signal)
-			continue ;
-		return (EOF);
-	}
+	write(1, "\n", 1);
+	close(STDIN_FILENO);
 }
 
 /**

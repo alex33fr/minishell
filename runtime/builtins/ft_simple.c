@@ -51,7 +51,7 @@ static int	ft_exit_set(t_env *env, int code)
 	int	is_main;
 
 	is_tty = isatty(STDIN_FILENO);
-	is_main = (getpid() == env->main_pid);
+	is_main = (env->in_child == 0);
 	if (is_tty && is_main)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	env->exit_flag = 1;

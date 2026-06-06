@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-char	*ft_get_pid_str(void)
-{
-	pid_t	pid;
-	char	*res;
-
-	pid = getpid();
-	res = ft_itoa(pid);
-	return (res);
-}
-
 /**
  * @brief
  * Write each word separated by spaces. Return 1 on write error.

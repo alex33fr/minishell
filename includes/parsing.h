@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 12:37:52 by byonis            #+#    #+#             */
-/*   Updated: 2026/06/05 17:38:14 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 08:03:48 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_redir
 	t_tok			type;
 	char			*file;
 	int				fd;
-	int             heredoc_quoted;
+	int				heredoc_quoted;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -93,7 +93,6 @@ int			ft_isspace(int c);
 int			skip_spaces(char *line);
 int			has_quotes(char *str);
 char		*unquoted(char *str);
-// void		remove_quotes_delimiter(t_node *node);
 t_queue		*do_expand(t_queue *q, char **envp, int last_status);
 t_queue		*lexer(char *line, char **envp, int last_status);
 
@@ -105,7 +104,6 @@ void		manage_cmd_word(t_queue *q, t_cmd *res, int *i);
 
 t_cmd		*create_cmds(t_queue *q);
 
-char		*ft_get_pid_str(void);
 int			handle_dollar(char *str, int *i, t_expand *ex);
 size_t		get_expanded_len(char *str, char **envp, int last_status);
 t_expand	init_expand(char **envp, int l_status, int squote, int dquote);

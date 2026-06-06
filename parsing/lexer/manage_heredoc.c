@@ -55,14 +55,3 @@ char	*unquoted(char *str)
 	res[j] = '\0';
 	return (res);
 }
-
-// void	remove_quotes_delimiter(t_node *node)
-// {
-// 	char	*res;
-
-// 	if (!node || !node->value)
-// 		return ;
-// 	res = unquoted(node->value);
-// 	free(node->value);
-// 	node->value = res;
-// }

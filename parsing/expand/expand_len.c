@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:55:13 by byonis            #+#    #+#             */
-/*   Updated: 2026/06/05 09:32:08 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 09:52:12 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static size_t	get_env_len(char *str, int *i, t_expand *ex)
 	size_t	len;
 
 	var_len = 0;
-	if (str[*i + 1] == '?' || str[*i + 1] == '$')
+	if (str[*i + 1] == '?')
 		var_len = 1;
 	else
 	{

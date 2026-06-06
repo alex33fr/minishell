@@ -90,10 +90,11 @@ main()
                     │           └── ft_restore_fds()
                     └── n>1 → ft_exec_pipeline()
                           ├── ft_preread_heredocs()          ← returns 1 on SIGINT
-                          │     └── ft_read_cmd_heredocs()   ← checks g_signal before+after loop
-                          │           └── ft_heredoc_loop()
-                          │                 └── readline() via ft_heredoc_getc()
-                          │                       └── on SIGINT: returns '\n' → readline exits cleanly
+                          │     └── ft_read_cmd_heredocs()   ← iterates each cmd's redirs
+                          │           └── ft_read_one_heredoc() ← g_signal check before/after
+                          │                 └── ft_heredoc_loop()  (stdin saved via dup)
+                          │                       └── readline("> ")
+                          │                             └── on SIGINT: sig_int_heredoc closes stdin → readline returns NULL
                           ├── ft_fork_loop()
                           │     ├── pipe() + fork() × N
                           │     └── child: ft_child()

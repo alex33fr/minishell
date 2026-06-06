@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:35:19 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/07 09:59:27 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 09:59:33 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,12 @@ static char	*ft_search_path(char **paths, char *cmd)
  */
 int	ft_is_path_cmd(char *cmd)
 {
+	char	*found;
+
 	if (!cmd)
 		return (0);
-	if (ft_strchr(cmd, '/'))
+	found = ft_strchr(cmd, '/');
+	if (found)
 		return (1);
 	return (0);
 }

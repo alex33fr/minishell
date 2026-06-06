@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 17:46:42 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 08:26:30 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ static void	ft_heredoc_write(int fd, char *line)
  *       ~ECHOCTL : 1 1 0 1
  *       result   : 1 1 0 1
  *   - rl_catch_signals = 0: prevents readline from installing its own SIGINT
- *     handler, which would override ours and reset rl_done/internal state.
- *   - rl_getc_function = ft_heredoc_getc: replaces readline's character reader
- *     so EINTR/g_signal is checked on every read, allowing a single Ctrl+C
- *     to exit the heredoc loop cleanly.
- *   - SIGINT -> sig_int_heredoc, SIGQUIT ignored.
+ *     handler, so our SIGINT handler fires during readline.
+ *   - SIGINT -> sig_int_heredoc (closes stdin to unblock readline),
+ *     SIGQUIT ignored.
  * @order 1.2.3.5.2.1.4.1.3
  */
 static void	ft_set_heredoc_sig(struct termios *saved)
@@ -51,7 +49,6 @@ static void	ft_set_heredoc_sig(struct termios *saved)
 	raw.c_lflag = raw.c_lflag & ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 	rl_catch_signals = 0;
-	rl_getc_function = ft_heredoc_getc;
 	sa.sa_handler = sig_int_heredoc;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
@@ -113,17 +110,19 @@ static int	ft_heredoc_process(int fd, char *line, t_env *env, int h_q)
 /**
  * @brief
  * Read lines from stdin and write them to fd until delimiter or EOF is seen.
- * Sets up heredoc-specific signal handling before the loop and restores
- * normal shell signals (rl_catch_signals, rl_getc_function, ft_setup_signals)
- * after, whether the loop ended on delimiter, EOF, or SIGINT.
+ * Backs up stdin (dup) before the loop and restores it (dup2) after, because
+ * the SIGINT handler closes stdin to unblock readline. Restores termios and
+ * normal shell signals whether the loop ended on delimiter, EOF, or SIGINT.
  * @order 1.2.3.5.2.1.4.1
  */
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 {
 	char			*line;
 	struct termios	saved;
+	int				saved_stdin;
 	int				status;
 
+	saved_stdin = dup(STDIN_FILENO);
 	ft_bzero(&saved, sizeof(saved));
 	ft_set_heredoc_sig(&saved);
 	while (1)
@@ -136,8 +135,9 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 		if (status)
 			break ;
 	}
+	dup2(saved_stdin, STDIN_FILENO);
+	ft_close(saved_stdin, -1);
 	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
 	rl_catch_signals = 1;
-	rl_getc_function = rl_getc;
 	ft_setup_signals();
 }

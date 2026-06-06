@@ -19,7 +19,7 @@
  */
 int	ft_exit_err(t_env *env, char *arg)
 {
-	if (isatty(STDIN_FILENO) && getpid() == env->main_pid)
+	if (isatty(STDIN_FILENO) && !env->in_child)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	ft_putstr_fd("exit: ", 2);
 	ft_putstr_fd(arg, 2);

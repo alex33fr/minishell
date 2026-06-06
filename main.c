@@ -43,6 +43,7 @@ static int	ft_run_line(char **pline, t_env *env, int last_status)
 		}
 		return (2);
 	}
+	env->exit_code = last_status;
 	last_status = ft_exec_cmds(tokens, pline, env, last_status);
 	return (last_status);
 }
@@ -129,7 +130,6 @@ int	main(int ac, char **av, char **envp)
 	env = ft_init(envp);
 	if (!env)
 		return (1);
-	env->main_pid = getpid();
 	status = ft_readline_loop(env);
 	ft_env_clear(env);
 	rl_clear_history();
