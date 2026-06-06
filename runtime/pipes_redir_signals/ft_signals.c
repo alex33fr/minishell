@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signals.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byonis <byonis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 08:55:14 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/29 13:27:46 by byonis           ###   ########.fr       */
+/*   Updated: 2026/06/06 17:44:43 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,17 @@ void	ft_signals_child(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+}
+
+/**
+ * @brief
+ * Setup signals for heredoc input: SIGINT closes stdin to unblock readline.
+ * @order 1.2.3.5.2.1.4.1.2
+ */
+void	ft_setup_signals_heredoc(void)
+{
+	signal(SIGINT, sig_int_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 /**

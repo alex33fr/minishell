@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/06 08:26:30 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 18:09:56 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,38 +22,6 @@ static void	ft_heredoc_write(int fd, char *line)
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
 	free(line);
-}
-
-/**
- * @brief
- * Disable ECHOCTL on stdin (storing original in *saved), configure signals
- * and readline for heredoc reading:
- *   - ECHOCTL cleared so terminal does not auto-echo "^C" on SIGINT.
- *     `c_lflag &= ~ECHOCTL` clears only the ECHOCTL bit:
- *       c_lflag  : 1 1 1 1
- *       ~ECHOCTL : 1 1 0 1
- *       result   : 1 1 0 1
- *   - rl_catch_signals = 0: prevents readline from installing its own SIGINT
- *     handler, so our SIGINT handler fires during readline.
- *   - SIGINT -> sig_int_heredoc (closes stdin to unblock readline),
- *     SIGQUIT ignored.
- * @order 1.2.3.5.2.1.4.1.3
- */
-static void	ft_set_heredoc_sig(struct termios *saved)
-{
-	struct sigaction	sa;
-	struct termios		raw;
-
-	tcgetattr(STDIN_FILENO, saved);
-	raw = *saved;
-	raw.c_lflag = raw.c_lflag & ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &raw);
-	rl_catch_signals = 0;
-	sa.sa_handler = sig_int_heredoc;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
 }
 
 /**
@@ -118,13 +86,11 @@ static int	ft_heredoc_process(int fd, char *line, t_env *env, int h_q)
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 {
 	char			*line;
-	struct termios	saved;
-	int				saved_stdin;
 	int				status;
+	int				saved_stdin;
 
 	saved_stdin = dup(STDIN_FILENO);
-	ft_bzero(&saved, sizeof(saved));
-	ft_set_heredoc_sig(&saved);
+	ft_setup_signals_heredoc();
 	while (1)
 	{
 		line = ft_read_heredoc_line();
@@ -135,9 +101,10 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 		if (status)
 			break ;
 	}
-	dup2(saved_stdin, STDIN_FILENO);
-	ft_close(saved_stdin, -1);
-	tcsetattr(STDIN_FILENO, TCSANOW, &saved);
-	rl_catch_signals = 1;
+	if (saved_stdin >= 0)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
 	ft_setup_signals();
 }

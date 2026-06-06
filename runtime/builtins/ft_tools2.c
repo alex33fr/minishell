@@ -84,6 +84,7 @@ int	ft_exit_parse_arg(t_env *env, char **args, char *arg, long *val)
 	if (args[2])
 	{
 		free(arg);
+		ft_putstr_fd("exit\n", 2);
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		return (1);
 	}

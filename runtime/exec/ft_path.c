@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:35:19 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/06 09:59:33 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 11:41:52 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ static char	**ft_get_path_splitted(t_env *env)
  */
 static char	*ft_search_path(char **paths, char *cmd)
 {
-	char	*path;
-	int		i;
+	char		*path;
+	struct stat	st;
+	int			i;
 
 	i = 0;
 	if (!paths || !cmd)
@@ -58,7 +59,8 @@ static char	*ft_search_path(char **paths, char *cmd)
 		path = ft_join_cmd_path(paths[i], cmd);
 		if (!path)
 			return (NULL);
-		if (access(path, X_OK) == 0)
+		if (access(path, X_OK) == 0 && stat(path, &st) == 0
+			&& !S_ISDIR(st.st_mode))
 			return (path);
 		free(path);
 		i++;

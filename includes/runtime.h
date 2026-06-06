@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 10:14:09 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 17:50:01 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 10:39:57 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int		ft_exec_cmds(t_queue *tokens, char **pline, t_env *env, int ls);
  */
 void	ft_setup_signals(void);
 void	ft_setup_signals_exec(void);
+void	ft_setup_signals_heredoc(void);
 void	ft_signals_child(void);
 int		ft_handle_signal(int last_status);
 

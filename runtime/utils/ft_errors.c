@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:48:14 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 18:14:41 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 11:39:36 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_err_2(void)
 void	ft_err_3(char *cmd, int is_path)
 {
 	ft_putstr_fd(cmd, 2);
-	if (!is_path)
+	if (is_path)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else
 		ft_putstr_fd(": command not found\n", 2);

@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 14:28:44 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/05 15:44:09 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 11:50:11 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,13 @@ char	*ft_resolve_path(t_exec *exec)
 {
 	char	*path;
 
+	if (ft_strcmp(exec->argv[0], ".") == 0)
+	{
+		ft_putstr_fd(".: filename argument required\n", 2);
+		ft_putstr_fd(".: usage: . filename [arguments]\n", 2);
+		ft_child_free(exec);
+		exit(2);
+	}
 	path = ft_find_path(exec->argv[0], exec->env);
 	if (!path)
 	{
@@ -86,7 +93,7 @@ void	ft_exec_child(t_exec *exec, char *path)
 
 	execve(path, exec->argv, exec->envp);
 	if (exec->argv[0][0] == '\0')
-		ft_putstr_fd("Command '' not found, but can be installed with:\n", 2);
+		ft_putstr_fd("Command '' not found =)\n", 2);
 	else
 		perror(exec->argv[0]);
 	status = stat(path, &st);
