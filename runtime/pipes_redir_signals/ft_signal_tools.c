@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 13:18:06 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/23 11:37:07 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 19:04:45 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,17 @@ void	sig_int_heredoc(int sig)
 	g_signal = sig;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
+}
+
+/**
+ * @brief
+ * Setup signals for heredoc input: SIGINT closes stdin to unblock readline.
+ * @order 1.2.3.5.2.1.4.1.2
+ */
+void	ft_setup_signals_heredoc(void)
+{
+	signal(SIGINT, sig_int_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 /**

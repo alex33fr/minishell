@@ -40,7 +40,7 @@ static int	ft_exec_redir(t_cmd *cmd, t_env *env)
 		ft_restore_fds(cmd);
 		return (130);
 	}
-	status = ft_apply_redirs(cmd->redir, env);
+	status = ft_apply_redirs(cmd->redir);
 	if (status)
 	{
 		ft_close_heredoc_fds(cmd, NULL);

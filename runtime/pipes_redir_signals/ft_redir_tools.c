@@ -17,7 +17,7 @@
  * Apply all redirections in the list in order. Return 1 on first failure.
  * @order 1.2.3.5.2.1
  */
-static int	ft_apply_one_redir(t_redir *redir, t_env *env)
+static int	ft_apply_one_redir(t_redir *redir)
 {
 	int	status;
 
@@ -36,20 +36,18 @@ static int	ft_apply_one_redir(t_redir *redir, t_env *env)
 		redir->fd = -1;
 		return (0);
 	}
-	else if (redir->type == T_HEREDOC)
-		status = ft_redir_heredoc(redir->file, env, redir->heredoc_quoted);
 	else
 		status = 0;
 	return (status);
 }
 
-int	ft_apply_redirs(t_redir *redir, t_env *env)
+int	ft_apply_redirs(t_redir *redir)
 {
 	int	status;
 
 	while (redir)
 	{
-		status = ft_apply_one_redir(redir, env);
+		status = ft_apply_one_redir(redir);
 		if (status)
 			return (1);
 		redir = redir->next;

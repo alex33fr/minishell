@@ -93,7 +93,7 @@ void	ft_child(t_cmd *cmd, t_env *env, t_pipe_fds *fds)
 	signal(SIGQUIT, SIG_IGN);
 	ft_child_setup_pipes(fds);
 	ft_child_close_heredocs(cmd);
-	ret = ft_apply_redirs(cmd->redir, env);
+	ret = ft_apply_redirs(cmd->redir);
 	if (ret)
 		ft_builtin_child_exit(&exec, 1);
 	if (!cmd->args || !cmd->args[0])

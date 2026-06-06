@@ -51,17 +51,6 @@ void	ft_signals_child(void)
 
 /**
  * @brief
- * Setup signals for heredoc input: SIGINT closes stdin to unblock readline.
- * @order 1.2.3.5.2.1.4.1.2
- */
-void	ft_setup_signals_heredoc(void)
-{
-	signal(SIGINT, sig_int_heredoc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-/**
- * @brief
  * SIGINT handler while parent waits for a child: no readline calls.
  * @order 1.2.3.5.2.1
  */

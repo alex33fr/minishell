@@ -42,7 +42,7 @@ minishell/
 │   │                          ft_childs, ft_child_tools, ft_wait, ft_heredoc,
 │   │                          ft_preread_heredoc, ft_path
 │   ├── pipes_redir_signals/ → ft_pipe, ft_pipe_tools, ft_redir, ft_redir_tools,
-│   │                          ft_signals, ft_signal_tools (incl. ft_heredoc_getc)
+│   │                          ft_signals, ft_signal_tools
 │   └── utils/              → ft_clear, ft_close, ft_errors, ft_errors2
 └── libft/
 ```
@@ -71,13 +71,12 @@ main()
                     ├── n==1 → ft_exec_single()
                     │     ├── (no redir) ft_exec_cmd()
                     │     └── (redir) dup() + ft_exec_redir()
-                    │           ├── ft_preread_heredocs()  → << delim (pre-read)
+                    │           ├── ft_preread_heredocs()  → << delim (fork, see n>1)
                     │           ├── ft_apply_redirs()
                     │           │     ├── ft_redir_in()       → < file
                     │           │     ├── ft_redir_out()      → > file
                     │           │     ├── ft_redir_join()     → >> file
-                    │           │     └── ft_redir_heredoc()  → << delim
-                    │           │           └── ft_heredoc_loop()
+                    │           │     └── (heredoc) dup2(redir->fd, STDIN) ← pre-read pipe
                     │           ├── ft_exec_cmd()
                     │           │     ├── ft_exec_builtin()   → cd, echo, env,
                     │           │     │                          export, unset,
@@ -91,10 +90,12 @@ main()
                     └── n>1 → ft_exec_pipeline()
                           ├── ft_preread_heredocs()          ← returns 1 on SIGINT
                           │     └── ft_read_cmd_heredocs()   ← iterates each cmd's redirs
-                          │           └── ft_read_one_heredoc() ← g_signal check before/after
-                          │                 └── ft_heredoc_loop()  (stdin saved via dup)
-                          │                       └── readline("> ")
-                          │                             └── on SIGINT: sig_int_heredoc closes stdin → readline returns NULL
+                          │           └── ft_read_one_heredoc() ← pipe() + fork()
+                          │                 ├── child: ft_heredoc_child()
+                          │                 │     ├── ft_heredoc_loop() → readline("> ")
+                          │                 │     │     └── on SIGINT: sig_int_heredoc closes stdin → readline NULL
+                          │                 │     └── free cmds/env + exit(130/0)
+                          │                 └── parent: ft_heredoc_wait() → waitpid, SIGINT→g_signal
                           ├── ft_fork_loop()
                           │     ├── pipe() + fork() × N
                           │     └── child: ft_child()

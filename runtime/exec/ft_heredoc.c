@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:13:42 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/06/06 18:09:56 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/06 19:00:44 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,17 @@ static int	ft_heredoc_process(int fd, char *line, t_env *env, int h_q)
 /**
  * @brief
  * Read lines from stdin and write them to fd until delimiter or EOF is seen.
- * Backs up stdin (dup) before the loop and restores it (dup2) after, because
- * the SIGINT handler closes stdin to unblock readline. Restores termios and
- * normal shell signals whether the loop ended on delimiter, EOF, or SIGINT.
+ * Runs inside the forked heredoc child (see ft_heredoc_child): installs the
+ * heredoc SIGINT handler before the loop, restores normal signals after.
+ * On SIGINT, sig_int_heredoc closes stdin so readline returns NULL and the
+ * loop breaks; readline corruption stays in the child, never the parent.
  * @order 1.2.3.5.2.1.4.1
  */
 void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 {
-	char			*line;
-	int				status;
-	int				saved_stdin;
+	char	*line;
+	int		status;
 
-	saved_stdin = dup(STDIN_FILENO);
 	ft_setup_signals_heredoc();
 	while (1)
 	{
@@ -100,11 +99,6 @@ void	ft_heredoc_loop(int fd, char *delimiter, t_env *env, int h_q)
 		status = ft_heredoc_process(fd, line, env, h_q);
 		if (status)
 			break ;
-	}
-	if (saved_stdin >= 0)
-	{
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
 	}
 	ft_setup_signals();
 }

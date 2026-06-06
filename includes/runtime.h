@@ -105,11 +105,10 @@ void	ft_close_heredoc_fds(t_cmd *head, t_cmd *skip);
  * @brief
  * REDIRECTIONS
  */
-int		ft_apply_redirs(t_redir *redir, t_env *env);
+int		ft_apply_redirs(t_redir *redir);
 int		ft_redir_in(char *file);
 int		ft_redir_out(char *file);
 int		ft_redir_join(char *file);
-int		ft_redir_heredoc(char *delimiter, t_env *env, int h_q);
 
 /**
  * @brief
