@@ -6,7 +6,7 @@
 /*   By: aprivalo <aprivalo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 10:02:48 by aprivalo          #+#    #+#             */
-/*   Updated: 2026/05/23 00:38:47 by aprivalo         ###   ########.fr       */
+/*   Updated: 2026/06/08 09:32:18 by aprivalo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	ft_export_no_value(char *key, t_env *env)
 	node = env->head;
 	while (node)
 	{
-		if (ft_strcmp(node->key, key) == 0)
+		if (ft_strcmp(node->key, key) == 0 && node->value != NULL)
 			return (0);
 		node = node->next;
 	}
