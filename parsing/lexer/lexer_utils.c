@@ -39,7 +39,6 @@ int	next_token(char *line, t_tok tok)
 {
 	int		res;
 
-	res = 0;
 	if (tok == T_WORD)
 		return (get_first_word_len(line));
 	else if (tok == T_REDIRIN || tok == T_PIPE || tok == T_REDIROUT)

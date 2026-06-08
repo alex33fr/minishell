@@ -96,14 +96,12 @@ void	ft_exec_child(t_exec *exec, char *path)
 		ft_putstr_fd("Command '' not found =)\n", 2);
 	else
 		perror(exec->argv[0]);
+	is_path = (ft_strchr(exec->argv[0], '/') != NULL);
 	status = stat(path, &st);
 	if (status != 0)
-	{
-		free(path);
-		ft_child_free(exec);
-	}
-	is_path = (ft_strchr(exec->argv[0], '/') != NULL);
-	code = ft_exit_code(&st, is_path);
+		code = 127;
+	else
+		code = ft_exit_code(&st, is_path);
 	free(path);
 	ft_child_free(exec);
 	exit(code);

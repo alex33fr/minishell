@@ -52,7 +52,7 @@ static t_env_n	*ft_new_env_node(char *str)
  */
 static void	ft_env_join(t_env *env, t_env_n *node, t_env_n **last)
 {
-	if (!env->head)
+	if (!*last)
 		env->head = node;
 	else
 		(*last)->next = node;

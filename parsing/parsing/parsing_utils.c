@@ -89,7 +89,6 @@ int	manage_cmd_redir(t_queue *q, t_cmd *res)
 
 	redir_type = q->front->token;
 	dequeue(q, NULL);
-	heredoc_quoted = 0;
 	if (q->front->token == T_WORD)
 	{
 		heredoc_quoted = q->front->heredoc_quoted;
