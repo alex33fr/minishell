@@ -19,17 +19,20 @@
  */
 int	ft_builtin_pwd(t_env *env)
 {
-	char	buffer[PATH_MAX];
+	char	*cwd;
 	char	*cached;
 
-	cached = getcwd(buffer, PATH_MAX);
-	if (cached)
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 	{
-		ft_putstr_fd(buffer, 1);
+		ft_putstr_fd(cwd, 1);
 		ft_putstr_fd("\n", 1);
+		free(cwd);
 		return (0);
 	}
 	cached = ft_env_get(env, "PWD");
+	if (!cached && env->cwd)
+		cached = env->cwd;
 	if (cached)
 	{
 		ft_putstr_fd(cached, 1);

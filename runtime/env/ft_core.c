@@ -66,12 +66,14 @@ static void	ft_env_join(t_env *env, t_env_n *node, t_env_n **last)
  */
 static void	ft_env_set_defaults(t_env *env)
 {
-	char	buffer[PATH_MAX];
 	char	*cwd;
 
-	cwd = getcwd(buffer, PATH_MAX);
+	cwd = getcwd(NULL, 0);
 	if (cwd)
-		ft_env_set(env, "PWD", buffer);
+	{
+		ft_env_set(env, "PWD", cwd);
+		env->cwd = cwd;
+	}
 	ft_env_set(env, "OLDPWD", NULL);
 }
 

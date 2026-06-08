@@ -33,6 +33,7 @@ typedef struct s_env
 	int		exit_code;
 	int		in_child;
 	int		path_unset;
+	char	*cwd;
 }	t_env;
 
 t_env	*ft_env_init(char **envp);

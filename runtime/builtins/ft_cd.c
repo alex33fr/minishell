@@ -17,20 +17,22 @@
  * Update OLDPWD and PWD in env; print error to stderr if getcwd fails.
  * @order 1.2.3.5.2.2.2.2.1
  */
-static void	ft_cd_update_pwd(t_env *env, char *old_pwd, char *buffer)
+static void	ft_cd_update_pwd(t_env *env, char *old_pwd)
 {
 	char	*cwd;
 
-	if (!old_pwd)
-		return ;
-	cwd = getcwd(buffer, PATH_MAX);
+	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		ft_err_2();
 		return ;
 	}
+	free(env->cwd);
+	env->cwd = cwd;
+	if (!old_pwd)
+		return ;
 	ft_env_set(env, "OLDPWD", old_pwd);
-	ft_env_set(env, "PWD", buffer);
+	ft_env_set(env, "PWD", cwd);
 }
 
 /**
@@ -40,7 +42,6 @@ static void	ft_cd_update_pwd(t_env *env, char *old_pwd, char *buffer)
  */
 int	ft_builtin_cd(char **argv, t_env *env)
 {
-	char	buffer[PATH_MAX];
 	char	*old_pwd;
 	char	*target;
 	int		status;
@@ -61,6 +62,6 @@ int	ft_builtin_cd(char **argv, t_env *env)
 		ft_err_4(target);
 		return (1);
 	}
-	ft_cd_update_pwd(env, old_pwd, buffer);
+	ft_cd_update_pwd(env, old_pwd);
 	return (0);
 }
